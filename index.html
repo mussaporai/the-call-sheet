@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE CALL SHEET — Gestão de Produção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-root:#080808;
+  --bg-surface:#101010;
+  --bg-raised:#181818;
+  --bg-overlay:#1E1E1E;
+  --border-subtle:#1E1E1E;
+  --border-default:#282828;
+  --border-strong:#383838;
+  --text-primary:#EDE8DE;
+  --text-secondary:#8A8880;
+  --text-muted:#484840;
+  --pre:#D4A800;
+  --pre-dim:rgba(212,168,0,0.12);
+  --dia:#00B4A8;
+  --dia-dim:rgba(0,180,168,0.12);
+  --pos:#E05C30;
+  --pos-dim:rgba(224,92,48,0.12);
+  --danger:#D93A4A;
+  --danger-dim:rgba(217,58,74,0.12);
+  --success:#2EA84A;
+  --success-dim:rgba(46,168,74,0.12);
+  --info:#2878E0;
+  --info-dim:rgba(40,120,224,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg-root);
+  color:var(--text-primary);
+  font-family:'Barlow',sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-default);}
+input,select,textarea,button{font-family:inherit;color:inherit;}
+button{cursor:pointer;}
+*{transition:background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;}
+
+/* ============ LOGIN ============ */
+#login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg-root);
+}
+.login-box{width:380px;}
+.login-logo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;
+  font-size:44px;
+  color:var(--pre);
+  letter-spacing:0.02em;
+  line-height:1;
+}
+.login-tagline{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-secondary);
+  margin-top:6px;
+}
+.login-author{
+  font-family:'Barlow',sans-serif;
+  font-weight:300;
+  font-size:11px;
+  color:var(--text-muted);
+  margin-top:4px;
+}
+.login-divider{height:1px;background:var(--border-default);margin:24px 0;}
+.login-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  margin-bottom:6px;
+  display:block;
+}
+.login-field{margin-bottom:18px;}
+.login-field input{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border-default);
+  color:var(--text-primary);
+  font-size:14px;
+  padding:8px 0;
+  outline:none;
+}
+.login-field input:focus{border-bottom-color:var(--pre);}
+.login-btn{
+  width:100%;
+  background:var(--pre);
+  color:#000;
+  border:none;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:16px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  padding:13px 0;
+  margin-top:8px;
+}
+.login-btn:hover{opacity:0.85;}
+.login-hint{
+  font-size:10px;
+  color:var(--text-muted);
+  margin-top:14px;
+  text-align:center;
+}
+.login-error{
+  font-size:11px;
+  color:var(--danger);
+  margin-top:8px;
+  height:14px;
+}
+
+/* ============ APP SHELL ============ */
+#app{display:flex;min-height:100vh;}
+.sidebar{
+  width:220px;
+  background:var(--bg-surface);
+  border-right:1px solid var(--border-default);
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.sidebar-header{padding:18px 20px;border-bottom:1px solid var(--border-subtle);}
+.sidebar-logo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:16px;
+  color:var(--pre);
+  letter-spacing:0.02em;
+}
+.sidebar-version{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--text-muted);
+  margin-top:2px;
+}
+.sidebar-event{padding:14px 20px;border-bottom:1px solid var(--border-subtle);}
+.sidebar-event-label{
+  font-size:10px;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:6px;
+  display:block;
+}
+.sidebar-event input{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid transparent;
+  color:var(--text-primary);
+  font-weight:500;
+  font-size:13px;
+  outline:none;
+  padding:2px 0;
+}
+.sidebar-event input:focus{border-bottom-color:var(--pre);}
+.nav-section{padding:14px 0 4px;border-bottom:1px solid var(--border-subtle);}
+.nav-section-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--text-muted);
+  padding:0 20px 6px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 20px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--text-secondary);
+  cursor:pointer;
+  border-left:3px solid transparent;
+}
+.nav-item:hover{background:var(--bg-raised);color:var(--text-primary);}
+.nav-item.active{color:var(--text-primary);}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
+.nav-item.active .dot{background:currentColor;}
+.nav-item[data-page="pre"].active{border-left-color:var(--pre);color:var(--pre);}
+.nav-item[data-page="dia"].active{border-left-color:var(--dia);color:var(--dia);}
+.nav-item[data-page="pos"].active{border-left-color:var(--pos);color:var(--pos);}
+.nav-item[data-page="overview"].active,
+.nav-item[data-page="timeline"].active,
+.nav-item[data-page="fornecedores"].active,
+.nav-item[data-page="budget"].active,
+.nav-item[data-page="briefings"].active,
+.nav-item[data-page="reunioes"].active{border-left-color:var(--pre);color:var(--pre);}
+.sidebar-footer{padding:14px 20px;margin-top:auto;}
+.logout-link{font-size:11px;color:var(--text-muted);cursor:pointer;}
+.logout-link:hover{color:var(--danger);}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{
+  height:56px;
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-default);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  flex-shrink:0;
+}
+.topbar-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:16px;
+  text-transform:uppercase;
+  color:var(--text-secondary);
+  letter-spacing:0.04em;
+}
+.topbar-countdown{display:flex;align-items:center;gap:8px;}
+.countdown-dot{width:8px;height:8px;border-radius:50%;background:var(--pre);}
+.countdown-dot.urgent{background:var(--danger);animation:pulse 1.4s infinite;}
+.countdown-dot.live{background:var(--dia);animation:blink 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.countdown-num{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:22px;
+  color:var(--text-primary);
+}
+.countdown-label{font-size:11px;color:var(--text-muted);font-weight:300;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.topbar-event-name{font-size:13px;color:var(--text-muted);font-weight:300;}
+.topbar-date-input{
+  background:var(--bg-raised);
+  border:1px solid var(--border-default);
+  color:var(--text-secondary);
+  font-size:12px;
+  padding:5px 8px;
+  border-radius:3px;
+}
+
+.content{flex:1;padding:32px;overflow-y:auto;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* ============ STAT CARDS ============ */
+.phase-row{display:flex;gap:16px;margin-bottom:40px;}
+.phase-card{
+  flex:1;
+  background:var(--bg-surface);
+  padding:20px 24px;
+  border-left:3px solid var(--border-strong);
+  cursor:pointer;
+}
+.phase-card[data-phase="pre"]{border-left-color:var(--pre);}
+.phase-card[data-phase="dia"]{border-left-color:var(--dia);}
+.phase-card[data-phase="pos"]{border-left-color:var(--pos);}
+.phase-card:hover{background:var(--bg-raised);}
+.phase-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:8px;
+}
+.phase-card[data-phase="pre"] .phase-label{color:var(--pre);}
+.phase-card[data-phase="dia"] .phase-label{color:var(--dia);}
+.phase-card[data-phase="pos"] .phase-label{color:var(--pos);}
+.phase-pct{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:64px;
+  line-height:1;
+}
+.phase-sub{font-size:12px;color:var(--text-secondary);font-weight:300;margin:6px 0 12px;}
+.phase-bar{height:2px;background:var(--border-subtle);}
+.phase-bar-fill{height:100%;}
+.phase-card[data-phase="pre"] .phase-bar-fill{background:var(--pre);}
+.phase-card[data-phase="dia"] .phase-bar-fill{background:var(--dia);}
+.phase-card[data-phase="pos"] .phase-bar-fill{background:var(--pos);}
+
+.section-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  margin-bottom:14px;
+}
+.alerts-list{margin-bottom:40px;}
+.alert-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  border-left:3px solid var(--danger);
+  background:var(--danger-dim);
+  font-size:13px;
+  margin-bottom:6px;
+}
+.alert-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);flex-shrink:0;}
+.alert-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+.metrics-row{display:flex;gap:16px;}
+.mini-card{
+  flex:1;
+  padding:16px;
+  border-left:2px solid var(--border-strong);
+  background:var(--bg-surface);
+}
+.mini-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:32px;}
+.mini-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-top:4px;}
+
+.empty-state{
+  text-align:center;
+  padding:40px 0;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  color:var(--text-muted);
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+/* ============ CHECKLIST PAGES ============ */
+.checklist-tabs{display:flex;gap:0;border-bottom:1px solid var(--border-default);margin-bottom:24px;}
+.checklist-tab{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+  padding:10px 24px;
+  color:var(--text-muted);
+  border-bottom:2px solid transparent;
+  cursor:pointer;
+}
+.checklist-tab.active.pre{color:var(--pre);border-bottom-color:var(--pre);}
+.checklist-tab.active.dia{color:var(--dia);border-bottom-color:var(--dia);}
+.checklist-tab.active.pos{color:var(--pos);border-bottom-color:var(--pos);}
+
+.group{margin-bottom:28px;}
+.group-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:8px;
+}
+.group-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+}
+.group-progress{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;}
+.group-bar{height:2px;background:var(--border-subtle);margin-bottom:6px;}
+.group-bar-fill{height:100%;}
+
+.item-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:44px;
+  padding:0 20px;
+  border-bottom:1px solid var(--border-subtle);
+}
+.item-row:hover{background:var(--bg-raised);}
+.item-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);width:28px;flex-shrink:0;}
+.item-checkbox{
+  width:15px;height:15px;flex-shrink:0;
+  border:1.5px solid var(--border-strong);
+  border-radius:2px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.item-checkbox.checked{display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:700;}
+.item-text{flex:1;font-size:13px;color:var(--text-primary);cursor:pointer;}
+.item-text.done{text-decoration:line-through;opacity:0.4;}
+.item-critical-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);flex-shrink:0;margin-right:-4px;}
+.badge{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  padding:2px 6px;
+  border-radius:2px;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+.badge-critical{color:var(--danger);background:var(--danger-dim);}
+.badge-done{color:var(--success);background:var(--success-dim);}
+.item-del{
+  width:20px;height:20px;flex-shrink:0;
+  color:var(--text-muted);
+  background:none;border:none;
+  font-size:14px;
+  opacity:0;
+}
+.item-row:hover .item-del{opacity:1;}
+.item-del:hover{color:var(--danger);}
+.add-item-row{padding:0 20px;height:40px;display:flex;align-items:center;}
+.add-item-row input{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid transparent;
+  font-size:13px;
+  padding:8px 0;
+  outline:none;
+}
+.add-item-row input::placeholder{color:var(--text-muted);font-weight:300;}
+.add-item-row input:focus{border-bottom-color:var(--border-subtle);}
+
+/* ============ FORNECEDORES ============ */
+.status-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.status-pill{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:11px;
+  text-transform:uppercase;
+  padding:6px 14px;
+  color:var(--text-muted);
+  background:var(--bg-surface);
+  cursor:pointer;
+  border:1px solid var(--border-default);
+}
+.status-pill.active{background:var(--pre);color:#000;border-color:var(--pre);}
+
+table{width:100%;border-collapse:collapse;}
+thead th{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--text-muted);
+  text-align:left;
+  padding:10px 14px;
+  border-bottom:1px solid var(--border-default);
+}
+tbody td{
+  padding:10px 14px;
+  font-size:13px;
+  border-bottom:1px solid var(--border-subtle);
+}
+tbody tr:hover{background:rgba(255,255,255,0.02);}
+table input,table select{
+  background:transparent;
+  border:none;
+  outline:none;
+  font-size:13px;
+  width:100%;
+}
+table input:focus{border-bottom:1px solid var(--border-default);}
+.cat-badge{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  padding:3px 8px;
+  border-radius:2px;
+  background:var(--border-subtle);
+  color:var(--text-secondary);
+  display:inline-block;
+}
+.status-select{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  text-transform:uppercase;
+  padding:4px 8px;
+  border-radius:2px;
+  border:none;
+  cursor:pointer;
+  appearance:none;
+}
+.add-row-btn{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:12px;
+  color:var(--pre);
+  padding:12px 14px;
+  cursor:pointer;
+}
+.add-row-btn:hover{background:var(--bg-raised);}
+.table-footer{font-size:12px;color:var(--text-muted);font-weight:300;padding:12px 14px;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.del-btn{background:none;border:none;color:var(--text-muted);font-size:14px;opacity:0;}
+tbody tr:hover .del-btn{opacity:1;}
+.del-btn:hover{color:var(--danger);}
+
+/* ============ BUDGET ============ */
+.budget-summary{display:flex;gap:16px;margin-bottom:32px;}
+.budget-card{flex:1;background:var(--bg-surface);padding:20px 24px;border-left:3px solid var(--border-strong);}
+.budget-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:36px;}
+.budget-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.budget-meter{height:4px;background:var(--border-subtle);margin-top:10px;}
+.budget-meter-fill{height:100%;}
+.diff-pos{color:var(--success);}
+.diff-neg{color:var(--danger);}
+.diff-zero{color:var(--text-muted);}
+.total-row{background:var(--bg-raised);font-weight:800;}
+.total-row td{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;}
+
+/* ============ BRIEFINGS / REUNIOES ============ */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{border-left:3px solid var(--pre);background:var(--bg-surface);}
+.card-header{
+  background:var(--bg-raised);
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:8px;
+}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;background:transparent;border:none;outline:none;flex:1;}
+.card-date{font-size:11px;color:var(--text-muted);}
+.card-author{font-size:11px;color:var(--text-muted);padding:6px 18px 0;}
+.card-body{padding:14px 18px;}
+.card-body textarea{
+  width:100%;
+  min-height:140px;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-size:13px;
+  font-family:'Barlow',sans-serif;
+  resize:vertical;
+}
+.add-card{
+  border:2px dashed var(--border-default);
+  display:flex;align-items:center;justify-content:center;
+  min-height:140px;
+  cursor:pointer;
+}
+.add-card span{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.add-card:hover{border-color:var(--pre);}
+.add-card:hover span{color:var(--pre);}
+
+.ia-banner{
+  background:rgba(0,180,168,0.06);
+  border-left:3px solid var(--dia);
+  padding:12px 16px;
+  font-size:13px;
+  color:var(--text-secondary);
+  margin-bottom:24px;
+}
+.meeting-meta{font-size:11px;color:var(--text-muted);}
+.field-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:10px 0 4px;}
+.ghost-btn{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--dia);
+  color:var(--dia);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:12px;
+  text-transform:uppercase;
+  padding:9px 0;
+  margin-top:10px;
+}
+.ghost-btn:hover{background:var(--dia-dim);}
+.ia-summary{
+  background:rgba(0,180,168,0.06);
+  border:1px solid var(--dia);
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:12px;
+}
+.del-card{background:none;border:none;color:var(--text-muted);font-size:14px;}
+.del-card:hover{color:var(--danger);}
+
+/* ============ TIMELINE ============ */
+.timeline-controls{display:flex;justify-content:flex-end;margin-bottom:20px;}
+.btn-primary{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:12px;
+  text-transform:uppercase;
+  background:var(--pre);
+  color:#000;
+  border:none;
+  padding:9px 18px;
+}
+.btn-primary:hover{opacity:0.85;}
+.marco{display:flex;gap:14px;position:relative;}
+.marco-line{display:flex;flex-direction:column;align-items:center;width:14px;flex-shrink:0;}
+.marco-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.marco-connector{width:2px;flex:1;background:var(--border-default);margin-top:2px;}
+.marco-body{flex:1;padding-bottom:24px;}
+.marco-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.marco-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;background:transparent;border:none;outline:none;flex:1;min-width:120px;}
+.marco-desc{font-size:12px;color:var(--text-secondary);font-weight:300;margin-top:4px;background:transparent;border:none;outline:none;width:100%;}
+.marco-select{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  background:var(--bg-raised);
+  border:1px solid var(--border-default);
+  color:var(--text-secondary);
+  padding:4px 6px;
+}
+.marco-date{
+  background:var(--bg-raised);
+  border:1px solid var(--border-default);
+  color:var(--text-secondary);
+  font-size:11px;
+  padding:4px 6px;
+}
+.marco.diad{border-left:3px solid var(--dia);background:var(--dia-dim);padding:10px 14px;border-radius:2px;}
+.marco.diad .marco-title{color:var(--dia);}
+.marco-del{background:none;border:none;color:var(--text-muted);font-size:14px;}
+.marco-del:hover{color:var(--danger);}
+
+/* ============ MODAL ============ */
+#modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:1000;
+}
+#modal-overlay.active{display:flex;}
+.modal-box{
+  width:480px;
+  background:var(--bg-overlay);
+  border:1px solid var(--border-default);
+  border-top:3px solid var(--pre);
+  padding:28px;
+  border-radius:4px;
+}
+.modal-header{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:20px;
+  text-transform:uppercase;
+  border-bottom:1px solid var(--border-subtle);
+  padding-bottom:16px;
+  margin-bottom:20px;
+}
+.modal-field{margin-bottom:16px;}
+.modal-field label{
+  display:block;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--text-muted);
+  margin-bottom:6px;
+}
+.modal-field input,.modal-field textarea,.modal-field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border-default);
+  padding:8px 0;
+  outline:none;
+  font-size:14px;
+}
+.modal-field input:focus,.modal-field textarea:focus,.modal-field select:focus{border-bottom-color:var(--pre);}
+.modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;}
+.btn-cancel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  background:none;
+  border:none;
+  color:var(--text-muted);
+}
+.btn-cancel:hover{color:var(--text-primary);}
+.btn-save{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:13px;
+  text-transform:uppercase;
+  background:var(--pre);
+  color:#000;
+  border:none;
+  padding:10px 24px;
+}
+
+@media print{
+  .sidebar,.topbar,.item-del,.del-btn,.del-card,.marco-del,.add-item-row,.add-row-btn,.add-card,.ghost-btn{display:none!important;}
+}
+
+@media (max-width:768px){
+  .sidebar{position:fixed;left:-220px;z-index:500;transition:left 200ms ease;}
+  .sidebar.open{left:0;}
+  .content{padding:16px;}
+  .phase-row,.grid-2,.metrics-row,.budget-summary{flex-direction:column;}
+  .grid-2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="login">
+  <div class="login-box">
+    <div class="login-logo">⊣ THE CALL SHEET</div>
+    <div class="login-tagline">Gestão de Produção · Do Briefing ao Wrap</div>
+    <div class="login-author">SFERA SOLUÇÕES IA</div>
+    <div class="login-divider"></div>
+    <div class="login-field">
+      <label class="login-label">Usuário</label>
+      <input type="text" id="login-user" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Senha</label>
+      <input type="password" id="login-pass" autocomplete="current-password">
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" id="login-btn">ENTRAR NA PRODUÇÃO</button>
+    <div class="login-hint">admin / sfera2026</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" style="display:none;">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">THE CALL SHEET</div>
+      <div class="sidebar-version">v1.0</div>
+    </div>
+    <div class="sidebar-event">
+      <span class="sidebar-event-label">Evento</span>
+      <input type="text" id="event-name-input" placeholder="Nome do evento">
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" data-page="overview"><span class="dot"></span>Visão Geral</div>
+      <div class="nav-item" data-page="timeline"><span class="dot"></span>Cronograma</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Produção</div>
+      <div class="nav-item" data-page="pre"><span class="dot"></span>Pré-Evento</div>
+      <div class="nav-item" data-page="dia"><span class="dot"></span>Dia D</div>
+      <div class="nav-item" data-page="pos"><span class="dot"></span>Pós-Evento</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Gestão</div>
+      <div class="nav-item" data-page="fornecedores"><span class="dot"></span>Fornecedores</div>
+      <div class="nav-item" data-page="budget"><span class="dot"></span>Budget</div>
+    </div>
+    <div class="nav-section" style="border-bottom:none;">
+      <div class="nav-section-label">Comunicação</div>
+      <div class="nav-item" data-page="briefings"><span class="dot"></span>Briefings</div>
+      <div class="nav-item" data-page="reunioes"><span class="dot"></span>Reuniões + IA</div>
+    </div>
+    <div class="sidebar-footer">
+      <span class="logout-link" id="logout-btn">Sair</span>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="page-title">Visão Geral</div>
+      <div class="topbar-countdown">
+        <span class="countdown-dot" id="countdown-dot"></span>
+        <span class="countdown-num" id="countdown-num">--</span>
+        <span class="countdown-label" id="countdown-label">DIAS</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-event-name" id="topbar-event-name"></span>
+        <input type="date" class="topbar-date-input" id="event-date-input">
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- VISÃO GERAL -->
+      <section class="page active" id="page-overview">
+        <div class="phase-row">
+          <div class="phase-card" data-phase="pre" onclick="goPage('pre')">
+            <div class="phase-label">Pré-Evento</div>
+            <div class="phase-pct" id="ov-pre-pct">0%</div>
+            <div class="phase-sub" id="ov-pre-sub">0 / 0 tarefas</div>
+            <div class="phase-bar"><div class="phase-bar-fill" id="ov-pre-bar" style="width:0%"></div></div>
+          </div>
+          <div class="phase-card" data-phase="dia" onclick="goPage('dia')">
+            <div class="phase-label">Dia D</div>
+            <div class="phase-pct" id="ov-dia-pct">0%</div>
+            <div class="phase-sub" id="ov-dia-sub">0 / 0 tarefas</div>
+            <div class="phase-bar"><div class="phase-bar-fill" id="ov-dia-bar" style="width:0%"></div></div>
+          </div>
+          <div class="phase-card" data-phase="pos" onclick="goPage('pos')">
+            <div class="phase-label">Pós-Evento</div>
+            <div class="phase-pct" id="ov-pos-pct">0%</div>
+            <div class="phase-sub" id="ov-pos-sub">0 / 0 tarefas</div>
+            <div class="phase-bar"><div class="phase-bar-fill" id="ov-pos-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="section-label" id="alerts-label" style="display:none;">Atenção Requerida</div>
+        <div class="alerts-list" id="alerts-list"></div>
+
+        <div class="section-label">Métricas Rápidas</div>
+        <div class="metrics-row">
+          <div class="mini-card"><div class="mini-num" id="mc-fornecedores">0</div><div class="mini-label">Fornecedores</div></div>
+          <div class="mini-card"><div class="mini-num" id="mc-orcado">R$0</div><div class="mini-label">Orçado</div></div>
+          <div class="mini-card"><div class="mini-num" id="mc-contratado">0%</div><div class="mini-label">Contratado</div></div>
+          <div class="mini-card"><div class="mini-num" id="mc-reunioes">0</div><div class="mini-label">Reuniões</div></div>
+        </div>
+      </section>
+
+      <!-- CRONOGRAMA -->
+      <section class="page" id="page-timeline">
+        <div class="timeline-controls">
+          <button class="btn-primary" onclick="openTimelineModal()">+ Novo Marco</button>
+        </div>
+        <div id="timeline-list"></div>
+      </section>
+
+      <!-- CHECKLISTS -->
+      <section class="page" id="page-pre">
+        <div id="checklist-pre"></div>
+      </section>
+      <section class="page" id="page-dia">
+        <div id="checklist-dia"></div>
+      </section>
+      <section class="page" id="page-pos">
+        <div id="checklist-pos"></div>
+      </section>
+
+      <!-- FORNECEDORES -->
+      <section class="page" id="page-fornecedores">
+        <div class="status-filter" id="fornecedor-filter"></div>
+        <table>
+          <thead>
+            <tr><th>Fornecedor</th><th>Categoria</th><th>Contato</th><th>Valor</th><th>Status</th><th>Obs</th><th></th></tr>
+          </thead>
+          <tbody id="fornecedores-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="7" class="add-row-btn" onclick="addFornecedor()">+ ADICIONAR FORNECEDOR</td></tr>
+          </tfoot>
+        </table>
+        <div class="table-footer" id="fornecedor-footer"></div>
+      </section>
+
+      <!-- BUDGET -->
+      <section class="page" id="page-budget">
+        <div class="budget-summary">
+          <div class="budget-card">
+            <div class="budget-num mono" id="bg-previsto">R$0</div>
+            <div class="budget-sub">Orçamento previsto</div>
+          </div>
+          <div class="budget-card" id="bg-realizado-card">
+            <div class="budget-num mono" id="bg-realizado">R$0</div>
+            <div class="budget-sub" id="bg-realizado-sub">0% do orçamento</div>
+            <div class="budget-meter"><div class="budget-meter-fill" id="bg-realizado-meter"></div></div>
+          </div>
+          <div class="budget-card">
+            <div class="budget-num mono" id="bg-saldo">R$0</div>
+            <div class="budget-sub">disponível</div>
+            <div class="budget-meter"><div class="budget-meter-fill" id="bg-saldo-meter"></div></div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Categoria</th><th>Descrição</th><th>Previsto</th><th>Realizado</th><th>Diferença</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="budget-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="7" class="add-row-btn" onclick="addBudgetLine()">+ ADICIONAR LINHA</td></tr>
+            <tr class="total-row" id="budget-total-row"></tr>
+          </tfoot>
+        </table>
+      </section>
+
+      <!-- BRIEFINGS -->
+      <section class="page" id="page-briefings">
+        <div class="grid-2" id="briefings-grid"></div>
+      </section>
+
+      <!-- REUNIÕES -->
+      <section class="page" id="page-reunioes">
+        <div class="ia-banner">Cole a transcrição da reunião → clique RESUMIR → a IA extrai decisões, ações e responsáveis</div>
+        <div class="grid-2" id="reunioes-grid"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL GLOBAL (timeline) -->
+<div id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">Novo Marco</div>
+    <div class="modal-field">
+      <label>Título</label>
+      <input type="text" id="modal-titulo">
+    </div>
+    <div class="modal-field">
+      <label>Data</label>
+      <input type="date" id="modal-data">
+    </div>
+    <div class="modal-field">
+      <label>Descrição</label>
+      <textarea id="modal-desc" rows="2"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveModalMarco()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== AUTH ===================== */
+const USUARIOS = { 'admin':'sfera2026', 'equipe':'evento2026', 'cliente':'view2026' };
+
+document.getElementById('login-btn').onclick = doLogin;
+document.getElementById('login-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+
+function doLogin(){
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  if(USUARIOS[u] && USUARIOS[u]===p){
+    sessionStorage.setItem('callsheet_session', u);
+    err.textContent='';
+    showApp();
+  } else {
+    err.textContent='Usuário ou senha incorretos.';
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('callsheet_session');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login').style.display='flex';
+}
+document.getElementById('logout-btn').onclick = doLogout;
+
+function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='flex';
+  renderAll();
+}
+
+/* ===================== STATE ===================== */
+const DEFAULT_STATE = {
+  eventName: 'Mega Evento 2026',
+  eventDate: '',
+  checklists: {
+    pre: {
+      'Briefing & Planejamento': [
+        mkItem('Briefing aprovado pelo cliente', true),
+        mkItem('Orçamento (budget) aprovado', true),
+        mkItem('Venue confirmado e contrato assinado', true),
+        mkItem('KV (Key Visual) aprovado', false),
+        mkItem('Run of Show versão 1 elaborado', false),
+        mkItem('Floorplan aprovado', false),
+      ],
+      'Venue & Licenças': [
+        mkItem('ECAD pago', true),
+        mkItem('Alvará temporário solicitado na Prefeitura', true),
+        mkItem('Autorização Corpo de Bombeiros (PPCI)', true),
+        mkItem('ART estrutural e elétrica contratadas', true),
+        mkItem('Seguro do evento contratado', false),
+        mkItem('Comunicação à Polícia Militar (se necessário)', false),
+        mkItem('Vigilância Sanitária (se houver A&B)', false),
+      ],
+      'AV & Cenografia': [
+        mkItem('Empresa de AV contratada', true),
+        mkItem('Rider técnico recebido e analisado', false),
+        mkItem('Empresa de cenografia/montagem contratada', true),
+        mkItem('Gerador dimensionado e reservado', false),
+        mkItem('Link de internet dedicado contratado', false),
+        mkItem('Plataforma de streaming configurada', false),
+      ],
+      'Logística & Equipe': [
+        mkItem('Catering / A&B contratado', false),
+        mkItem('Transfer e hotelaria de palestrantes confirmados', false),
+        mkItem('Segurança privada contratada', true),
+        mkItem('Brigadistas contratados', true),
+        mkItem('Recepcionistas / Hostess confirmadas', false),
+        mkItem('Sistema de credenciamento configurado', false),
+        mkItem('Gráfica: banners, totens, credenciais aprovados', false),
+      ],
+    },
+    dia: {
+      'Abertura & Credenciamento': [
+        mkItem('Briefing de abertura com toda a equipe realizado', true),
+        mkItem('Todos os sistemas AV testados antes da abertura', true),
+        mkItem('Portões abertos no horário', false),
+        mkItem('Credenciamento funcionando', false),
+        mkItem('War Room / Command Center operacional', true),
+      ],
+      'Palco & AV': [
+        mkItem('Soundcheck concluído', true),
+        mkItem('Run of Show final distribuído para toda equipe', true),
+        mkItem('Stage manager posicionado nas wings', false),
+        mkItem('Teleprompter testado com palestrantes', false),
+        mkItem('Streaming ao vivo confirmado', false),
+        mkItem('Canais de rádio (HT) definidos por setor', true),
+      ],
+      'Equipe & Segurança': [
+        mkItem('Brigada de incêndio posicionada', true),
+        mkItem('Segurança nos acessos', true),
+        mkItem('Catering servindo no horário', false),
+        mkItem('Fotógrafo e câmera cobrindo o evento', false),
+      ],
+    },
+    pos: {
+      'Desmontagem': [
+        mkItem('Supervisão da desmontagem completa', false),
+        mkItem('Vistoria e entrega formal do venue', true),
+        mkItem('Devolução de todos os equipamentos alugados', false),
+        mkItem('Descarte correto de resíduos', false),
+      ],
+      'Financeiro & Relatório': [
+        mkItem('Pagamentos finais a todos os fornecedores', true),
+        mkItem('Conciliação de notas fiscais x contratos', true),
+        mkItem('Relatório executivo enviado ao cliente', true),
+        mkItem('Relatório financeiro (previsto x realizado)', false),
+        mkItem('Press clipping / cobertura de mídia compilado', false),
+      ],
+      'Avaliação': [
+        mkItem('NPS disparado para participantes (até 48h)', false),
+        mkItem('Reunião de retrospectiva interna realizada', false),
+        mkItem('Banco de fornecedores atualizado com avaliações', false),
+        mkItem('Proposta de melhoria documentada para próxima edição', false),
+      ],
+    }
+  },
+  fornecedores: [],
+  budget: [],
+  briefings: [],
+  reunioes: [],
+  timeline: [
+    { id: uid(), titulo:'Briefing aprovado pelo cliente', data:'', descricao:'', status:'done' },
+    { id: uid(), titulo:'Contratos de fornecedores assinados', data:'', descricao:'', status:'doing' },
+    { id: uid(), titulo:'Walk-through no venue', data:'', descricao:'', status:'pending' },
+    { id: uid(), titulo:'Soundcheck e Dry Run', data:'', descricao:'', status:'pending' },
+    { id: uid(), titulo:'★ DIA DO EVENTO', data:'', descricao:'', status:'pending', diad:true },
+    { id: uid(), titulo:'Desmontagem concluída', data:'', descricao:'', status:'pending' },
+    { id: uid(), titulo:'Relatório final entregue ao cliente', data:'', descricao:'', status:'pending' },
+  ]
+};
+
+function mkItem(text, critical){ return { id: uid(), text, done:false, critical: !!critical }; }
+function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+
+let STATE = loadState();
+
+function loadState(){
+  const raw = localStorage.getItem('callsheet_v1');
+  if(!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  try{
+    const parsed = JSON.parse(raw);
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
+  }catch(e){
+    return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+}
+
+let saveTimer = null;
+function saveState(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    localStorage.setItem('callsheet_v1', JSON.stringify(STATE));
+  }, 500);
+}
+
+function fmtBRL(n){
+  return (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+
+/* ===================== NAVIGATION ===================== */
+const PAGE_TITLES = {
+  overview:'Visão Geral', timeline:'Cronograma', pre:'Pré-Evento', dia:'Dia D', pos:'Pós-Evento',
+  fornecedores:'Fornecedores', budget:'Budget', briefings:'Briefings', reunioes:'Reuniões + IA'
+};
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click', ()=>goPage(item.dataset.page));
+});
+
+function goPage(page){
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.toggle('active', i.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('page-title').textContent = PAGE_TITLES[page] || '';
+  if(window.innerWidth<=768) document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ===================== TOPBAR / COUNTDOWN ===================== */
+const eventNameInput = document.getElementById('event-name-input');
+const eventDateInput = document.getElementById('event-date-input');
+
+eventNameInput.addEventListener('input', ()=>{
+  STATE.eventName = eventNameInput.value;
+  document.getElementById('topbar-event-name').textContent = STATE.eventName;
+  saveState();
+});
+eventDateInput.addEventListener('change', ()=>{
+  STATE.eventDate = eventDateInput.value;
+  saveState();
+  renderCountdown();
+});
+
+function renderCountdown(){
+  const dot = document.getElementById('countdown-dot');
+  const num = document.getElementById('countdown-num');
+  const label = document.getElementById('countdown-label');
+  dot.className='countdown-dot';
+  if(!STATE.eventDate){
+    num.textContent='--'; label.textContent='DIAS'; return;
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(STATE.eventDate+'T00:00:00');
+  const diffDays = Math.round((target-today)/86400000);
+
+  if(diffDays===0){
+    num.textContent=''; label.textContent='● AO VIVO HOJE';
+    dot.classList.add('live');
+  } else if(diffDays<0){
+    num.textContent=Math.abs(diffDays); label.textContent='DIAS APÓS';
+    dot.classList.add('live');
+  } else if(diffDays<=30){
+    num.textContent=diffDays; label.textContent='DIAS';
+    dot.classList.add('urgent');
+  } else {
+    num.textContent=diffDays; label.textContent='DIAS';
+  }
+}
+
+/* ===================== CHECKLISTS ===================== */
+function checklistTotals(phase){
+  const groups = STATE.checklists[phase];
+  let total=0, done=0;
+  Object.values(groups).forEach(items=>{
+    total+=items.length;
+    done+=items.filter(i=>i.done).length;
+  });
+  return { total, done, pct: total? Math.round(done/total*100):0 };
+}
+
+function renderChecklistPage(phase){
+  const container = document.getElementById('checklist-'+phase);
+  const groups = STATE.checklists[phase];
+  let html='';
+  Object.keys(groups).forEach(groupName=>{
+    const items = groups[groupName];
+    const done = items.filter(i=>i.done).length;
+    const pct = items.length? Math.round(done/items.length*100):0;
+    html += `<div class="group">
+      <div class="group-header">
+        <span class="group-title">${esc(groupName)}</span>
+        <span class="group-progress" style="color:var(--${phase})">${done}/${items.length} · ${pct}%</span>
+      </div>
+      <div class="group-bar"><div class="group-bar-fill" style="width:${pct}%;background:var(--${phase})"></div></div>`;
+    items.forEach((item, idx)=>{
+      html += `<div class="item-row">
+        <span class="item-num">${String(idx+1).padStart(2,'0')}</span>
+        <span class="item-checkbox ${item.done?'checked':''}" style="${item.done?`background:var(--${phase});border-color:var(--${phase})`:''}" onclick="toggleItem('${phase}','${esc(groupName,true)}','${item.id}')">${item.done?'✓':''}</span>
+        <span class="item-text ${item.done?'done':''}" onclick="toggleItem('${phase}','${esc(groupName,true)}','${item.id}')">${esc(item.text)}</span>
+        ${item.critical && !item.done ? '<span class="badge badge-critical">Crítico</span>' : ''}
+        ${item.done ? '<span class="badge badge-done">✓ Concluído</span>' : ''}
+        <button class="item-del" onclick="delItem('${phase}','${esc(groupName,true)}','${item.id}')">✕</button>
+      </div>`;
+    });
+    html += `<div class="add-item-row">
+      <input type="text" placeholder="+ Adicionar tarefa" onkeydown="if(event.key==='Enter'){addItem('${phase}','${esc(groupName,true)}',this)}">
+    </div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggleItem(phase, groupName, id){
+  const items = STATE.checklists[phase][groupName];
+  const item = items.find(i=>i.id===id);
+  if(item){ item.done = !item.done; saveState(); renderAll(); }
+}
+function delItem(phase, groupName, id){
+  STATE.checklists[phase][groupName] = STATE.checklists[phase][groupName].filter(i=>i.id!==id);
+  saveState(); renderAll();
+}
+function addItem(phase, groupName, input){
+  const text = input.value.trim();
+  if(!text) return;
+  STATE.checklists[phase][groupName].push(mkItem(text,false));
+  saveState(); renderAll();
+}
+
+/* ===================== VISÃO GERAL ===================== */
+function renderOverview(){
+  ['pre','dia','pos'].forEach(phase=>{
+    const t = checklistTotals(phase);
+    document.getElementById('ov-'+phase+'-pct').textContent = t.pct+'%';
+    document.getElementById('ov-'+phase+'-sub').textContent = `${t.done} / ${t.total} tarefas`;
+    document.getElementById('ov-'+phase+'-bar').style.width = t.pct+'%';
+  });
+
+  const criticals = [];
+  ['pre','dia','pos'].forEach(phase=>{
+    Object.entries(STATE.checklists[phase]).forEach(([groupName, items])=>{
+      items.filter(i=>i.critical && !i.done).forEach(i=>{
+        criticals.push({ phase, text:i.text });
+      });
+    });
+  });
+  const alertsLabel = document.getElementById('alerts-label');
+  const alertsList = document.getElementById('alerts-list');
+  if(criticals.length){
+    alertsLabel.style.display='block';
+    alertsLabel.textContent = `Atenção Requerida — ${criticals.length} itens`;
+    alertsList.innerHTML = criticals.map(c=>`<div class="alert-item"><span class="alert-dot"></span><span class="alert-tag">[${c.phase.toUpperCase()}]</span> ${esc(c.text)}</div>`).join('');
+  } else {
+    alertsLabel.style.display='none';
+    alertsList.innerHTML='';
+  }
+
+  document.getElementById('mc-fornecedores').textContent = STATE.fornecedores.length;
+  const totalContratado = STATE.fornecedores.reduce((s,f)=> s + (Number(f.valor)||0), 0);
+  document.getElementById('mc-orcado').textContent = fmtBRL(totalContratado).replace(',00','').replace('R$\xa0','R$');
+  const contratados = STATE.fornecedores.filter(f=>f.status==='Contratado'||f.status==='Pago').length;
+  document.getElementById('mc-contratado').textContent = STATE.fornecedores.length ? Math.round(contratados/STATE.fornecedores.length*100)+'%' : '0%';
+  document.getElementById('mc-reunioes').textContent = STATE.reunioes.length;
+}
+
+/* ===================== FORNECEDORES ===================== */
+const FORNECEDOR_STATUS = ['Prospecção','Proposta','Em Negociação','Contratado','Pago','Cancelado'];
+const STATUS_COLORS = {
+  'Contratado':{bg:'var(--success-dim)',fg:'var(--success)'},
+  'Pago':{bg:'var(--success-dim)',fg:'var(--success)'},
+  'Em Negociação':{bg:'var(--pre-dim)',fg:'var(--pre)'},
+  'Cancelado':{bg:'var(--danger-dim)',fg:'var(--danger)'},
+  'Prospecção':{bg:'var(--border-subtle)',fg:'var(--text-muted)'},
+  'Proposta':{bg:'var(--info-dim)',fg:'var(--info)'},
+};
+let fornecedorFilter = 'TODOS';
+
+function renderFornecedorFilter(){
+  const counts = { TODOS: STATE.fornecedores.length };
+  FORNECEDOR_STATUS.forEach(s=> counts[s]=STATE.fornecedores.filter(f=>f.status===s).length);
+  const filterEl = document.getElementById('fornecedor-filter');
+  filterEl.innerHTML = ['TODOS', ...FORNECEDOR_STATUS].map(s=>
+    `<div class="status-pill ${fornecedorFilter===s?'active':''}" onclick="setFornecedorFilter('${s}')">${s.toUpperCase()} · ${counts[s]||0}</div>`
+  ).join('');
+}
+function setFornecedorFilter(s){ fornecedorFilter = s; renderFornecedores(); }
+
+function renderFornecedores(){
+  renderFornecedorFilter();
+  const tbody = document.getElementById('fornecedores-tbody');
+  const list = fornecedorFilter==='TODOS' ? STATE.fornecedores : STATE.fornecedores.filter(f=>f.status===fornecedorFilter);
+  if(!list.length){
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Nenhum fornecedor cadastrado</div></td></tr>`;
+  } else {
+    tbody.innerHTML = list.map(f=>{
+      const c = STATUS_COLORS[f.status] || STATUS_COLORS['Prospecção'];
+      return `<tr>
+        <td><input value="${escAttr(f.nome)}" onchange="updateFornecedor('${f.id}','nome',this.value)"></td>
+        <td><input value="${escAttr(f.categoria)}" onchange="updateFornecedor('${f.id}','categoria',this.value)" placeholder="Categoria"></td>
+        <td><input value="${escAttr(f.contato)}" onchange="updateFornecedor('${f.id}','contato',this.value)"></td>
+        <td><input class="mono" value="${escAttr(f.valor)}" onchange="updateFornecedor('${f.id}','valor',this.value)" placeholder="R$ 0"></td>
+        <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateFornecedor('${f.id}','status',this.value)">
+          ${FORNECEDOR_STATUS.map(s=>`<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></td>
+        <td><input value="${escAttr(f.obs)}" onchange="updateFornecedor('${f.id}','obs',this.value)"></td>
+        <td><button class="del-btn" onclick="delFornecedor('${f.id}')">✕</button></td>
+      </tr>`;
+    }).join('');
+  }
+  const total = STATE.fornecedores.reduce((s,f)=>s+(Number(f.valor)||0),0);
+  document.getElementById('fornecedor-footer').textContent = `${STATE.fornecedores.length} fornecedores · ${fmtBRL(total)} total`;
+}
+function addFornecedor(){
+  STATE.fornecedores.push({ id:uid(), nome:'Novo Fornecedor', categoria:'', contato:'', valor:'', status:'Prospecção', obs:'' });
+  saveState(); renderAll();
+}
+function updateFornecedor(id, field, value){
+  const f = STATE.fornecedores.find(x=>x.id===id);
+  if(f){ f[field]= field==='valor' ? value.replace(/[^\d.,]/g,'') : value; saveState(); renderOverview(); }
+}
+function delFornecedor(id){
+  STATE.fornecedores = STATE.fornecedores.filter(f=>f.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== BUDGET ===================== */
+const BUDGET_STATUS = ['Previsto','Aprovado','Pago','Cancelado'];
+function renderBudget(){
+  const tbody = document.getElementById('budget-tbody');
+  if(!STATE.budget.length){
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Nenhuma linha de orçamento</div></td></tr>`;
+  } else {
+    tbody.innerHTML = STATE.budget.map(b=>{
+      const diff = (Number(b.previsto)||0) - (Number(b.realizado)||0);
+      const diffClass = diff>0?'diff-pos':diff<0?'diff-neg':'diff-zero';
+      return `<tr>
+        <td><input value="${escAttr(b.categoria)}" onchange="updateBudget('${b.id}','categoria',this.value)"></td>
+        <td><input value="${escAttr(b.descricao)}" onchange="updateBudget('${b.id}','descricao',this.value)"></td>
+        <td><input class="mono" value="${escAttr(b.previsto)}" onchange="updateBudget('${b.id}','previsto',this.value)"></td>
+        <td><input class="mono" value="${escAttr(b.realizado)}" onchange="updateBudget('${b.id}','realizado',this.value)"></td>
+        <td class="mono ${diffClass}">${fmtBRL(diff)}</td>
+        <td><select class="status-select" onchange="updateBudget('${b.id}','status',this.value)">
+          ${BUDGET_STATUS.map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></td>
+        <td><button class="del-btn" onclick="delBudget('${b.id}')">✕</button></td>
+      </tr>`;
+    }).join('');
+  }
+  const totalPrevisto = STATE.budget.reduce((s,b)=>s+(Number(b.previsto)||0),0);
+  const totalRealizado = STATE.budget.reduce((s,b)=>s+(Number(b.realizado)||0),0);
+  const totalDiff = totalPrevisto-totalRealizado;
+  document.getElementById('budget-total-row').innerHTML = `
+    <td>TOTAL</td><td></td>
+    <td class="mono">${fmtBRL(totalPrevisto)}</td>
+    <td class="mono">${fmtBRL(totalRealizado)}</td>
+    <td class="mono ${totalDiff>0?'diff-pos':totalDiff<0?'diff-neg':'diff-zero'}">${fmtBRL(totalDiff)}</td>
+    <td></td><td></td>`;
+
+  document.getElementById('bg-previsto').textContent = fmtBRL(totalPrevisto);
+  document.getElementById('bg-realizado').textContent = fmtBRL(totalRealizado);
+  const pctRealizado = totalPrevisto? Math.round(totalRealizado/totalPrevisto*100):0;
+  document.getElementById('bg-realizado-sub').textContent = pctRealizado+'% do orçamento';
+  const realCard = document.getElementById('bg-realizado-card');
+  const meter = document.getElementById('bg-realizado-meter');
+  let color = 'var(--success)';
+  if(pctRealizado>=100) color='var(--danger)'; else if(pctRealizado>=80) color='var(--pre)';
+  realCard.style.borderLeftColor = color;
+  document.getElementById('bg-realizado').style.color = color;
+  meter.style.width = Math.min(pctRealizado,100)+'%';
+  meter.style.background = color;
+
+  const saldo = totalPrevisto-totalRealizado;
+  document.getElementById('bg-saldo').textContent = fmtBRL(saldo);
+  document.getElementById('bg-saldo').style.color = saldo>=0?'var(--success)':'var(--danger)';
+  const saldoMeter = document.getElementById('bg-saldo-meter');
+  saldoMeter.style.width = Math.min(100, totalPrevisto? (saldo/totalPrevisto*100):0)+'%';
+  saldoMeter.style.background = saldo>=0?'var(--success)':'var(--danger)';
+}
+function addBudgetLine(){
+  STATE.budget.push({ id:uid(), categoria:'Categoria', descricao:'', previsto:0, realizado:0, status:'Previsto' });
+  saveState(); renderAll();
+}
+function updateBudget(id, field, value){
+  const b = STATE.budget.find(x=>x.id===id);
+  if(b){
+    b[field] = (field==='previsto'||field==='realizado') ? (parseFloat(value.replace(',','.'))||0) : value;
+    saveState(); renderAll();
+  }
+}
+function delBudget(id){
+  STATE.budget = STATE.budget.filter(b=>b.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== BRIEFINGS ===================== */
+function renderBriefings(){
+  const grid = document.getElementById('briefings-grid');
+  let html = STATE.briefings.map(b=>`
+    <div class="card">
+      <div class="card-header">
+        <input class="card-title" value="${escAttr(b.titulo)}" onchange="updateBriefing('${b.id}','titulo',this.value)">
+        <span class="card-date">${escAttr(b.data)}</span>
+        <button class="del-card" onclick="delBriefing('${b.id}')">✕</button>
+      </div>
+      <div class="card-author">${esc(b.autor||'')}</div>
+      <div class="card-body">
+        <textarea onchange="updateBriefing('${b.id}','conteudo',this.value)" placeholder="Escreva o briefing...">${esc(b.conteudo||'')}</textarea>
+      </div>
+    </div>`).join('');
+  html += `<div class="add-card" onclick="addBriefing()"><span>+ Novo Briefing</span></div>`;
+  grid.innerHTML = html;
+}
+function addBriefing(){
+  STATE.briefings.push({ id:uid(), titulo:'Novo Briefing', data: new Date().toISOString().slice(0,10), autor:'', conteudo:'' });
+  saveState(); renderAll();
+}
+function updateBriefing(id, field, value){
+  const b = STATE.briefings.find(x=>x.id===id);
+  if(b){ b[field]=value; saveState(); }
+}
+function delBriefing(id){
+  STATE.briefings = STATE.briefings.filter(b=>b.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== REUNIÕES + IA ===================== */
+function renderReunioes(){
+  const grid = document.getElementById('reunioes-grid');
+  let html = STATE.reunioes.map(r=>`
+    <div class="card" style="border-left-color:var(--dia)">
+      <div class="card-header">
+        <input class="card-title" value="${escAttr(r.titulo)}" onchange="updateReuniao('${r.id}','titulo',this.value)">
+        <span class="meeting-meta">${escAttr(r.data)} · ${escAttr(r.participantes||'')}</span>
+        <button class="del-card" onclick="delReuniao('${r.id}')">✕</button>
+      </div>
+      <div class="card-body">
+        <div class="field-label">Notas / Transcrição</div>
+        <textarea onchange="updateReuniao('${r.id}','notas',this.value)" placeholder="Cole aqui as notas ou transcrição...">${esc(r.notas||'')}</textarea>
+        <button class="ghost-btn" onclick="resumirIA('${r.id}')">Resumir com IA</button>
+        <div class="field-label">Resumo IA</div>
+        <textarea class="ia-summary-input" onchange="updateReuniao('${r.id}','resumoIA',this.value)" placeholder="Integre via n8n + API Claude para resumo automático. Enquanto isso, cole o resumo manualmente aqui." style="width:100%;min-height:80px;background:rgba(0,180,168,0.06);border:1px solid var(--dia);padding:10px;font-size:12px;outline:none;">${esc(r.resumoIA||'')}</textarea>
+      </div>
+    </div>`).join('');
+  html += `<div class="add-card" onclick="addReuniao()"><span>+ Nova Reunião</span></div>`;
+  grid.innerHTML = html;
+}
+function addReuniao(){
+  STATE.reunioes.push({ id:uid(), titulo:'Nova Reunião', data:new Date().toISOString().slice(0,10), participantes:'', notas:'', resumoIA:'' });
+  saveState(); renderAll();
+}
+function updateReuniao(id, field, value){
+  const r = STATE.reunioes.find(x=>x.id===id);
+  if(r){ r[field]=value; saveState(); }
+}
+function delReuniao(id){
+  STATE.reunioes = STATE.reunioes.filter(r=>r.id!==id);
+  saveState(); renderAll();
+}
+function resumirIA(id){
+  const r = STATE.reunioes.find(x=>x.id===id);
+  if(r && !r.resumoIA){
+    r.resumoIA = 'Integre via n8n + API Claude para resumo automático.\nEnquanto isso, cole o resumo manualmente aqui.';
+    saveState(); renderReunioes();
+  }
+}
+
+/* ===================== TIMELINE ===================== */
+const TIMELINE_STATUS = { pending:{label:'PENDENTE',color:'var(--border-strong)'}, doing:{label:'EM ANDAMENTO',color:'var(--pre)'}, done:{label:'CONCLUÍDO',color:'var(--success)'} };
+function renderTimeline(){
+  const list = document.getElementById('timeline-list');
+  if(!STATE.timeline.length){
+    list.innerHTML = `<div class="empty-state">Nenhum marco no cronograma</div>`;
+    return;
+  }
+  list.innerHTML = STATE.timeline.map((m,idx)=>{
+    const st = TIMELINE_STATUS[m.status] || TIMELINE_STATUS.pending;
+    const isLast = idx===STATE.timeline.length-1;
+    return `<div class="marco ${m.diad?'diad':''}">
+      <div class="marco-line">
+        <div class="marco-dot" style="background:${m.diad?'var(--dia)':st.color}"></div>
+        ${!isLast?'<div class="marco-connector"></div>':''}
+      </div>
+      <div class="marco-body">
+        <div class="marco-row">
+          <input class="marco-title" value="${escAttr(m.titulo)}" onchange="updateMarco('${m.id}','titulo',this.value)">
+          <select class="marco-select" onchange="updateMarco('${m.id}','status',this.value)">
+            ${Object.entries(TIMELINE_STATUS).map(([k,v])=>`<option value="${k}" ${m.status===k?'selected':''}>${v.label}</option>`).join('')}
+          </select>
+          <input type="date" class="marco-date" value="${escAttr(m.data)}" onchange="updateMarco('${m.id}','data',this.value)">
+          <button class="marco-del" onclick="delMarco('${m.id}')">✕</button>
+        </div>
+        <input class="marco-desc" placeholder="Descrição opcional" value="${escAttr(m.descricao)}" onchange="updateMarco('${m.id}','descricao',this.value)">
+      </div>
+    </div>`;
+  }).join('');
+}
+function updateMarco(id, field, value){
+  const m = STATE.timeline.find(x=>x.id===id);
+  if(m){ m[field]=value; saveState(); renderTimeline(); }
+}
+function delMarco(id){
+  STATE.timeline = STATE.timeline.filter(m=>m.id!==id);
+  saveState(); renderTimeline();
+}
+function openTimelineModal(){
+  document.getElementById('modal-titulo').value='';
+  document.getElementById('modal-data').value='';
+  document.getElementById('modal-desc').value='';
+  document.getElementById('modal-overlay').classList.add('active');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('active'); }
+function saveModalMarco(){
+  const titulo = document.getElementById('modal-titulo').value.trim();
+  if(!titulo) return;
+  STATE.timeline.push({
+    id: uid(),
+    titulo,
+    data: document.getElementById('modal-data').value,
+    descricao: document.getElementById('modal-desc').value,
+    status: 'pending'
+  });
+  saveState(); renderTimeline(); closeModal();
+}
+
+/* ===================== UTIL ===================== */
+function esc(str, forAttr){
+  str = String(str==null?'':str);
+  const out = str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return forAttr ? out.replace(/'/g,'&#39;') : out;
+}
+function escAttr(str){
+  return String(str==null?'':str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ===================== RENDER ALL ===================== */
+if(sessionStorage.getItem('callsheet_session')){ showApp(); }
+
+function renderAll(){
+  eventNameInput.value = STATE.eventName || '';
+  eventDateInput.value = STATE.eventDate || '';
+  document.getElementById('topbar-event-name').textContent = STATE.eventName || '';
+  renderCountdown();
+  renderOverview();
+  renderChecklistPage('pre');
+  renderChecklistPage('dia');
+  renderChecklistPage('pos');
+  renderFornecedores();
+  renderBudget();
+  renderBriefings();
+  renderReunioes();
+  renderTimeline();
+}
+</script>
+</body>
+</html>
