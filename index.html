@@ -201,15 +201,9 @@ button{cursor:pointer;}
 .nav-item.active{color:var(--text-primary);}
 .nav-item .dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
 .nav-item.active .dot{background:currentColor;}
-.nav-item[data-page="pre"].active{border-left-color:var(--pre);color:var(--pre);}
+.nav-item.active{border-left-color:var(--pre);color:var(--pre);}
 .nav-item[data-page="dia"].active{border-left-color:var(--dia);color:var(--dia);}
 .nav-item[data-page="pos"].active{border-left-color:var(--pos);color:var(--pos);}
-.nav-item[data-page="overview"].active,
-.nav-item[data-page="timeline"].active,
-.nav-item[data-page="fornecedores"].active,
-.nav-item[data-page="budget"].active,
-.nav-item[data-page="briefings"].active,
-.nav-item[data-page="reunioes"].active{border-left-color:var(--pre);color:var(--pre);}
 .sidebar-footer{padding:14px 20px;margin-top:auto;}
 .logout-link{font-size:11px;color:var(--text-muted);cursor:pointer;}
 .logout-link:hover{color:var(--danger);}
@@ -704,6 +698,93 @@ tbody tr:hover .del-btn{opacity:1;}
   padding:10px 24px;
 }
 
+/* ============ UPLOAD / GALLERY (Cenografia, NF, Documentos) ============ */
+.upload-zone{
+  border:2px dashed var(--border-default);
+  padding:24px;
+  text-align:center;
+  cursor:pointer;
+  margin-bottom:20px;
+}
+.upload-zone:hover{border-color:var(--pre);}
+.upload-zone span{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.upload-zone:hover span{color:var(--pre);}
+.ceno-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.ceno-card{background:var(--bg-surface);border-left:3px solid var(--pre);}
+.ceno-card-header{
+  background:var(--bg-raised);
+  padding:12px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:8px;
+}
+.ceno-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;background:transparent;border:none;outline:none;flex:1;}
+.ceno-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:10px;}
+.ceno-thumb{position:relative;aspect-ratio:1;overflow:hidden;background:var(--bg-raised);}
+.ceno-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.ceno-thumb-del{
+  position:absolute;top:2px;right:2px;
+  background:rgba(0,0,0,0.7);color:var(--text-primary);
+  border:none;width:16px;height:16px;font-size:10px;
+  display:flex;align-items:center;justify-content:center;
+}
+.ceno-thumb-del:hover{color:var(--danger);}
+.ceno-add-img{
+  aspect-ratio:1;border:1px dashed var(--border-strong);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-muted);font-size:20px;cursor:pointer;
+}
+.ceno-add-img:hover{border-color:var(--pre);color:var(--pre);}
+.ceno-body{padding:0 16px 14px;}
+.ceno-body select{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  text-transform:uppercase;
+  background:var(--bg-raised);
+  border:1px solid var(--border-default);
+  color:var(--text-secondary);
+  padding:3px 6px;
+  margin-bottom:8px;
+}
+.ceno-body textarea{
+  width:100%;
+  min-height:60px;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-size:12px;
+  font-family:'Barlow',sans-serif;
+  color:var(--text-secondary);
+  resize:vertical;
+}
+.file-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--info);
+  background:var(--info-dim);
+  padding:3px 8px;border-radius:2px;
+}
+.file-input-hidden{display:none;}
+.upload-btn{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:11px;
+  text-transform:uppercase;
+  color:var(--info);
+  background:var(--info-dim);
+  border:none;
+  padding:5px 10px;
+  cursor:pointer;
+}
+.upload-btn:hover{opacity:0.8;}
+
 @media print{
   .sidebar,.topbar,.item-del,.del-btn,.del-card,.marco-del,.add-item-row,.add-row-btn,.add-card,.ghost-btn{display:none!important;}
 }
@@ -713,7 +794,7 @@ tbody tr:hover .del-btn{opacity:1;}
   .sidebar.open{left:0;}
   .content{padding:16px;}
   .phase-row,.grid-2,.metrics-row,.budget-summary{flex-direction:column;}
-  .grid-2{grid-template-columns:1fr;}
+  .grid-2,.ceno-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -763,14 +844,22 @@ tbody tr:hover .del-btn{opacity:1;}
       <div class="nav-item" data-page="pos"><span class="dot"></span>Pós-Evento</div>
     </div>
     <div class="nav-section">
+      <div class="nav-section-label">Criativo</div>
+      <div class="nav-item" data-page="cenografia"><span class="dot"></span>Cenografia</div>
+      <div class="nav-item" data-page="ab"><span class="dot"></span>A&amp;B</div>
+    </div>
+    <div class="nav-section">
       <div class="nav-section-label">Gestão</div>
       <div class="nav-item" data-page="fornecedores"><span class="dot"></span>Fornecedores</div>
       <div class="nav-item" data-page="budget"><span class="dot"></span>Budget</div>
+      <div class="nav-item" data-page="financeiro"><span class="dot"></span>Financeiro</div>
+      <div class="nav-item" data-page="prestacao"><span class="dot"></span>Prestação de Contas</div>
     </div>
     <div class="nav-section" style="border-bottom:none;">
       <div class="nav-section-label">Comunicação</div>
       <div class="nav-item" data-page="briefings"><span class="dot"></span>Briefings</div>
       <div class="nav-item" data-page="reunioes"><span class="dot"></span>Reuniões + IA</div>
+      <div class="nav-item" data-page="documentos"><span class="dot"></span>Documentação</div>
     </div>
     <div class="sidebar-footer">
       <span class="logout-link" id="logout-btn">Sair</span>
@@ -852,14 +941,94 @@ tbody tr:hover .del-btn{opacity:1;}
         <div class="status-filter" id="fornecedor-filter"></div>
         <table>
           <thead>
-            <tr><th>Fornecedor</th><th>Categoria</th><th>Contato</th><th>Valor</th><th>Status</th><th>Obs</th><th></th></tr>
+            <tr><th>Fornecedor</th><th>Categoria</th><th>Contato</th><th>Valor</th><th>Status</th><th>Especificações / Rider</th><th>Obs</th><th></th></tr>
           </thead>
           <tbody id="fornecedores-tbody"></tbody>
           <tfoot>
-            <tr><td colspan="7" class="add-row-btn" onclick="addFornecedor()">+ ADICIONAR FORNECEDOR</td></tr>
+            <tr><td colspan="8" class="add-row-btn" onclick="addFornecedor()">+ ADICIONAR FORNECEDOR</td></tr>
           </tfoot>
         </table>
         <div class="table-footer" id="fornecedor-footer"></div>
+      </section>
+
+      <!-- CENOGRAFIA -->
+      <section class="page" id="page-cenografia">
+        <div class="ceno-grid" id="cenografia-grid"></div>
+      </section>
+
+      <!-- A&B -->
+      <section class="page" id="page-ab">
+        <div class="section-label">Cardápio / A&amp;B</div>
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Categoria</th><th>Qtd</th><th>Restrição</th><th>Obs</th><th></th></tr>
+          </thead>
+          <tbody id="ab-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="6" class="add-row-btn" onclick="addAbItem()">+ ADICIONAR ITEM</td></tr>
+          </tfoot>
+        </table>
+      </section>
+
+      <!-- FINANCEIRO (P&L) -->
+      <section class="page" id="page-financeiro">
+        <div class="budget-summary">
+          <div class="budget-card">
+            <div class="budget-num mono" id="fin-receita">R$0</div>
+            <div class="budget-sub">Receita contratada</div>
+          </div>
+          <div class="budget-card">
+            <div class="budget-num mono" id="fin-custo">R$0</div>
+            <div class="budget-sub">Custo total (budget realizado)</div>
+          </div>
+          <div class="budget-card" id="fin-lucro-card">
+            <div class="budget-num mono" id="fin-lucro">R$0</div>
+            <div class="budget-sub" id="fin-margem-sub">0% de margem</div>
+          </div>
+        </div>
+        <div class="section-label">Receita do Evento</div>
+        <div class="modal-field" style="max-width:280px;margin-bottom:24px;">
+          <label>Valor total do contrato com o cliente</label>
+          <input type="text" id="fin-receita-input" placeholder="R$ 0">
+        </div>
+        <div class="section-label">Parcelas / Recebimentos</div>
+        <table>
+          <thead>
+            <tr><th>Descrição</th><th>Valor</th><th>Data Prevista</th><th>Recebido</th><th></th></tr>
+          </thead>
+          <tbody id="parcelas-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="5" class="add-row-btn" onclick="addParcela()">+ ADICIONAR PARCELA</td></tr>
+          </tfoot>
+        </table>
+      </section>
+
+      <!-- PRESTAÇÃO DE CONTAS -->
+      <section class="page" id="page-prestacao">
+        <div class="status-filter" id="nf-filter"></div>
+        <table>
+          <thead>
+            <tr><th>Descrição</th><th>Categoria</th><th>Nº NF</th><th>Valor</th><th>Data</th><th>Status</th><th>Arquivo</th><th></th></tr>
+          </thead>
+          <tbody id="nf-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="8" class="add-row-btn" onclick="addNotaFiscal()">+ ADICIONAR NOTA FISCAL</td></tr>
+          </tfoot>
+        </table>
+        <div class="table-footer" id="nf-footer"></div>
+      </section>
+
+      <!-- DOCUMENTAÇÃO -->
+      <section class="page" id="page-documentos">
+        <table>
+          <thead>
+            <tr><th>Documento</th><th>Categoria</th><th>Status</th><th>Arquivo</th><th>Obs</th><th></th></tr>
+          </thead>
+          <tbody id="documentos-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="6" class="add-row-btn" onclick="addDocumento()">+ ADICIONAR DOCUMENTO</td></tr>
+          </tfoot>
+        </table>
       </section>
 
       <!-- BUDGET -->
@@ -1053,6 +1222,11 @@ const DEFAULT_STATE = {
   budget: [],
   briefings: [],
   reunioes: [],
+  cenografia: [],
+  ab: [],
+  notasFiscais: [],
+  documentos: [],
+  financeiro: { receitaContratada: 0, parcelas: [] },
   timeline: [
     { id: uid(), titulo:'Briefing aprovado pelo cliente', data:'', descricao:'', status:'done' },
     { id: uid(), titulo:'Contratos de fornecedores assinados', data:'', descricao:'', status:'doing' },
@@ -1095,7 +1269,9 @@ function fmtBRL(n){
 /* ===================== NAVIGATION ===================== */
 const PAGE_TITLES = {
   overview:'Visão Geral', timeline:'Cronograma', pre:'Pré-Evento', dia:'Dia D', pos:'Pós-Evento',
-  fornecedores:'Fornecedores', budget:'Budget', briefings:'Briefings', reunioes:'Reuniões + IA'
+  cenografia:'Cenografia', ab:'A&B',
+  fornecedores:'Fornecedores', budget:'Budget', financeiro:'Financeiro', prestacao:'Prestação de Contas',
+  briefings:'Briefings', reunioes:'Reuniões + IA', documentos:'Documentação'
 };
 
 document.querySelectorAll('.nav-item').forEach(item=>{
@@ -1272,7 +1448,7 @@ function renderFornecedores(){
   const tbody = document.getElementById('fornecedores-tbody');
   const list = fornecedorFilter==='TODOS' ? STATE.fornecedores : STATE.fornecedores.filter(f=>f.status===fornecedorFilter);
   if(!list.length){
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Nenhum fornecedor cadastrado</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">Nenhum fornecedor cadastrado</div></td></tr>`;
   } else {
     tbody.innerHTML = list.map(f=>{
       const c = STATUS_COLORS[f.status] || STATUS_COLORS['Prospecção'];
@@ -1284,6 +1460,7 @@ function renderFornecedores(){
         <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateFornecedor('${f.id}','status',this.value)">
           ${FORNECEDOR_STATUS.map(s=>`<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
         </select></td>
+        <td><input value="${escAttr(f.especificacoes||'')}" placeholder="Rider, especificações técnicas..." onchange="updateFornecedor('${f.id}','especificacoes',this.value)"></td>
         <td><input value="${escAttr(f.obs)}" onchange="updateFornecedor('${f.id}','obs',this.value)"></td>
         <td><button class="del-btn" onclick="delFornecedor('${f.id}')">✕</button></td>
       </tr>`;
@@ -1293,7 +1470,7 @@ function renderFornecedores(){
   document.getElementById('fornecedor-footer').textContent = `${STATE.fornecedores.length} fornecedores · ${fmtBRL(total)} total`;
 }
 function addFornecedor(){
-  STATE.fornecedores.push({ id:uid(), nome:'Novo Fornecedor', categoria:'', contato:'', valor:'', status:'Prospecção', obs:'' });
+  STATE.fornecedores.push({ id:uid(), nome:'Novo Fornecedor', categoria:'', contato:'', valor:'', status:'Prospecção', especificacoes:'', obs:'' });
   saveState(); renderAll();
 }
 function updateFornecedor(id, field, value){
@@ -1504,6 +1681,289 @@ function saveModalMarco(){
   saveState(); renderTimeline(); closeModal();
 }
 
+/* ===================== CENOGRAFIA ===================== */
+const CENO_STATUS = ['Conceito','Em Produção','Aprovado','Montado'];
+function renderCenografia(){
+  const grid = document.getElementById('cenografia-grid');
+  let html = STATE.cenografia.map(c=>`
+    <div class="ceno-card">
+      <div class="ceno-card-header">
+        <input class="ceno-title" value="${escAttr(c.titulo)}" onchange="updateCeno('${c.id}','titulo',this.value)">
+        <button class="del-card" onclick="delCeno('${c.id}')">✕</button>
+      </div>
+      <div class="ceno-gallery">
+        ${(c.imagens||[]).map((img,idx)=>`
+          <div class="ceno-thumb">
+            <img src="${img}">
+            <button class="ceno-thumb-del" onclick="delCenoImg('${c.id}',${idx})">✕</button>
+          </div>`).join('')}
+        <label class="ceno-add-img">
+          +
+          <input type="file" accept="image/*" multiple class="file-input-hidden" onchange="addCenoImg('${c.id}',this.files)">
+        </label>
+      </div>
+      <div class="ceno-body">
+        <select onchange="updateCeno('${c.id}','status',this.value)">
+          ${CENO_STATUS.map(s=>`<option ${c.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <textarea placeholder="Descrição, referências, conceito..." onchange="updateCeno('${c.id}','descricao',this.value)">${esc(c.descricao||'')}</textarea>
+      </div>
+    </div>`).join('');
+  html += `<div class="add-card" onclick="addCeno()" style="min-height:200px;"><span>+ Novo Projeto</span></div>`;
+  grid.innerHTML = html;
+}
+function addCeno(){
+  STATE.cenografia.push({ id:uid(), titulo:'Novo Projeto', descricao:'', status:'Conceito', imagens:[] });
+  saveState(); renderAll();
+}
+function updateCeno(id, field, value){
+  const c = STATE.cenografia.find(x=>x.id===id);
+  if(c){ c[field]=value; saveState(); }
+}
+function delCeno(id){
+  STATE.cenografia = STATE.cenografia.filter(c=>c.id!==id);
+  saveState(); renderAll();
+}
+function addCenoImg(id, files){
+  const c = STATE.cenografia.find(x=>x.id===id);
+  if(!c || !files.length) return;
+  c.imagens = c.imagens || [];
+  let pending = files.length;
+  Array.from(files).forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      c.imagens.push(reader.result);
+      pending--;
+      if(pending===0){ saveState(); renderCenografia(); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function delCenoImg(id, idx){
+  const c = STATE.cenografia.find(x=>x.id===id);
+  if(c){ c.imagens.splice(idx,1); saveState(); renderCenografia(); }
+}
+
+/* ===================== A&B ===================== */
+const AB_CATEGORIAS = ['Entrada','Principal','Sobremesa','Bebida','Coffee Break','Outro'];
+function renderAb(){
+  const tbody = document.getElementById('ab-tbody');
+  if(!STATE.ab.length){
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nenhum item de A&B cadastrado</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = STATE.ab.map(a=>`
+    <tr>
+      <td><input value="${escAttr(a.item)}" onchange="updateAbItem('${a.id}','item',this.value)"></td>
+      <td><select class="status-select" style="background:var(--border-subtle);color:var(--text-secondary)" onchange="updateAbItem('${a.id}','categoria',this.value)">
+        ${AB_CATEGORIAS.map(c=>`<option ${a.categoria===c?'selected':''}>${c}</option>`).join('')}
+      </select></td>
+      <td><input class="mono" value="${escAttr(a.qtd)}" onchange="updateAbItem('${a.id}','qtd',this.value)" placeholder="0"></td>
+      <td><input value="${escAttr(a.restricao)}" onchange="updateAbItem('${a.id}','restricao',this.value)" placeholder="Vegano, sem glúten..."></td>
+      <td><input value="${escAttr(a.obs)}" onchange="updateAbItem('${a.id}','obs',this.value)"></td>
+      <td><button class="del-btn" onclick="delAbItem('${a.id}')">✕</button></td>
+    </tr>`).join('');
+}
+function addAbItem(){
+  STATE.ab.push({ id:uid(), item:'Novo Item', categoria:'Principal', qtd:'', restricao:'', obs:'' });
+  saveState(); renderAll();
+}
+function updateAbItem(id, field, value){
+  const a = STATE.ab.find(x=>x.id===id);
+  if(a){ a[field]=value; saveState(); }
+}
+function delAbItem(id){
+  STATE.ab = STATE.ab.filter(a=>a.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== FINANCEIRO (P&L) ===================== */
+function renderFinanceiro(){
+  document.getElementById('fin-receita-input').value = STATE.financeiro.receitaContratada ? fmtBRL(STATE.financeiro.receitaContratada).replace('R$\xa0','') : '';
+  const receita = Number(STATE.financeiro.receitaContratada)||0;
+  const custo = STATE.budget.reduce((s,b)=>s+(Number(b.realizado)||0),0);
+  const lucro = receita - custo;
+  const margem = receita ? Math.round(lucro/receita*100) : 0;
+
+  document.getElementById('fin-receita').textContent = fmtBRL(receita);
+  document.getElementById('fin-custo').textContent = fmtBRL(custo);
+  document.getElementById('fin-lucro').textContent = fmtBRL(lucro);
+  document.getElementById('fin-margem-sub').textContent = margem+'% de margem';
+  const lucroCard = document.getElementById('fin-lucro-card');
+  const lucroColor = lucro>=0 ? 'var(--success)' : 'var(--danger)';
+  lucroCard.style.borderLeftColor = lucroColor;
+  document.getElementById('fin-lucro').style.color = lucroColor;
+
+  const tbody = document.getElementById('parcelas-tbody');
+  const parcelas = STATE.financeiro.parcelas || [];
+  if(!parcelas.length){
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">Nenhuma parcela cadastrada</div></td></tr>`;
+  } else {
+    tbody.innerHTML = parcelas.map(p=>`
+      <tr>
+        <td><input value="${escAttr(p.descricao)}" onchange="updateParcela('${p.id}','descricao',this.value)"></td>
+        <td><input class="mono" value="${escAttr(p.valor)}" onchange="updateParcela('${p.id}','valor',this.value)" placeholder="R$ 0"></td>
+        <td><input type="date" value="${escAttr(p.data)}" onchange="updateParcela('${p.id}','data',this.value)" style="background:transparent;border:none;outline:none;color:var(--text-secondary);font-size:12px;"></td>
+        <td><span class="item-checkbox ${p.recebido?'checked':''}" style="${p.recebido?'background:var(--success);border-color:var(--success)':''}" onclick="toggleParcela('${p.id}')">${p.recebido?'✓':''}</span></td>
+        <td><button class="del-btn" onclick="delParcela('${p.id}')">✕</button></td>
+      </tr>`).join('');
+  }
+}
+document.getElementById('fin-receita-input').addEventListener('change', e=>{
+  STATE.financeiro.receitaContratada = parseFloat(e.target.value.replace(/[^\d,.-]/g,'').replace(',','.'))||0;
+  saveState(); renderAll();
+});
+function addParcela(){
+  STATE.financeiro.parcelas.push({ id:uid(), descricao:'Parcela', valor:0, data:'', recebido:false });
+  saveState(); renderAll();
+}
+function updateParcela(id, field, value){
+  const p = STATE.financeiro.parcelas.find(x=>x.id===id);
+  if(p){
+    p[field] = field==='valor' ? (parseFloat(value.replace(',','.'))||0) : value;
+    saveState(); renderAll();
+  }
+}
+function toggleParcela(id){
+  const p = STATE.financeiro.parcelas.find(x=>x.id===id);
+  if(p){ p.recebido = !p.recebido; saveState(); renderFinanceiro(); }
+}
+function delParcela(id){
+  STATE.financeiro.parcelas = STATE.financeiro.parcelas.filter(p=>p.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== PRESTAÇÃO DE CONTAS (NOTAS FISCAIS) ===================== */
+const NF_STATUS = ['Pendente','Aprovado','Reembolsado','Pago'];
+const NF_STATUS_COLORS = {
+  'Pendente':{bg:'var(--pre-dim)',fg:'var(--pre)'},
+  'Aprovado':{bg:'var(--info-dim)',fg:'var(--info)'},
+  'Reembolsado':{bg:'var(--success-dim)',fg:'var(--success)'},
+  'Pago':{bg:'var(--success-dim)',fg:'var(--success)'},
+};
+let nfFilter = 'TODOS';
+function renderNfFilter(){
+  const counts = { TODOS: STATE.notasFiscais.length };
+  NF_STATUS.forEach(s=> counts[s]=STATE.notasFiscais.filter(n=>n.status===s).length);
+  document.getElementById('nf-filter').innerHTML = ['TODOS', ...NF_STATUS].map(s=>
+    `<div class="status-pill ${nfFilter===s?'active':''}" onclick="setNfFilter('${s}')">${s.toUpperCase()} · ${counts[s]||0}</div>`
+  ).join('');
+}
+function setNfFilter(s){ nfFilter = s; renderNotasFiscais(); }
+function renderNotasFiscais(){
+  renderNfFilter();
+  const tbody = document.getElementById('nf-tbody');
+  const list = nfFilter==='TODOS' ? STATE.notasFiscais : STATE.notasFiscais.filter(n=>n.status===nfFilter);
+  if(!list.length){
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">Nenhuma nota fiscal cadastrada</div></td></tr>`;
+  } else {
+    tbody.innerHTML = list.map(n=>{
+      const c = NF_STATUS_COLORS[n.status] || NF_STATUS_COLORS['Pendente'];
+      return `<tr>
+        <td><input value="${escAttr(n.descricao)}" onchange="updateNf('${n.id}','descricao',this.value)"></td>
+        <td><input value="${escAttr(n.categoria)}" onchange="updateNf('${n.id}','categoria',this.value)" placeholder="Categoria"></td>
+        <td><input class="mono" value="${escAttr(n.numero)}" onchange="updateNf('${n.id}','numero',this.value)" placeholder="000000"></td>
+        <td><input class="mono" value="${escAttr(n.valor)}" onchange="updateNf('${n.id}','valor',this.value)" placeholder="R$ 0"></td>
+        <td><input type="date" value="${escAttr(n.data)}" onchange="updateNf('${n.id}','data',this.value)" style="background:transparent;border:none;outline:none;color:var(--text-secondary);font-size:12px;"></td>
+        <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateNf('${n.id}','status',this.value)">
+          ${NF_STATUS.map(s=>`<option value="${s}" ${n.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></td>
+        <td>${n.arquivoNome
+          ? `<span class="file-pill">📎 ${esc(n.arquivoNome)}</span>`
+          : `<label class="upload-btn">+ Anexar<input type="file" accept="image/*,application/pdf" class="file-input-hidden" onchange="attachNfFile('${n.id}',this.files[0])"></label>`}</td>
+        <td><button class="del-btn" onclick="delNotaFiscal('${n.id}')">✕</button></td>
+      </tr>`;
+    }).join('');
+  }
+  const total = STATE.notasFiscais.reduce((s,n)=>s+(Number(n.valor)||0),0);
+  document.getElementById('nf-footer').textContent = `${STATE.notasFiscais.length} notas fiscais · ${fmtBRL(total)} total`;
+}
+function addNotaFiscal(){
+  STATE.notasFiscais.push({ id:uid(), descricao:'Despesa', categoria:'', numero:'', valor:0, data:'', status:'Pendente', arquivoNome:'', arquivoData:'' });
+  saveState(); renderAll();
+}
+function updateNf(id, field, value){
+  const n = STATE.notasFiscais.find(x=>x.id===id);
+  if(n){
+    n[field] = field==='valor' ? (parseFloat(value.replace(',','.'))||0) : value;
+    saveState(); renderAll();
+  }
+}
+function attachNfFile(id, file){
+  if(!file) return;
+  const n = STATE.notasFiscais.find(x=>x.id===id);
+  if(!n) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    n.arquivoNome = file.name;
+    n.arquivoData = reader.result;
+    saveState(); renderNotasFiscais();
+  };
+  reader.readAsDataURL(file);
+}
+function delNotaFiscal(id){
+  STATE.notasFiscais = STATE.notasFiscais.filter(n=>n.id!==id);
+  saveState(); renderAll();
+}
+
+/* ===================== DOCUMENTAÇÃO ===================== */
+const DOC_CATEGORIAS = ['Contrato','Alvará/Licença','ART','Seguro','Rider Técnico','Relatório','Outro'];
+const DOC_STATUS = ['Pendente','Em Análise','Aprovado','Vencido'];
+const DOC_STATUS_COLORS = {
+  'Pendente':{bg:'var(--pre-dim)',fg:'var(--pre)'},
+  'Em Análise':{bg:'var(--info-dim)',fg:'var(--info)'},
+  'Aprovado':{bg:'var(--success-dim)',fg:'var(--success)'},
+  'Vencido':{bg:'var(--danger-dim)',fg:'var(--danger)'},
+};
+function renderDocumentos(){
+  const tbody = document.getElementById('documentos-tbody');
+  if(!STATE.documentos.length){
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nenhum documento cadastrado</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = STATE.documentos.map(d=>{
+    const c = DOC_STATUS_COLORS[d.status] || DOC_STATUS_COLORS['Pendente'];
+    return `<tr>
+      <td><input value="${escAttr(d.nome)}" onchange="updateDocumento('${d.id}','nome',this.value)"></td>
+      <td><select class="status-select" style="background:var(--border-subtle);color:var(--text-secondary)" onchange="updateDocumento('${d.id}','categoria',this.value)">
+        ${DOC_CATEGORIAS.map(c2=>`<option ${d.categoria===c2?'selected':''}>${c2}</option>`).join('')}
+      </select></td>
+      <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateDocumento('${d.id}','status',this.value)">
+        ${DOC_STATUS.map(s=>`<option value="${s}" ${d.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td>${d.arquivoNome
+        ? `<span class="file-pill">📎 ${esc(d.arquivoNome)}</span>`
+        : `<label class="upload-btn">+ Anexar<input type="file" class="file-input-hidden" onchange="attachDocFile('${d.id}',this.files[0])"></label>`}</td>
+      <td><input value="${escAttr(d.obs)}" onchange="updateDocumento('${d.id}','obs',this.value)"></td>
+      <td><button class="del-btn" onclick="delDocumento('${d.id}')">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+function addDocumento(){
+  STATE.documentos.push({ id:uid(), nome:'Novo Documento', categoria:'Contrato', status:'Pendente', obs:'', arquivoNome:'', arquivoData:'' });
+  saveState(); renderAll();
+}
+function updateDocumento(id, field, value){
+  const d = STATE.documentos.find(x=>x.id===id);
+  if(d){ d[field]=value; saveState(); renderAll(); }
+}
+function attachDocFile(id, file){
+  if(!file) return;
+  const d = STATE.documentos.find(x=>x.id===id);
+  if(!d) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    d.arquivoNome = file.name;
+    d.arquivoData = reader.result;
+    saveState(); renderDocumentos();
+  };
+  reader.readAsDataURL(file);
+}
+function delDocumento(id){
+  STATE.documentos = STATE.documentos.filter(d=>d.id!==id);
+  saveState(); renderAll();
+}
+
 /* ===================== UTIL ===================== */
 function esc(str, forAttr){
   str = String(str==null?'':str);
@@ -1528,6 +1988,11 @@ function renderAll(){
   renderChecklistPage('pos');
   renderFornecedores();
   renderBudget();
+  renderFinanceiro();
+  renderNotasFiscais();
+  renderDocumentos();
+  renderCenografia();
+  renderAb();
   renderBriefings();
   renderReunioes();
   renderTimeline();
