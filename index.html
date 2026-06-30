@@ -3,1999 +3,1621 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE CALL SHEET — Gestão de Produção</title>
+<title>THE CALL SHEET</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 :root{
-  --bg-root:#080808;
-  --bg-surface:#101010;
-  --bg-raised:#181818;
-  --bg-overlay:#1E1E1E;
-  --border-subtle:#1E1E1E;
-  --border-default:#282828;
-  --border-strong:#383838;
-  --text-primary:#EDE8DE;
-  --text-secondary:#8A8880;
-  --text-muted:#484840;
-  --pre:#D4A800;
-  --pre-dim:rgba(212,168,0,0.12);
-  --dia:#00B4A8;
-  --dia-dim:rgba(0,180,168,0.12);
-  --pos:#E05C30;
-  --pos-dim:rgba(224,92,48,0.12);
-  --danger:#D93A4A;
-  --danger-dim:rgba(217,58,74,0.12);
-  --success:#2EA84A;
-  --success-dim:rgba(46,168,74,0.12);
-  --info:#2878E0;
-  --info-dim:rgba(40,120,224,0.12);
+  --bg-root:#F4F3EF;
+  --bg-surface:#FFFFFF;
+  --bg-raised:#EDECEA;
+  --bg-overlay:#E4E3DF;
+  --border-subtle:#E4E3DF;
+  --border-default:#D4D3CF;
+  --border-strong:#B8B7B3;
+  --text-primary:#1A1A14;
+  --text-secondary:#68675F;
+  --text-muted:#A8A79F;
+  --pre:#B8880A;
+  --pre-dim:rgba(184,136,10,0.10);
+  --dia:#007870;
+  --dia-dim:rgba(0,120,112,0.10);
+  --pos:#C84420;
+  --pos-dim:rgba(200,68,32,0.10);
+  --danger:#C02838;
+  --danger-dim:rgba(192,40,56,0.10);
+  --success:#1A8C3C;
+  --success-dim:rgba(26,140,60,0.10);
+  --info:#1860C8;
+  --info-dim:rgba(24,96,200,0.10);
+  --sidebar-w:240px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{
-  background:var(--bg-root);
-  color:var(--text-primary);
-  font-family:'Barlow',sans-serif;
-  font-weight:400;
-  -webkit-font-smoothing:antialiased;
-}
+body{background:var(--bg-root);color:var(--text-primary);font-family:'Barlow',sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border-default);}
 input,select,textarea,button{font-family:inherit;color:inherit;}
 button{cursor:pointer;}
-*{transition:background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;}
 
-/* ============ LOGIN ============ */
-#login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--bg-root);
-}
-.login-box{width:380px;}
-.login-logo{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:900;
-  font-size:44px;
-  color:var(--pre);
-  letter-spacing:0.02em;
-  line-height:1;
-}
-.login-tagline{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--text-secondary);
-  margin-top:6px;
-}
-.login-author{
-  font-family:'Barlow',sans-serif;
-  font-weight:300;
-  font-size:11px;
-  color:var(--text-muted);
-  margin-top:4px;
-}
+/* LOGIN */
+#login{min-height:100vh;display:none;align-items:center;justify-content:center;background:var(--bg-root);}
+.login-box{width:360px;}
+.login-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:40px;color:var(--pre);letter-spacing:0.02em;line-height:1;}
+.login-tagline{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);margin-top:6px;}
+.login-author{font-size:11px;color:var(--text-muted);margin-top:3px;}
 .login-divider{height:1px;background:var(--border-default);margin:24px 0;}
-.login-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--text-muted);
-  margin-bottom:6px;
-  display:block;
-}
+.login-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:6px;display:block;}
 .login-field{margin-bottom:18px;}
-.login-field input{
-  width:100%;
-  background:transparent;
-  border:none;
-  border-bottom:1px solid var(--border-default);
-  color:var(--text-primary);
-  font-size:14px;
-  padding:8px 0;
-  outline:none;
-}
+.login-field input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border-default);font-size:14px;padding:8px 0;outline:none;}
 .login-field input:focus{border-bottom-color:var(--pre);}
-.login-btn{
-  width:100%;
-  background:var(--pre);
-  color:#000;
-  border:none;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:800;
-  font-size:16px;
-  text-transform:uppercase;
-  letter-spacing:0.04em;
-  padding:13px 0;
-  margin-top:8px;
-}
+.login-btn{width:100%;background:var(--pre);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;padding:13px 0;margin-top:8px;}
 .login-btn:hover{opacity:0.85;}
-.login-hint{
-  font-size:10px;
-  color:var(--text-muted);
-  margin-top:14px;
-  text-align:center;
-}
-.login-error{
-  font-size:11px;
-  color:var(--danger);
-  margin-top:8px;
-  height:14px;
-}
+.login-hint{font-size:10px;color:var(--text-muted);text-align:center;margin-top:12px;}
+.login-err{color:var(--danger);font-size:12px;margin-top:8px;text-align:center;}
 
-/* ============ APP SHELL ============ */
-#app{display:flex;min-height:100vh;}
-.sidebar{
-  width:220px;
-  background:var(--bg-surface);
-  border-right:1px solid var(--border-default);
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow-y:auto;
-  flex-shrink:0;
-}
-.sidebar-header{padding:18px 20px;border-bottom:1px solid var(--border-subtle);}
-.sidebar-logo{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:800;
-  font-size:16px;
-  color:var(--pre);
-  letter-spacing:0.02em;
-}
-.sidebar-version{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;
-  color:var(--text-muted);
-  margin-top:2px;
-}
-.sidebar-event{padding:14px 20px;border-bottom:1px solid var(--border-subtle);}
-.sidebar-event-label{
-  font-size:10px;
-  color:var(--text-muted);
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  margin-bottom:6px;
-  display:block;
-}
-.sidebar-event input{
-  width:100%;
-  background:transparent;
-  border:none;
-  border-bottom:1px solid transparent;
-  color:var(--text-primary);
-  font-weight:500;
-  font-size:13px;
-  outline:none;
-  padding:2px 0;
-}
-.sidebar-event input:focus{border-bottom-color:var(--pre);}
-.nav-section{padding:14px 0 4px;border-bottom:1px solid var(--border-subtle);}
-.nav-section-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:9px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  color:var(--text-muted);
-  padding:0 20px 6px;
-}
-.nav-item{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 20px;
-  font-size:13px;
-  font-weight:500;
-  color:var(--text-secondary);
-  cursor:pointer;
-  border-left:3px solid transparent;
-}
-.nav-item:hover{background:var(--bg-raised);color:var(--text-primary);}
-.nav-item.active{color:var(--text-primary);}
-.nav-item .dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
-.nav-item.active .dot{background:currentColor;}
-.nav-item.active{border-left-color:var(--pre);color:var(--pre);}
-.nav-item[data-page="dia"].active{border-left-color:var(--dia);color:var(--dia);}
-.nav-item[data-page="pos"].active{border-left-color:var(--pos);color:var(--pos);}
-.sidebar-footer{padding:14px 20px;margin-top:auto;}
-.logout-link{font-size:11px;color:var(--text-muted);cursor:pointer;}
-.logout-link:hover{color:var(--danger);}
+/* HOME SCREEN */
+#home-screen{min-height:100vh;display:none;flex-direction:column;background:var(--bg-root);}
+.home-topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--border-default);background:var(--bg-surface);}
+.home-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:var(--pre);}
+.home-body{padding:40px 32px;flex:1;}
+.home-heading{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;letter-spacing:0.02em;margin-bottom:6px;}
+.home-sub{font-size:13px;color:var(--text-secondary);margin-bottom:32px;}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.project-card{background:var(--bg-surface);border:1px solid var(--border-default);padding:20px;cursor:pointer;transition:box-shadow 150ms,border-color 150ms;position:relative;}
+.project-card:hover{border-color:var(--pre);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.project-card-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;margin-bottom:4px;}
+.project-card-date{font-size:12px;color:var(--text-secondary);margin-bottom:16px;}
+.project-card-bar{height:4px;background:var(--bg-raised);border-radius:2px;overflow:hidden;display:flex;gap:1px;}
+.project-card-bar-seg{height:100%;}
+.project-card-stats{display:flex;gap:16px;margin-top:12px;}
+.project-card-stat{font-size:11px;color:var(--text-muted);}
+.project-card-stat span{font-weight:600;color:var(--text-secondary);}
+.project-card-del{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--text-muted);font-size:16px;line-height:1;padding:2px 6px;opacity:0;}
+.project-card:hover .project-card-del{opacity:1;}
+.project-card-del:hover{color:var(--danger);}
+.card-new{background:transparent;border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;cursor:pointer;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.06em;min-height:120px;transition:border-color 150ms,color 150ms;}
+.card-new:hover{border-color:var(--pre);color:var(--pre);}
+.btn-text{background:none;border:none;font-size:13px;color:var(--text-secondary);padding:6px 0;}
+.btn-text:hover{color:var(--text-primary);}
 
-.main{flex:1;display:flex;flex-direction:column;min-width:0;}
-.topbar{
-  height:56px;
-  background:var(--bg-surface);
-  border-bottom:1px solid var(--border-default);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 32px;
-  flex-shrink:0;
-}
-.topbar-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:16px;
-  text-transform:uppercase;
-  color:var(--text-secondary);
-  letter-spacing:0.04em;
-}
-.topbar-countdown{display:flex;align-items:center;gap:8px;}
-.countdown-dot{width:8px;height:8px;border-radius:50%;background:var(--pre);}
-.countdown-dot.urgent{background:var(--danger);animation:pulse 1.4s infinite;}
-.countdown-dot.live{background:var(--dia);animation:blink 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
-.countdown-num{
-  font-family:'JetBrains Mono',monospace;
-  font-weight:700;
-  font-size:22px;
-  color:var(--text-primary);
-}
-.countdown-label{font-size:11px;color:var(--text-muted);font-weight:300;}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.topbar-event-name{font-size:13px;color:var(--text-muted);font-weight:300;}
-.topbar-date-input{
-  background:var(--bg-raised);
-  border:1px solid var(--border-default);
-  color:var(--text-secondary);
-  font-size:12px;
-  padding:5px 8px;
-  border-radius:3px;
-}
+/* APP LAYOUT */
+#app{display:none;height:100vh;overflow:hidden;}
+.app-inner{display:flex;height:100%;}
+#sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg-surface);border-right:1px solid var(--border-default);display:flex;flex-direction:column;overflow-y:auto;}
+.sidebar-top{padding:16px 16px 0;}
+.sidebar-back{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);background:none;border:none;padding:0 0 12px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
+.sidebar-back:hover{color:var(--pre);}
+.sidebar-event{padding:0 16px 16px;border-bottom:1px solid var(--border-subtle);}
+.sidebar-event-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;line-height:1.2;margin-bottom:2px;}
+.sidebar-event-date{font-size:11px;color:var(--text-muted);}
+.sidebar-section{padding:12px 16px 4px;}
+.sidebar-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:13px;cursor:pointer;border-left:2px solid transparent;color:var(--text-secondary);background:none;border-right:none;border-top:none;border-bottom:none;width:100%;text-align:left;}
+.nav-item:hover{color:var(--text-primary);background:var(--bg-raised);}
+.nav-item.active{border-left-color:var(--pre);color:var(--pre);background:var(--pre-dim);font-weight:600;}
+.nav-item[data-area="cenografia"].active{border-left-color:#8B5CF6;color:#8B5CF6;background:rgba(139,92,246,0.08);}
+.nav-item[data-area="ab"].active{border-left-color:var(--pos);color:var(--pos);background:var(--pos-dim);}
+.nav-item[data-area="infratech"].active{border-left-color:var(--dia);color:var(--dia);background:var(--dia-dim);}
+.nav-item[data-area="producao"].active{border-left-color:var(--pre);color:var(--pre);background:var(--pre-dim);}
+.nav-item[data-area="financeiro"].active{border-left-color:var(--success);color:var(--success);background:var(--success-dim);}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border-subtle);}
+.logout-btn{width:100%;background:none;border:1px solid var(--border-default);padding:7px;font-size:12px;color:var(--text-secondary);}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
 
-.content{flex:1;padding:32px;overflow-y:auto;}
-.page{display:none;}
-.page.active{display:block;}
+/* CONTENT */
+#content{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.page{display:none;flex:1;flex-direction:column;}
+.page.active{display:flex;}
+.page-header{padding:20px 28px 16px;border-bottom:1px solid var(--border-default);background:var(--bg-surface);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.page-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;letter-spacing:0.02em;}
+.page-body{padding:24px 28px;flex:1;}
+.section-block{background:var(--bg-surface);border:1px solid var(--border-default);padding:20px;margin-bottom:16px;}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title-count{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--bg-raised);padding:2px 6px;color:var(--text-muted);}
 
-/* ============ STAT CARDS ============ */
-.phase-row{display:flex;gap:16px;margin-bottom:40px;}
-.phase-card{
-  flex:1;
-  background:var(--bg-surface);
-  padding:20px 24px;
-  border-left:3px solid var(--border-strong);
-  cursor:pointer;
-}
-.phase-card[data-phase="pre"]{border-left-color:var(--pre);}
-.phase-card[data-phase="dia"]{border-left-color:var(--dia);}
-.phase-card[data-phase="pos"]{border-left-color:var(--pos);}
-.phase-card:hover{background:var(--bg-raised);}
-.phase-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  margin-bottom:8px;
-}
-.phase-card[data-phase="pre"] .phase-label{color:var(--pre);}
-.phase-card[data-phase="dia"] .phase-label{color:var(--dia);}
-.phase-card[data-phase="pos"] .phase-label{color:var(--pos);}
-.phase-pct{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:800;
-  font-size:64px;
-  line-height:1;
-}
-.phase-sub{font-size:12px;color:var(--text-secondary);font-weight:300;margin:6px 0 12px;}
-.phase-bar{height:2px;background:var(--border-subtle);}
-.phase-bar-fill{height:100%;}
-.phase-card[data-phase="pre"] .phase-bar-fill{background:var(--pre);}
-.phase-card[data-phase="dia"] .phase-bar-fill{background:var(--dia);}
-.phase-card[data-phase="pos"] .phase-bar-fill{background:var(--pos);}
+/* DASHBOARD */
+.dashboard-progress{margin-bottom:24px;}
+.dp-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;}
+.dp-bar{height:8px;border-radius:4px;overflow:hidden;display:flex;gap:2px;background:var(--bg-raised);}
+.dp-seg{height:100%;border-radius:2px;transition:width 400ms;}
+.dp-seg.pre{background:var(--pre);}
+.dp-seg.dia{background:var(--dia);}
+.dp-seg.pos{background:var(--pos);}
+.dp-legend{display:flex;gap:16px;margin-top:8px;}
+.dp-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);}
+.dp-legend-dot{width:8px;height:8px;border-radius:50%;}
+.area-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
+.area-card{background:var(--bg-surface);border:1px solid var(--border-default);padding:16px;cursor:pointer;transition:border-color 150ms,box-shadow 150ms;}
+.area-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.area-card-icon{font-size:22px;margin-bottom:8px;}
+.area-card-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;}
+.area-card-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+.area-card-bar{height:3px;background:var(--bg-raised);margin-top:10px;border-radius:2px;overflow:hidden;}
+.area-card-bar-fill{height:100%;border-radius:2px;}
+.urgentes-list{display:flex;flex-direction:column;gap:4px;}
+.urgente-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg-raised);border-left:3px solid var(--danger);font-size:13px;}
+.urgente-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+.urgente-text{flex:1;}
+.badge-pre{background:var(--pre-dim);color:var(--pre);}
+.badge-dia{background:var(--dia-dim);color:var(--dia);}
+.badge-pos{background:var(--pos-dim);color:var(--pos);}
+.urgentes-empty{font-size:13px;color:var(--text-muted);padding:16px 0;}
 
-.section-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--text-muted);
-  margin-bottom:14px;
-}
-.alerts-list{margin-bottom:40px;}
-.alert-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 16px;
-  border-left:3px solid var(--danger);
-  background:var(--danger-dim);
-  font-size:13px;
-  margin-bottom:6px;
-}
-.alert-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);flex-shrink:0;}
-.alert-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+/* AREA PAGE */
+.area-tabs{display:flex;gap:2px;padding:0 28px;background:var(--bg-surface);border-bottom:1px solid var(--border-default);}
+.area-tab{padding:10px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.06em;border:none;border-bottom:2px solid transparent;background:none;color:var(--text-muted);cursor:pointer;margin-bottom:-1px;}
+.area-tab:hover{color:var(--text-primary);}
+.area-tab.active{color:var(--pre);border-bottom-color:var(--pre);}
+.area-tab.t-dia.active{color:var(--dia);border-bottom-color:var(--dia);}
+.area-tab.t-pos.active{color:var(--pos);border-bottom-color:var(--pos);}
+.area-content{padding:24px 28px;flex:1;overflow-y:auto;}
 
-.metrics-row{display:flex;gap:16px;}
-.mini-card{
-  flex:1;
-  padding:16px;
-  border-left:2px solid var(--border-strong);
-  background:var(--bg-surface);
-}
-.mini-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:32px;}
-.mini-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-top:4px;}
+/* CHECKLIST */
+.checklist-add{display:flex;gap:8px;margin-bottom:12px;}
+.checklist-add input{flex:1;border:1px solid var(--border-default);background:var(--bg-surface);padding:8px 10px;font-size:13px;outline:none;}
+.checklist-add input:focus{border-color:var(--pre);}
+.checklist-add .btn-add{background:var(--pre);color:#fff;border:none;padding:8px 14px;font-size:12px;font-weight:600;white-space:nowrap;}
+.checklist-items{display:flex;flex-direction:column;gap:2px;}
+.cl-item{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;}
+.cl-item:hover{background:var(--bg-raised);}
+.cl-check{width:16px;height:16px;border:1.5px solid var(--border-strong);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cl-item.done .cl-check{background:var(--success);border-color:var(--success);}
+.cl-item.done .cl-text{color:var(--text-muted);text-decoration:line-through;}
+.cl-text{font-size:13px;flex:1;}
+.cl-del{background:none;border:none;color:var(--text-muted);font-size:14px;padding:0 4px;opacity:0;line-height:1;}
+.cl-item:hover .cl-del{opacity:1;}
+.cl-del:hover{color:var(--danger);}
+.cl-empty{font-size:13px;color:var(--text-muted);padding:12px 0;}
 
-.empty-state{
-  text-align:center;
-  padding:40px 0;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  color:var(--text-muted);
-  font-size:14px;
-  text-transform:uppercase;
-  letter-spacing:0.05em;
-}
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);padding:8px 10px;border-bottom:1px solid var(--border-default);}
+.data-table td{padding:9px 10px;border-bottom:1px solid var(--border-subtle);}
+.data-table tr:hover td{background:var(--bg-raised);}
+.data-table .td-num{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.data-table .td-actions{display:flex;gap:4px;justify-content:flex-end;}
+.btn-icon{background:none;border:none;color:var(--text-muted);padding:3px 6px;font-size:13px;cursor:pointer;}
+.btn-icon:hover{color:var(--danger);}
+.btn-icon.edit:hover{color:var(--info);}
+.tbl-add{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border-default);padding:7px 12px;font-size:12px;color:var(--text-secondary);cursor:pointer;margin-top:10px;}
+.tbl-add:hover{border-color:var(--pre);color:var(--pre);}
+.badge-area{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 6px;border-radius:2px;}
+.ba-cenografia{background:rgba(139,92,246,0.1);color:#7C3AED;}
+.ba-ab{background:var(--pos-dim);color:var(--pos);}
+.ba-infratech{background:var(--dia-dim);color:var(--dia);}
+.ba-producao{background:var(--pre-dim);color:var(--pre);}
+.ba-financeiro{background:var(--success-dim);color:var(--success);}
 
-/* ============ CHECKLIST PAGES ============ */
-.checklist-tabs{display:flex;gap:0;border-bottom:1px solid var(--border-default);margin-bottom:24px;}
-.checklist-tab{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-  padding:10px 24px;
-  color:var(--text-muted);
-  border-bottom:2px solid transparent;
-  cursor:pointer;
-}
-.checklist-tab.active.pre{color:var(--pre);border-bottom-color:var(--pre);}
-.checklist-tab.active.dia{color:var(--dia);border-bottom-color:var(--dia);}
-.checklist-tab.active.pos{color:var(--pos);border-bottom-color:var(--pos);}
+/* FINANCEIRO */
+.fin-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px;}
+.fin-kpi{background:var(--bg-surface);border:1px solid var(--border-default);padding:16px;}
+.fin-kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;}
+.fin-kpi-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;}
+.fin-kpi-value.green{color:var(--success);}
+.fin-kpi-value.red{color:var(--danger);}
+.fin-kpi-value.amber{color:var(--pre);}
+.fin-area-table{width:100%;border-collapse:collapse;font-size:13px;}
+.fin-area-table th{text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);padding:8px 10px;border-bottom:1px solid var(--border-default);}
+.fin-area-table td{padding:8px 10px;border-bottom:1px solid var(--border-subtle);font-family:'JetBrains Mono',monospace;font-size:12px;}
+.fin-area-table .td-label{font-family:'Barlow',sans-serif;font-size:13px;}
+.fin-import-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.btn-import{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border-default);padding:8px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;}
+.btn-import:hover{border-color:var(--info);color:var(--info);}
+.btn-export{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border-default);padding:8px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;}
+.btn-export:hover{border-color:var(--success);color:var(--success);}
 
-.group{margin-bottom:28px;}
-.group-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding-bottom:8px;
-}
-.group-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-}
-.group-progress{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;}
-.group-bar{height:2px;background:var(--border-subtle);margin-bottom:6px;}
-.group-bar-fill{height:100%;}
-
-.item-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  height:44px;
-  padding:0 20px;
-  border-bottom:1px solid var(--border-subtle);
-}
-.item-row:hover{background:var(--bg-raised);}
-.item-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);width:28px;flex-shrink:0;}
-.item-checkbox{
-  width:15px;height:15px;flex-shrink:0;
-  border:1.5px solid var(--border-strong);
-  border-radius:2px;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-.item-checkbox.checked{display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:700;}
-.item-text{flex:1;font-size:13px;color:var(--text-primary);cursor:pointer;}
-.item-text.done{text-decoration:line-through;opacity:0.4;}
-.item-critical-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);flex-shrink:0;margin-right:-4px;}
-.badge{
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  padding:2px 6px;
-  border-radius:2px;
-  flex-shrink:0;
-  white-space:nowrap;
-}
-.badge-critical{color:var(--danger);background:var(--danger-dim);}
-.badge-done{color:var(--success);background:var(--success-dim);}
-.item-del{
-  width:20px;height:20px;flex-shrink:0;
-  color:var(--text-muted);
-  background:none;border:none;
-  font-size:14px;
-  opacity:0;
-}
-.item-row:hover .item-del{opacity:1;}
-.item-del:hover{color:var(--danger);}
-.add-item-row{padding:0 20px;height:40px;display:flex;align-items:center;}
-.add-item-row input{
-  width:100%;
-  background:transparent;
-  border:none;
-  border-bottom:1px solid transparent;
-  font-size:13px;
-  padding:8px 0;
-  outline:none;
-}
-.add-item-row input::placeholder{color:var(--text-muted);font-weight:300;}
-.add-item-row input:focus{border-bottom-color:var(--border-subtle);}
-
-/* ============ FORNECEDORES ============ */
-.status-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.status-pill{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:11px;
-  text-transform:uppercase;
-  padding:6px 14px;
-  color:var(--text-muted);
-  background:var(--bg-surface);
-  cursor:pointer;
-  border:1px solid var(--border-default);
-}
-.status-pill.active{background:var(--pre);color:#000;border-color:var(--pre);}
-
-table{width:100%;border-collapse:collapse;}
-thead th{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  color:var(--text-muted);
-  text-align:left;
-  padding:10px 14px;
-  border-bottom:1px solid var(--border-default);
-}
-tbody td{
-  padding:10px 14px;
-  font-size:13px;
-  border-bottom:1px solid var(--border-subtle);
-}
-tbody tr:hover{background:rgba(255,255,255,0.02);}
-table input,table select{
-  background:transparent;
-  border:none;
-  outline:none;
-  font-size:13px;
-  width:100%;
-}
-table input:focus{border-bottom:1px solid var(--border-default);}
-.cat-badge{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.06em;
-  padding:3px 8px;
-  border-radius:2px;
-  background:var(--border-subtle);
-  color:var(--text-secondary);
-  display:inline-block;
-}
-.status-select{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  text-transform:uppercase;
-  padding:4px 8px;
-  border-radius:2px;
-  border:none;
-  cursor:pointer;
-  appearance:none;
-}
-.add-row-btn{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:12px;
-  color:var(--pre);
-  padding:12px 14px;
-  cursor:pointer;
-}
-.add-row-btn:hover{background:var(--bg-raised);}
-.table-footer{font-size:12px;color:var(--text-muted);font-weight:300;padding:12px 14px;}
-.mono{font-family:'JetBrains Mono',monospace;}
-.del-btn{background:none;border:none;color:var(--text-muted);font-size:14px;opacity:0;}
-tbody tr:hover .del-btn{opacity:1;}
-.del-btn:hover{color:var(--danger);}
-
-/* ============ BUDGET ============ */
-.budget-summary{display:flex;gap:16px;margin-bottom:32px;}
-.budget-card{flex:1;background:var(--bg-surface);padding:20px 24px;border-left:3px solid var(--border-strong);}
-.budget-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:36px;}
-.budget-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
-.budget-meter{height:4px;background:var(--border-subtle);margin-top:10px;}
-.budget-meter-fill{height:100%;}
-.diff-pos{color:var(--success);}
-.diff-neg{color:var(--danger);}
-.diff-zero{color:var(--text-muted);}
-.total-row{background:var(--bg-raised);font-weight:800;}
-.total-row td{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;}
-
-/* ============ BRIEFINGS / REUNIOES ============ */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.card{border-left:3px solid var(--pre);background:var(--bg-surface);}
-.card-header{
-  background:var(--bg-raised);
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:8px;
-}
-.card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;background:transparent;border:none;outline:none;flex:1;}
-.card-date{font-size:11px;color:var(--text-muted);}
-.card-author{font-size:11px;color:var(--text-muted);padding:6px 18px 0;}
-.card-body{padding:14px 18px;}
-.card-body textarea{
-  width:100%;
-  min-height:140px;
-  background:transparent;
-  border:none;
-  outline:none;
-  font-size:13px;
-  font-family:'Barlow',sans-serif;
-  resize:vertical;
-}
-.add-card{
-  border:2px dashed var(--border-default);
-  display:flex;align-items:center;justify-content:center;
-  min-height:140px;
-  cursor:pointer;
-}
-.add-card span{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-  color:var(--text-muted);
-}
-.add-card:hover{border-color:var(--pre);}
-.add-card:hover span{color:var(--pre);}
-
-.ia-banner{
-  background:rgba(0,180,168,0.06);
-  border-left:3px solid var(--dia);
-  padding:12px 16px;
-  font-size:13px;
-  color:var(--text-secondary);
-  margin-bottom:24px;
-}
-.meeting-meta{font-size:11px;color:var(--text-muted);}
-.field-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:10px 0 4px;}
-.ghost-btn{
-  width:100%;
-  background:transparent;
-  border:1px solid var(--dia);
-  color:var(--dia);
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:12px;
-  text-transform:uppercase;
-  padding:9px 0;
-  margin-top:10px;
-}
-.ghost-btn:hover{background:var(--dia-dim);}
-.ia-summary{
-  background:rgba(0,180,168,0.06);
-  border:1px solid var(--dia);
-  padding:12px 14px;
-  margin-top:12px;
-  font-size:12px;
-}
-.del-card{background:none;border:none;color:var(--text-muted);font-size:14px;}
-.del-card:hover{color:var(--danger);}
-
-/* ============ TIMELINE ============ */
-.timeline-controls{display:flex;justify-content:flex-end;margin-bottom:20px;}
-.btn-primary{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:12px;
-  text-transform:uppercase;
-  background:var(--pre);
-  color:#000;
-  border:none;
-  padding:9px 18px;
-}
+/* MODALS */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);display:none;align-items:center;justify-content:center;z-index:1000;}
+#modal-overlay.open{display:flex;}
+#modal-box{background:var(--bg-surface);width:480px;max-width:95vw;max-height:85vh;overflow-y:auto;}
+.modal-header{padding:18px 20px 14px;border-bottom:1px solid var(--border-default);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;}
+.modal-close{background:none;border:none;font-size:20px;color:var(--text-muted);line-height:1;padding:0 4px;}
+.modal-close:hover{color:var(--danger);}
+.modal-body{padding:20px;}
+.form-row{margin-bottom:16px;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);display:block;margin-bottom:6px;}
+.form-input{width:100%;border:1px solid var(--border-default);background:var(--bg-surface);padding:9px 10px;font-size:13px;outline:none;}
+.form-input:focus{border-color:var(--pre);}
+.form-select{width:100%;border:1px solid var(--border-default);background:var(--bg-surface);padding:9px 10px;font-size:13px;outline:none;}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border-default);display:flex;justify-content:flex-end;gap:8px;}
+.btn-primary{background:var(--pre);color:#fff;border:none;padding:9px 20px;font-size:13px;font-weight:600;}
 .btn-primary:hover{opacity:0.85;}
-.marco{display:flex;gap:14px;position:relative;}
-.marco-line{display:flex;flex-direction:column;align-items:center;width:14px;flex-shrink:0;}
-.marco-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
-.marco-connector{width:2px;flex:1;background:var(--border-default);margin-top:2px;}
-.marco-body{flex:1;padding-bottom:24px;}
-.marco-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.marco-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;background:transparent;border:none;outline:none;flex:1;min-width:120px;}
-.marco-desc{font-size:12px;color:var(--text-secondary);font-weight:300;margin-top:4px;background:transparent;border:none;outline:none;width:100%;}
-.marco-select{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:10px;
-  font-weight:700;
-  text-transform:uppercase;
-  background:var(--bg-raised);
-  border:1px solid var(--border-default);
-  color:var(--text-secondary);
-  padding:4px 6px;
-}
-.marco-date{
-  background:var(--bg-raised);
-  border:1px solid var(--border-default);
-  color:var(--text-secondary);
-  font-size:11px;
-  padding:4px 6px;
-}
-.marco.diad{border-left:3px solid var(--dia);background:var(--dia-dim);padding:10px 14px;border-radius:2px;}
-.marco.diad .marco-title{color:var(--dia);}
-.marco-del{background:none;border:none;color:var(--text-muted);font-size:14px;}
-.marco-del:hover{color:var(--danger);}
+.btn-secondary{background:none;border:1px solid var(--border-default);padding:9px 20px;font-size:13px;color:var(--text-secondary);}
+.btn-secondary:hover{border-color:var(--border-strong);color:var(--text-primary);}
 
-/* ============ MODAL ============ */
-#modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
-  display:none;
-  align-items:center;justify-content:center;
-  z-index:1000;
-}
-#modal-overlay.active{display:flex;}
-.modal-box{
-  width:480px;
-  background:var(--bg-overlay);
-  border:1px solid var(--border-default);
-  border-top:3px solid var(--pre);
-  padding:28px;
-  border-radius:4px;
-}
-.modal-header{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:800;
-  font-size:20px;
-  text-transform:uppercase;
-  border-bottom:1px solid var(--border-subtle);
-  padding-bottom:16px;
-  margin-bottom:20px;
-}
-.modal-field{margin-bottom:16px;}
-.modal-field label{
-  display:block;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--text-muted);
-  margin-bottom:6px;
-}
-.modal-field input,.modal-field textarea,.modal-field select{
-  width:100%;
-  background:transparent;
-  border:none;
-  border-bottom:1px solid var(--border-default);
-  padding:8px 0;
-  outline:none;
-  font-size:14px;
-}
-.modal-field input:focus,.modal-field textarea:focus,.modal-field select:focus{border-bottom-color:var(--pre);}
-.modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;}
-.btn-cancel{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  background:none;
-  border:none;
-  color:var(--text-muted);
-}
-.btn-cancel:hover{color:var(--text-primary);}
-.btn-save{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:800;
-  font-size:13px;
-  text-transform:uppercase;
-  background:var(--pre);
-  color:#000;
-  border:none;
-  padding:10px 24px;
-}
+/* CENOGRAFIA GALLERY */
+.ceno-projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:12px;}
+.ceno-proj-card{background:var(--bg-raised);border:1px solid var(--border-default);overflow:hidden;cursor:pointer;}
+.ceno-proj-card:hover{border-color:var(--border-strong);}
+.ceno-proj-img{width:100%;height:120px;object-fit:cover;background:var(--bg-overlay);display:block;}
+.ceno-proj-img-placeholder{width:100%;height:120px;background:var(--bg-overlay);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:24px;}
+.ceno-proj-info{padding:10px 12px;}
+.ceno-proj-name{font-weight:600;font-size:13px;margin-bottom:2px;}
+.ceno-proj-desc{font-size:11px;color:var(--text-muted);}
 
-/* ============ UPLOAD / GALLERY (Cenografia, NF, Documentos) ============ */
-.upload-zone{
-  border:2px dashed var(--border-default);
-  padding:24px;
-  text-align:center;
-  cursor:pointer;
-  margin-bottom:20px;
-}
-.upload-zone:hover{border-color:var(--pre);}
-.upload-zone span{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  text-transform:uppercase;
-  color:var(--text-muted);
-}
-.upload-zone:hover span{color:var(--pre);}
-.ceno-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
-.ceno-card{background:var(--bg-surface);border-left:3px solid var(--pre);}
-.ceno-card-header{
-  background:var(--bg-raised);
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:8px;
-}
-.ceno-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;background:transparent;border:none;outline:none;flex:1;}
-.ceno-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:10px;}
-.ceno-thumb{position:relative;aspect-ratio:1;overflow:hidden;background:var(--bg-raised);}
-.ceno-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-.ceno-thumb-del{
-  position:absolute;top:2px;right:2px;
-  background:rgba(0,0,0,0.7);color:var(--text-primary);
-  border:none;width:16px;height:16px;font-size:10px;
-  display:flex;align-items:center;justify-content:center;
-}
-.ceno-thumb-del:hover{color:var(--danger);}
-.ceno-add-img{
-  aspect-ratio:1;border:1px dashed var(--border-strong);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--text-muted);font-size:20px;cursor:pointer;
-}
-.ceno-add-img:hover{border-color:var(--pre);color:var(--pre);}
-.ceno-body{padding:0 16px 14px;}
-.ceno-body select{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  text-transform:uppercase;
-  background:var(--bg-raised);
-  border:1px solid var(--border-default);
-  color:var(--text-secondary);
-  padding:3px 6px;
-  margin-bottom:8px;
-}
-.ceno-body textarea{
-  width:100%;
-  min-height:60px;
-  background:transparent;
-  border:none;
-  outline:none;
-  font-size:12px;
-  font-family:'Barlow',sans-serif;
-  color:var(--text-secondary);
-  resize:vertical;
-}
-.file-pill{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;color:var(--info);
-  background:var(--info-dim);
-  padding:3px 8px;border-radius:2px;
-}
-.file-input-hidden{display:none;}
-.upload-btn{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:11px;
-  text-transform:uppercase;
-  color:var(--info);
-  background:var(--info-dim);
-  border:none;
-  padding:5px 10px;
-  cursor:pointer;
-}
-.upload-btn:hover{opacity:0.8;}
+/* AB MENU */
+.ab-menu-table{width:100%;border-collapse:collapse;font-size:13px;}
+.ab-menu-table th{text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);padding:8px 10px;border-bottom:1px solid var(--border-default);}
+.ab-menu-table td{padding:8px 10px;border-bottom:1px solid var(--border-subtle);}
+.ab-tipo{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 6px;border-radius:2px;}
+.ab-tipo.prato{background:var(--pre-dim);color:var(--pre);}
+.ab-tipo.bebida{background:var(--info-dim);color:var(--info);}
+.ab-tipo.outro{background:var(--bg-raised);color:var(--text-secondary);}
 
-@media print{
-  .sidebar,.topbar,.item-del,.del-btn,.del-card,.marco-del,.add-item-row,.add-row-btn,.add-card,.ghost-btn{display:none!important;}
-}
+/* UTILITY */
+.pill-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.pill{padding:5px 12px;font-size:11px;font-weight:600;border:1px solid var(--border-default);border-radius:20px;background:none;cursor:pointer;color:var(--text-secondary);}
+.pill.active{background:var(--pre);border-color:var(--pre);color:#fff;}
+.pill.all.active{background:var(--text-primary);border-color:var(--text-primary);color:#fff;}
+.empty-state{padding:40px 20px;text-align:center;color:var(--text-muted);font-size:13px;}
 
-@media (max-width:768px){
-  .sidebar{position:fixed;left:-220px;z-index:500;transition:left 200ms ease;}
-  .sidebar.open{left:0;}
-  .content{padding:16px;}
-  .phase-row,.grid-2,.metrics-row,.budget-summary{flex-direction:column;}
-  .grid-2,.ceno-grid{grid-template-columns:1fr;}
-}
+/* CRONOGRAMA */
+.timeline-item{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border-subtle);}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;gap:0;}
+.tl-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border-strong);flex-shrink:0;margin-top:4px;}
+.tl-dot.done{background:var(--success);border-color:var(--success);}
+.tl-dot.alert{background:var(--danger);border-color:var(--danger);}
+.tl-body{flex:1;}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:3px;}
+.tl-text{font-size:13px;font-weight:500;}
+.tl-status{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;margin-top:4px;border-radius:2px;}
+.tl-pendente{background:var(--bg-raised);color:var(--text-muted);}
+.tl-concluido{background:var(--success-dim);color:var(--success);}
+.tl-atencao{background:var(--danger-dim);color:var(--danger);}
+
+/* NF */
+.nf-status{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:2px;}
+.nf-pago{background:var(--success-dim);color:var(--success);}
+.nf-pendente{background:var(--pos-dim);color:var(--pos);}
+.nf-vencido{background:var(--danger-dim);color:var(--danger);}
+
+/* BRIEFINGS / REUNIOES */
+.card-list{display:flex;flex-direction:column;gap:8px;}
+.card-item{background:var(--bg-surface);border:1px solid var(--border-default);padding:16px;}
+.card-item-title{font-weight:600;font-size:14px;margin-bottom:4px;}
+.card-item-meta{font-size:11px;color:var(--text-muted);margin-bottom:8px;}
+.card-item-body{font-size:13px;color:var(--text-secondary);white-space:pre-wrap;}
+
+/* MISC */
+.kv-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-subtle);font-size:13px;}
+.kv-key{color:var(--text-secondary);}
+.kv-val{font-weight:500;text-align:right;}
+.tag-fase{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;}
+.t-pre{background:var(--pre-dim);color:var(--pre);}
+.t-dia{background:var(--dia-dim);color:var(--dia);}
+.t-pos{background:var(--pos-dim);color:var(--pos);}
 </style>
 </head>
 <body>
 
-<!-- ============ LOGIN ============ -->
+<!-- LOGIN -->
 <div id="login">
   <div class="login-box">
-    <div class="login-logo">⊣ THE CALL SHEET</div>
-    <div class="login-tagline">Gestão de Produção · Do Briefing ao Wrap</div>
-    <div class="login-author">SFERA SOLUÇÕES IA</div>
+    <div class="login-logo">⌗ THE CALL SHEET</div>
+    <div class="login-tagline">Gestão de produção · Do briefing ao wrap</div>
+    <div class="login-author">Sfera Soluções IA</div>
     <div class="login-divider"></div>
     <div class="login-field">
       <label class="login-label">Usuário</label>
-      <input type="text" id="login-user" autocomplete="username">
+      <input id="login-user" type="text" autocomplete="username" placeholder="">
     </div>
     <div class="login-field">
       <label class="login-label">Senha</label>
-      <input type="password" id="login-pass" autocomplete="current-password">
+      <input id="login-pass" type="password" autocomplete="current-password" placeholder="">
     </div>
-    <div class="login-error" id="login-error"></div>
-    <button class="login-btn" id="login-btn">ENTRAR NA PRODUÇÃO</button>
+    <button class="login-btn" onclick="doLogin()">Entrar na Produção</button>
     <div class="login-hint">admin / sfera2026</div>
+    <div class="login-err" id="login-err"></div>
   </div>
 </div>
 
-<!-- ============ APP ============ -->
-<div id="app" style="display:none;">
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">THE CALL SHEET</div>
-      <div class="sidebar-version">v1.0</div>
-    </div>
-    <div class="sidebar-event">
-      <span class="sidebar-event-label">Evento</span>
-      <input type="text" id="event-name-input" placeholder="Nome do evento">
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Principal</div>
-      <div class="nav-item active" data-page="overview"><span class="dot"></span>Visão Geral</div>
-      <div class="nav-item" data-page="timeline"><span class="dot"></span>Cronograma</div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Produção</div>
-      <div class="nav-item" data-page="pre"><span class="dot"></span>Pré-Evento</div>
-      <div class="nav-item" data-page="dia"><span class="dot"></span>Dia D</div>
-      <div class="nav-item" data-page="pos"><span class="dot"></span>Pós-Evento</div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Criativo</div>
-      <div class="nav-item" data-page="cenografia"><span class="dot"></span>Cenografia</div>
-      <div class="nav-item" data-page="ab"><span class="dot"></span>A&amp;B</div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-label">Gestão</div>
-      <div class="nav-item" data-page="fornecedores"><span class="dot"></span>Fornecedores</div>
-      <div class="nav-item" data-page="budget"><span class="dot"></span>Budget</div>
-      <div class="nav-item" data-page="financeiro"><span class="dot"></span>Financeiro</div>
-      <div class="nav-item" data-page="prestacao"><span class="dot"></span>Prestação de Contas</div>
-    </div>
-    <div class="nav-section" style="border-bottom:none;">
-      <div class="nav-section-label">Comunicação</div>
-      <div class="nav-item" data-page="briefings"><span class="dot"></span>Briefings</div>
-      <div class="nav-item" data-page="reunioes"><span class="dot"></span>Reuniões + IA</div>
-      <div class="nav-item" data-page="documentos"><span class="dot"></span>Documentação</div>
-    </div>
-    <div class="sidebar-footer">
-      <span class="logout-link" id="logout-btn">Sair</span>
-    </div>
-  </nav>
+<!-- HOME SCREEN -->
+<div id="home-screen">
+  <div class="home-topbar">
+    <div class="home-logo">⌗ THE CALL SHEET</div>
+    <button class="btn-text" onclick="doLogout()">Sair</button>
+  </div>
+  <div class="home-body">
+    <div class="home-heading">Seus Eventos</div>
+    <div class="home-sub">Selecione um evento para gerenciar ou crie um novo.</div>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+</div>
 
-  <div class="main">
-    <header class="topbar">
-      <div class="topbar-title" id="page-title">Visão Geral</div>
-      <div class="topbar-countdown">
-        <span class="countdown-dot" id="countdown-dot"></span>
-        <span class="countdown-num" id="countdown-num">--</span>
-        <span class="countdown-label" id="countdown-label">DIAS</span>
+<!-- APP -->
+<div id="app">
+  <div class="app-inner">
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sidebar-top">
+        <button class="sidebar-back" onclick="goHome()">← Projetos</button>
       </div>
-      <div class="topbar-right">
-        <span class="topbar-event-name" id="topbar-event-name"></span>
-        <input type="date" class="topbar-date-input" id="event-date-input">
+      <div class="sidebar-event">
+        <div class="sidebar-event-name" id="sb-event-name">—</div>
+        <div class="sidebar-event-date" id="sb-event-date">—</div>
       </div>
-    </header>
+      <div class="sidebar-section"><div class="sidebar-section-label">Principal</div></div>
+      <button class="nav-item" data-page="dashboard" onclick="showPage('dashboard')"><span class="nav-dot"></span>Dashboard</button>
+      <div class="sidebar-section"><div class="sidebar-section-label">Áreas de Trabalho</div></div>
+      <button class="nav-item" data-area="cenografia" onclick="showArea('cenografia')"><span class="nav-dot" style="background:#8B5CF6"></span>Cenografia</button>
+      <button class="nav-item" data-area="ab" onclick="showArea('ab')"><span class="nav-dot" style="background:var(--pos)"></span>A&amp;B</button>
+      <button class="nav-item" data-area="infratech" onclick="showArea('infratech')"><span class="nav-dot" style="background:var(--dia)"></span>Infra Tech</button>
+      <button class="nav-item" data-area="producao" onclick="showArea('producao')"><span class="nav-dot" style="background:var(--pre)"></span>Produção</button>
+      <button class="nav-item" data-area="financeiro" onclick="showArea('financeiro')"><span class="nav-dot" style="background:var(--success)"></span>Financeiro</button>
+      <div class="sidebar-section"><div class="sidebar-section-label">Gestão</div></div>
+      <button class="nav-item" data-page="fornecedores" onclick="showPage('fornecedores')"><span class="nav-dot"></span>Fornecedores</button>
+      <button class="nav-item" data-page="cronograma" onclick="showPage('cronograma')"><span class="nav-dot"></span>Cronograma</button>
+      <button class="nav-item" data-page="briefings" onclick="showPage('briefings')"><span class="nav-dot"></span>Briefings</button>
+      <button class="nav-item" data-page="reunioes" onclick="showPage('reunioes')"><span class="nav-dot"></span>Reuniões</button>
+      <button class="nav-item" data-page="documentos" onclick="showPage('documentos')"><span class="nav-dot"></span>Documentos</button>
+      <div class="sidebar-bottom">
+        <button class="logout-btn" onclick="doLogout()">Sair da Sessão</button>
+      </div>
+    </aside>
 
-    <main class="content">
+    <!-- CONTENT -->
+    <main id="content">
 
-      <!-- VISÃO GERAL -->
-      <section class="page active" id="page-overview">
-        <div class="phase-row">
-          <div class="phase-card" data-phase="pre" onclick="goPage('pre')">
-            <div class="phase-label">Pré-Evento</div>
-            <div class="phase-pct" id="ov-pre-pct">0%</div>
-            <div class="phase-sub" id="ov-pre-sub">0 / 0 tarefas</div>
-            <div class="phase-bar"><div class="phase-bar-fill" id="ov-pre-bar" style="width:0%"></div></div>
-          </div>
-          <div class="phase-card" data-phase="dia" onclick="goPage('dia')">
-            <div class="phase-label">Dia D</div>
-            <div class="phase-pct" id="ov-dia-pct">0%</div>
-            <div class="phase-sub" id="ov-dia-sub">0 / 0 tarefas</div>
-            <div class="phase-bar"><div class="phase-bar-fill" id="ov-dia-bar" style="width:0%"></div></div>
-          </div>
-          <div class="phase-card" data-phase="pos" onclick="goPage('pos')">
-            <div class="phase-label">Pós-Evento</div>
-            <div class="phase-pct" id="ov-pos-pct">0%</div>
-            <div class="phase-sub" id="ov-pos-sub">0 / 0 tarefas</div>
-            <div class="phase-bar"><div class="phase-bar-fill" id="ov-pos-bar" style="width:0%"></div></div>
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page">
+        <div class="page-header">
+          <div class="page-title" id="dash-title">Dashboard</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:12px;color:var(--text-muted)">Data do evento:</span>
+            <input type="date" id="dash-date" style="border:1px solid var(--border-default);background:transparent;padding:5px 8px;font-size:12px;outline:none;" onchange="onDateChange(this.value)">
           </div>
         </div>
-
-        <div class="section-label" id="alerts-label" style="display:none;">Atenção Requerida</div>
-        <div class="alerts-list" id="alerts-list"></div>
-
-        <div class="section-label">Métricas Rápidas</div>
-        <div class="metrics-row">
-          <div class="mini-card"><div class="mini-num" id="mc-fornecedores">0</div><div class="mini-label">Fornecedores</div></div>
-          <div class="mini-card"><div class="mini-num" id="mc-orcado">R$0</div><div class="mini-label">Orçado</div></div>
-          <div class="mini-card"><div class="mini-num" id="mc-contratado">0%</div><div class="mini-label">Contratado</div></div>
-          <div class="mini-card"><div class="mini-num" id="mc-reunioes">0</div><div class="mini-label">Reuniões</div></div>
+        <div class="page-body">
+          <div class="dashboard-progress">
+            <div class="dp-label">Progresso do Evento</div>
+            <div class="dp-bar" id="dp-bar"></div>
+            <div class="dp-legend">
+              <div class="dp-legend-item"><div class="dp-legend-dot" style="background:var(--pre)"></div><span id="dp-pre-pct">Pré 0%</span></div>
+              <div class="dp-legend-item"><div class="dp-legend-dot" style="background:var(--dia)"></div><span id="dp-dia-pct">Dia D 0%</span></div>
+              <div class="dp-legend-item"><div class="dp-legend-dot" style="background:var(--pos)"></div><span id="dp-pos-pct">Pós 0%</span></div>
+            </div>
+          </div>
+          <div class="section-title">Áreas de Trabalho</div>
+          <div class="area-cards" id="area-cards"></div>
+          <div class="section-block">
+            <div class="section-title">Ações Urgentes <span class="section-title-count" id="urgentes-count">0</span></div>
+            <div class="urgentes-list" id="urgentes-list"></div>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <!-- CRONOGRAMA -->
-      <section class="page" id="page-timeline">
-        <div class="timeline-controls">
-          <button class="btn-primary" onclick="openTimelineModal()">+ Novo Marco</button>
+      <!-- AREA PAGE (shared template) -->
+      <div id="page-area" class="page">
+        <div class="page-header">
+          <div class="page-title" id="area-title">Área</div>
+          <button class="tbl-add" onclick="openAreaExtra()">+ Adicionar</button>
         </div>
-        <div id="timeline-list"></div>
-      </section>
+        <div class="area-tabs" id="area-tabs">
+          <button class="area-tab active t-pre" data-fase="pre" onclick="switchFase('pre')">Pré-Evento</button>
+          <button class="area-tab t-dia" data-fase="durante" onclick="switchFase('durante')">Dia D</button>
+          <button class="area-tab t-pos" data-fase="pos" onclick="switchFase('pos')">Pós-Evento</button>
+        </div>
+        <div class="area-content" id="area-content"></div>
+      </div>
 
-      <!-- CHECKLISTS -->
-      <section class="page" id="page-pre">
-        <div id="checklist-pre"></div>
-      </section>
-      <section class="page" id="page-dia">
-        <div id="checklist-dia"></div>
-      </section>
-      <section class="page" id="page-pos">
-        <div id="checklist-pos"></div>
-      </section>
+      <!-- FINANCEIRO -->
+      <div id="page-financeiro" class="page">
+        <div class="page-header">
+          <div class="page-title">Financeiro</div>
+          <div style="display:flex;gap:8px;">
+            <label class="btn-import" title="Importar CSV ou XLSX">
+              ↑ Importar Planilha
+              <input type="file" id="import-file" accept=".csv,.xlsx,.xls" style="display:none" onchange="importPlanilha(this)">
+            </label>
+            <button class="btn-export" onclick="exportCSV()">↓ Exportar CSV</button>
+          </div>
+        </div>
+        <div class="page-body" id="fin-body"></div>
+      </div>
 
       <!-- FORNECEDORES -->
-      <section class="page" id="page-fornecedores">
-        <div class="status-filter" id="fornecedor-filter"></div>
-        <table>
-          <thead>
-            <tr><th>Fornecedor</th><th>Categoria</th><th>Contato</th><th>Valor</th><th>Status</th><th>Especificações / Rider</th><th>Obs</th><th></th></tr>
-          </thead>
-          <tbody id="fornecedores-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="8" class="add-row-btn" onclick="addFornecedor()">+ ADICIONAR FORNECEDOR</td></tr>
-          </tfoot>
-        </table>
-        <div class="table-footer" id="fornecedor-footer"></div>
-      </section>
-
-      <!-- CENOGRAFIA -->
-      <section class="page" id="page-cenografia">
-        <div class="ceno-grid" id="cenografia-grid"></div>
-      </section>
-
-      <!-- A&B -->
-      <section class="page" id="page-ab">
-        <div class="section-label">Cardápio / A&amp;B</div>
-        <table>
-          <thead>
-            <tr><th>Item</th><th>Categoria</th><th>Qtd</th><th>Restrição</th><th>Obs</th><th></th></tr>
-          </thead>
-          <tbody id="ab-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="6" class="add-row-btn" onclick="addAbItem()">+ ADICIONAR ITEM</td></tr>
-          </tfoot>
-        </table>
-      </section>
-
-      <!-- FINANCEIRO (P&L) -->
-      <section class="page" id="page-financeiro">
-        <div class="budget-summary">
-          <div class="budget-card">
-            <div class="budget-num mono" id="fin-receita">R$0</div>
-            <div class="budget-sub">Receita contratada</div>
-          </div>
-          <div class="budget-card">
-            <div class="budget-num mono" id="fin-custo">R$0</div>
-            <div class="budget-sub">Custo total (budget realizado)</div>
-          </div>
-          <div class="budget-card" id="fin-lucro-card">
-            <div class="budget-num mono" id="fin-lucro">R$0</div>
-            <div class="budget-sub" id="fin-margem-sub">0% de margem</div>
-          </div>
+      <div id="page-fornecedores" class="page">
+        <div class="page-header">
+          <div class="page-title">Fornecedores</div>
+          <button class="tbl-add" onclick="openFornModal()">+ Novo Fornecedor</button>
         </div>
-        <div class="section-label">Receita do Evento</div>
-        <div class="modal-field" style="max-width:280px;margin-bottom:24px;">
-          <label>Valor total do contrato com o cliente</label>
-          <input type="text" id="fin-receita-input" placeholder="R$ 0">
+        <div class="page-body">
+          <div class="pill-filter" id="forn-filter">
+            <button class="pill all active" data-val="" onclick="setFornFilter('')">Todos</button>
+            <button class="pill" data-val="cenografia" onclick="setFornFilter('cenografia')">Cenografia</button>
+            <button class="pill" data-val="ab" onclick="setFornFilter('ab')">A&amp;B</button>
+            <button class="pill" data-val="infratech" onclick="setFornFilter('infratech')">Infra Tech</button>
+            <button class="pill" data-val="producao" onclick="setFornFilter('producao')">Produção</button>
+            <button class="pill" data-val="financeiro" onclick="setFornFilter('financeiro')">Financeiro</button>
+          </div>
+          <div id="forn-table-wrap"></div>
         </div>
-        <div class="section-label">Parcelas / Recebimentos</div>
-        <table>
-          <thead>
-            <tr><th>Descrição</th><th>Valor</th><th>Data Prevista</th><th>Recebido</th><th></th></tr>
-          </thead>
-          <tbody id="parcelas-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="5" class="add-row-btn" onclick="addParcela()">+ ADICIONAR PARCELA</td></tr>
-          </tfoot>
-        </table>
-      </section>
+      </div>
 
-      <!-- PRESTAÇÃO DE CONTAS -->
-      <section class="page" id="page-prestacao">
-        <div class="status-filter" id="nf-filter"></div>
-        <table>
-          <thead>
-            <tr><th>Descrição</th><th>Categoria</th><th>Nº NF</th><th>Valor</th><th>Data</th><th>Status</th><th>Arquivo</th><th></th></tr>
-          </thead>
-          <tbody id="nf-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="8" class="add-row-btn" onclick="addNotaFiscal()">+ ADICIONAR NOTA FISCAL</td></tr>
-          </tfoot>
-        </table>
-        <div class="table-footer" id="nf-footer"></div>
-      </section>
-
-      <!-- DOCUMENTAÇÃO -->
-      <section class="page" id="page-documentos">
-        <table>
-          <thead>
-            <tr><th>Documento</th><th>Categoria</th><th>Status</th><th>Arquivo</th><th>Obs</th><th></th></tr>
-          </thead>
-          <tbody id="documentos-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="6" class="add-row-btn" onclick="addDocumento()">+ ADICIONAR DOCUMENTO</td></tr>
-          </tfoot>
-        </table>
-      </section>
-
-      <!-- BUDGET -->
-      <section class="page" id="page-budget">
-        <div class="budget-summary">
-          <div class="budget-card">
-            <div class="budget-num mono" id="bg-previsto">R$0</div>
-            <div class="budget-sub">Orçamento previsto</div>
-          </div>
-          <div class="budget-card" id="bg-realizado-card">
-            <div class="budget-num mono" id="bg-realizado">R$0</div>
-            <div class="budget-sub" id="bg-realizado-sub">0% do orçamento</div>
-            <div class="budget-meter"><div class="budget-meter-fill" id="bg-realizado-meter"></div></div>
-          </div>
-          <div class="budget-card">
-            <div class="budget-num mono" id="bg-saldo">R$0</div>
-            <div class="budget-sub">disponível</div>
-            <div class="budget-meter"><div class="budget-meter-fill" id="bg-saldo-meter"></div></div>
-          </div>
+      <!-- CRONOGRAMA -->
+      <div id="page-cronograma" class="page">
+        <div class="page-header">
+          <div class="page-title">Cronograma</div>
+          <button class="tbl-add" onclick="openTlModal()">+ Marco</button>
         </div>
-        <table>
-          <thead>
-            <tr><th>Categoria</th><th>Descrição</th><th>Previsto</th><th>Realizado</th><th>Diferença</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody id="budget-tbody"></tbody>
-          <tfoot>
-            <tr><td colspan="7" class="add-row-btn" onclick="addBudgetLine()">+ ADICIONAR LINHA</td></tr>
-            <tr class="total-row" id="budget-total-row"></tr>
-          </tfoot>
-        </table>
-      </section>
+        <div class="page-body" id="tl-body"></div>
+      </div>
 
       <!-- BRIEFINGS -->
-      <section class="page" id="page-briefings">
-        <div class="grid-2" id="briefings-grid"></div>
-      </section>
+      <div id="page-briefings" class="page">
+        <div class="page-header">
+          <div class="page-title">Briefings</div>
+          <button class="tbl-add" onclick="openBriefModal()">+ Novo Briefing</button>
+        </div>
+        <div class="page-body" id="brief-body"></div>
+      </div>
 
-      <!-- REUNIÕES -->
-      <section class="page" id="page-reunioes">
-        <div class="ia-banner">Cole a transcrição da reunião → clique RESUMIR → a IA extrai decisões, ações e responsáveis</div>
-        <div class="grid-2" id="reunioes-grid"></div>
-      </section>
+      <!-- REUNIOES -->
+      <div id="page-reunioes" class="page">
+        <div class="page-header">
+          <div class="page-title">Reuniões</div>
+          <button class="tbl-add" onclick="openReuniaoModal()">+ Nova Reunião</button>
+        </div>
+        <div class="page-body" id="reun-body"></div>
+      </div>
+
+      <!-- DOCUMENTOS -->
+      <div id="page-documentos" class="page">
+        <div class="page-header">
+          <div class="page-title">Documentos</div>
+          <button class="tbl-add" onclick="openDocModal()">+ Novo Documento</button>
+        </div>
+        <div class="page-body" id="doc-body"></div>
+      </div>
 
     </main>
   </div>
 </div>
 
-<!-- MODAL GLOBAL (timeline) -->
-<div id="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">Novo Marco</div>
-    <div class="modal-field">
-      <label>Título</label>
-      <input type="text" id="modal-titulo">
-    </div>
-    <div class="modal-field">
-      <label>Data</label>
-      <input type="date" id="modal-data">
-    </div>
-    <div class="modal-field">
-      <label>Descrição</label>
-      <textarea id="modal-desc" rows="2"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-save" onclick="saveModalMarco()">Salvar</button>
-    </div>
+<!-- MODAL -->
+<div id="modal-overlay" onclick="overlayClose(event)">
+  <div id="modal-box" onclick="event.stopPropagation()">
+    <div id="modal-content"></div>
   </div>
 </div>
 
 <script>
+/* ===================== CONSTANTS ===================== */
+const USUARIOS = {'admin':'sfera2026','equipe':'evento2026','cliente':'view2026'};
+const STORAGE_KEY = 'callsheet_v2';
+const AREAS = {
+  cenografia:{label:'Cenografia',color:'#8B5CF6',icon:'🎨'},
+  ab:{label:'A&B',color:'var(--pos)',icon:'🍽️'},
+  infratech:{label:'Infra Tech',color:'var(--dia)',icon:'⚡'},
+  producao:{label:'Produção',color:'var(--pre)',icon:'🎬'},
+  financeiro:{label:'Financeiro',color:'var(--success)',icon:'💰'}
+};
+
+const CL_DEFAULT = {
+  cenografia:{
+    pre:['Floorplan / planta baixa aprovado','Key Visual (KV) aprovado pelo cliente','Empresa de cenografia / montagem contratada','ART estrutural da cenografia emitida','Projeto elétrico da cenografia aprovado','Sinalização e wayfinding aprovados','Brand placement / naming rights definidos','Materiais e insumos listados e orçados'],
+    durante:['Supervisão da montagem realizada','Teste de iluminação cênica concluído','Sinalização instalada e conferida','Cenário fotográfico conferido','Ajustes de última hora resolvidos'],
+    pos:['Supervisão da desmontagem concluída','Vistoria de devolução sem avarias','Relatório fotográfico registrado','Materiais próprios recolhidos']
+  },
+  ab:{
+    pre:['Cardápio aprovado pelo cliente','Degustação (prova de cardápio) realizada','Empresa de catering contratada','Equipe de garçons / bartenders dimensionada','Welcome drink / coffee break definido','Restrições alimentares mapeadas','Quantidade de pessoas confirmada','Equipamentos de A&B listados (mesas, rechauds)'],
+    durante:['Serviço de A&B iniciado no horário','Welcome drink / coffee break servido','Reposição de estoque monitorada','Controle de alérgenos ativo'],
+    pos:['Área de A&B limpa e organizada','Insumos extras devolvidos ou descartados','Nota fiscal do catering conferida','Avaliação do serviço de catering registrada']
+  },
+  infratech:{
+    pre:['Rider técnico recebido e analisado','Empresa de AV contratada','Gerador dimensionado e reservado','Link de internet dedicado contratado','Backup de internet (4G/5G) configurado','Plataforma de streaming configurada','Sistema de captação / gravação definido','Canais de rádio (HT) definidos por setor','Teleprompter contratado','No-break para pontos críticos testado','Plano de contingência elétrica aprovado'],
+    durante:['Soundcheck concluído','Todos sistemas AV testados antes da abertura','Streaming ao vivo confirmado e estável','Câmeras de captação posicionadas','HT distribuídos por setor','Teleprompter funcionando com roteiro','Energia estável (gerador em standby)'],
+    pos:['Devolução de equipamentos alugados','Desligamento seguro de todos os sistemas','Backup da gravação do evento salvo','Relatório técnico de ocorrências emitido']
+  },
+  producao:{
+    pre:['Briefing aprovado pelo cliente','Orçamento (budget) aprovado','Venue confirmado e contrato assinado','ECAD pago','Alvará temporário solicitado na Prefeitura','Autorização Corpo de Bombeiros (PPCI)','ART estrutural e elétrica contratadas','Seguro do evento contratado','Vigilância Sanitária (se aplicável)','Segurança privada contratada','Brigadistas contratados','Recepcionistas / Hostess contratados','Sistema de credenciamento definido','Gráfica (banners / materiais) entregue','Transfer e hotelaria de palestrantes','Plano de evacuação e rotas sinalizadas','Cronograma de montagem aprovado pelo venue','Equipe de limpeza contratada','Comunicação interna (PM / walkie) definida'],
+    durante:['Briefing de abertura com equipe realizado','Portões abertos no horário','Credenciamento funcionando','War Room operacional','Stage manager nas wings','Brigada de incêndio posicionada','Segurança nos acessos','Fotógrafo / câmera cobrindo o evento','Run of show / cronômetro ativo'],
+    pos:['Supervisão da desmontagem geral','Vistoria e entrega do venue','Descarte de resíduos conforme normas','Relatório executivo entregue ao cliente','NPS / avaliação coletada','Retrospectiva interna realizada','Banco de fornecedores atualizado','Proposta de melhoria documentada']
+  }
+};
+
+/* ===================== STATE ===================== */
+let STATE = null;
+let _saveTimer = null;
+let currentArea = null;
+let currentFase = 'pre';
+let fornFilter = '';
+
+function uid(){return Math.random().toString(36).slice(2,10);}
+function mkItem(text){return {id:uid(),text,done:false};}
+
+function mkDefaultProject(name='Novo Evento'){
+  const id = uid();
+  const cls = {};
+  ['cenografia','ab','infratech','producao'].forEach(a=>{
+    cls[a]={
+      pre: CL_DEFAULT[a].pre.map(mkItem),
+      durante: CL_DEFAULT[a].durante.map(mkItem),
+      pos: CL_DEFAULT[a].pos.map(mkItem)
+    };
+  });
+  return {
+    id, name, date:'',
+    checklists: cls,
+    fornecedores:[],
+    budget:[],
+    financeiro:{receitaContratada:0, parcelas:[]},
+    notasFiscais:[],
+    documentos:[],
+    cenografiaProjects:[],
+    abItems:[],
+    briefings:[],
+    reunioes:[],
+    timeline:[]
+  };
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const p = mkDefaultProject('Mega Evento 2026');
+  return {projects:[p], currentProjectId:null};
+}
+
+function saveState(){
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(STATE)),400);
+}
+
+function getProject(){
+  return STATE.projects.find(p=>p.id===STATE.currentProjectId)||null;
+}
+
 /* ===================== AUTH ===================== */
-const USUARIOS = { 'admin':'sfera2026', 'equipe':'evento2026', 'cliente':'view2026' };
-
-document.getElementById('login-btn').onclick = doLogin;
-document.getElementById('login-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
-
 function doLogin(){
   const u = document.getElementById('login-user').value.trim();
   const p = document.getElementById('login-pass').value;
-  const err = document.getElementById('login-error');
-  if(USUARIOS[u] && USUARIOS[u]===p){
-    sessionStorage.setItem('callsheet_session', u);
-    err.textContent='';
-    showApp();
+  if(USUARIOS[u]===p){
+    sessionStorage.setItem('callsheet_session','1');
+    document.getElementById('login-err').textContent='';
+    showScreen('home');
   } else {
-    err.textContent='Usuário ou senha incorretos.';
+    document.getElementById('login-err').textContent='Usuário ou senha incorretos.';
   }
 }
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('login-user').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 function doLogout(){
   sessionStorage.removeItem('callsheet_session');
-  document.getElementById('app').style.display='none';
-  document.getElementById('login').style.display='flex';
-}
-document.getElementById('logout-btn').onclick = doLogout;
-
-function showApp(){
-  document.getElementById('login').style.display='none';
-  document.getElementById('app').style.display='flex';
-  renderAll();
+  STATE.currentProjectId = null;
+  showScreen('login');
 }
 
-/* ===================== STATE ===================== */
-const DEFAULT_STATE = {
-  eventName: 'Mega Evento 2026',
-  eventDate: '',
-  checklists: {
-    pre: {
-      'Briefing & Planejamento': [
-        mkItem('Briefing aprovado pelo cliente', true),
-        mkItem('Orçamento (budget) aprovado', true),
-        mkItem('Venue confirmado e contrato assinado', true),
-        mkItem('KV (Key Visual) aprovado', false),
-        mkItem('Run of Show versão 1 elaborado', false),
-        mkItem('Floorplan aprovado', false),
-      ],
-      'Venue & Licenças': [
-        mkItem('ECAD pago', true),
-        mkItem('Alvará temporário solicitado na Prefeitura', true),
-        mkItem('Autorização Corpo de Bombeiros (PPCI)', true),
-        mkItem('ART estrutural e elétrica contratadas', true),
-        mkItem('Seguro do evento contratado', false),
-        mkItem('Comunicação à Polícia Militar (se necessário)', false),
-        mkItem('Vigilância Sanitária (se houver A&B)', false),
-      ],
-      'AV & Cenografia': [
-        mkItem('Empresa de AV contratada', true),
-        mkItem('Rider técnico recebido e analisado', false),
-        mkItem('Empresa de cenografia/montagem contratada', true),
-        mkItem('Gerador dimensionado e reservado', false),
-        mkItem('Link de internet dedicado contratado', false),
-        mkItem('Plataforma de streaming configurada', false),
-      ],
-      'Logística & Equipe': [
-        mkItem('Catering / A&B contratado', false),
-        mkItem('Transfer e hotelaria de palestrantes confirmados', false),
-        mkItem('Segurança privada contratada', true),
-        mkItem('Brigadistas contratados', true),
-        mkItem('Recepcionistas / Hostess confirmadas', false),
-        mkItem('Sistema de credenciamento configurado', false),
-        mkItem('Gráfica: banners, totens, credenciais aprovados', false),
-      ],
-    },
-    dia: {
-      'Abertura & Credenciamento': [
-        mkItem('Briefing de abertura com toda a equipe realizado', true),
-        mkItem('Todos os sistemas AV testados antes da abertura', true),
-        mkItem('Portões abertos no horário', false),
-        mkItem('Credenciamento funcionando', false),
-        mkItem('War Room / Command Center operacional', true),
-      ],
-      'Palco & AV': [
-        mkItem('Soundcheck concluído', true),
-        mkItem('Run of Show final distribuído para toda equipe', true),
-        mkItem('Stage manager posicionado nas wings', false),
-        mkItem('Teleprompter testado com palestrantes', false),
-        mkItem('Streaming ao vivo confirmado', false),
-        mkItem('Canais de rádio (HT) definidos por setor', true),
-      ],
-      'Equipe & Segurança': [
-        mkItem('Brigada de incêndio posicionada', true),
-        mkItem('Segurança nos acessos', true),
-        mkItem('Catering servindo no horário', false),
-        mkItem('Fotógrafo e câmera cobrindo o evento', false),
-      ],
-    },
-    pos: {
-      'Desmontagem': [
-        mkItem('Supervisão da desmontagem completa', false),
-        mkItem('Vistoria e entrega formal do venue', true),
-        mkItem('Devolução de todos os equipamentos alugados', false),
-        mkItem('Descarte correto de resíduos', false),
-      ],
-      'Financeiro & Relatório': [
-        mkItem('Pagamentos finais a todos os fornecedores', true),
-        mkItem('Conciliação de notas fiscais x contratos', true),
-        mkItem('Relatório executivo enviado ao cliente', true),
-        mkItem('Relatório financeiro (previsto x realizado)', false),
-        mkItem('Press clipping / cobertura de mídia compilado', false),
-      ],
-      'Avaliação': [
-        mkItem('NPS disparado para participantes (até 48h)', false),
-        mkItem('Reunião de retrospectiva interna realizada', false),
-        mkItem('Banco de fornecedores atualizado com avaliações', false),
-        mkItem('Proposta de melhoria documentada para próxima edição', false),
-      ],
-    }
-  },
-  fornecedores: [],
-  budget: [],
-  briefings: [],
-  reunioes: [],
-  cenografia: [],
-  ab: [],
-  notasFiscais: [],
-  documentos: [],
-  financeiro: { receitaContratada: 0, parcelas: [] },
-  timeline: [
-    { id: uid(), titulo:'Briefing aprovado pelo cliente', data:'', descricao:'', status:'done' },
-    { id: uid(), titulo:'Contratos de fornecedores assinados', data:'', descricao:'', status:'doing' },
-    { id: uid(), titulo:'Walk-through no venue', data:'', descricao:'', status:'pending' },
-    { id: uid(), titulo:'Soundcheck e Dry Run', data:'', descricao:'', status:'pending' },
-    { id: uid(), titulo:'★ DIA DO EVENTO', data:'', descricao:'', status:'pending', diad:true },
-    { id: uid(), titulo:'Desmontagem concluída', data:'', descricao:'', status:'pending' },
-    { id: uid(), titulo:'Relatório final entregue ao cliente', data:'', descricao:'', status:'pending' },
-  ]
-};
-
-function mkItem(text, critical){ return { id: uid(), text, done:false, critical: !!critical }; }
-function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
-
-let STATE = loadState();
-
-function loadState(){
-  const raw = localStorage.getItem('callsheet_v1');
-  if(!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
-  try{
-    const parsed = JSON.parse(raw);
-    return Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
-  }catch(e){
-    return JSON.parse(JSON.stringify(DEFAULT_STATE));
-  }
+/* ===================== SCREENS ===================== */
+function showScreen(name){
+  document.getElementById('login').style.display = name==='login'?'flex':'none';
+  document.getElementById('home-screen').style.display = name==='home'?'flex':'none';
+  document.getElementById('app').style.display = name==='app'?'flex':'none';
+  if(name==='home') renderHomeScreen();
+  if(name==='app') renderSidebar();
 }
 
-let saveTimer = null;
-function saveState(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{
-    localStorage.setItem('callsheet_v1', JSON.stringify(STATE));
-  }, 500);
-}
-
-function fmtBRL(n){
-  return (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-}
-
-/* ===================== NAVIGATION ===================== */
-const PAGE_TITLES = {
-  overview:'Visão Geral', timeline:'Cronograma', pre:'Pré-Evento', dia:'Dia D', pos:'Pós-Evento',
-  cenografia:'Cenografia', ab:'A&B',
-  fornecedores:'Fornecedores', budget:'Budget', financeiro:'Financeiro', prestacao:'Prestação de Contas',
-  briefings:'Briefings', reunioes:'Reuniões + IA', documentos:'Documentação'
-};
-
-document.querySelectorAll('.nav-item').forEach(item=>{
-  item.addEventListener('click', ()=>goPage(item.dataset.page));
-});
-
-function goPage(page){
-  document.querySelectorAll('.nav-item').forEach(i=>i.classList.toggle('active', i.dataset.page===page));
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  document.getElementById('page-title').textContent = PAGE_TITLES[page] || '';
-  if(window.innerWidth<=768) document.getElementById('sidebar').classList.remove('open');
-}
-
-/* ===================== TOPBAR / COUNTDOWN ===================== */
-const eventNameInput = document.getElementById('event-name-input');
-const eventDateInput = document.getElementById('event-date-input');
-
-eventNameInput.addEventListener('input', ()=>{
-  STATE.eventName = eventNameInput.value;
-  document.getElementById('topbar-event-name').textContent = STATE.eventName;
+function goHome(){
+  STATE.currentProjectId = null;
   saveState();
-});
-eventDateInput.addEventListener('change', ()=>{
-  STATE.eventDate = eventDateInput.value;
-  saveState();
-  renderCountdown();
-});
-
-function renderCountdown(){
-  const dot = document.getElementById('countdown-dot');
-  const num = document.getElementById('countdown-num');
-  const label = document.getElementById('countdown-label');
-  dot.className='countdown-dot';
-  if(!STATE.eventDate){
-    num.textContent='--'; label.textContent='DIAS'; return;
-  }
-  const today = new Date(); today.setHours(0,0,0,0);
-  const target = new Date(STATE.eventDate+'T00:00:00');
-  const diffDays = Math.round((target-today)/86400000);
-
-  if(diffDays===0){
-    num.textContent=''; label.textContent='● AO VIVO HOJE';
-    dot.classList.add('live');
-  } else if(diffDays<0){
-    num.textContent=Math.abs(diffDays); label.textContent='DIAS APÓS';
-    dot.classList.add('live');
-  } else if(diffDays<=30){
-    num.textContent=diffDays; label.textContent='DIAS';
-    dot.classList.add('urgent');
-  } else {
-    num.textContent=diffDays; label.textContent='DIAS';
-  }
+  showScreen('home');
 }
 
-/* ===================== CHECKLISTS ===================== */
-function checklistTotals(phase){
-  const groups = STATE.checklists[phase];
-  let total=0, done=0;
-  Object.values(groups).forEach(items=>{
-    total+=items.length;
-    done+=items.filter(i=>i.done).length;
-  });
-  return { total, done, pct: total? Math.round(done/total*100):0 };
-}
-
-function renderChecklistPage(phase){
-  const container = document.getElementById('checklist-'+phase);
-  const groups = STATE.checklists[phase];
-  let html='';
-  Object.keys(groups).forEach(groupName=>{
-    const items = groups[groupName];
-    const done = items.filter(i=>i.done).length;
-    const pct = items.length? Math.round(done/items.length*100):0;
-    html += `<div class="group">
-      <div class="group-header">
-        <span class="group-title">${esc(groupName)}</span>
-        <span class="group-progress" style="color:var(--${phase})">${done}/${items.length} · ${pct}%</span>
+/* ===================== HOME SCREEN ===================== */
+function renderHomeScreen(){
+  const grid = document.getElementById('projects-grid');
+  const items = STATE.projects.map(p=>{
+    const stats = projectStats(p);
+    return `<div class="project-card" onclick="selectProject('${p.id}')">
+      <button class="project-card-del" onclick="event.stopPropagation();deleteProject('${p.id}')">✕</button>
+      <div class="project-card-name">${esc(p.name)}</div>
+      <div class="project-card-date">${p.date ? fmt(p.date) : 'Data não definida'}</div>
+      <div class="project-card-bar">
+        <div class="project-card-bar-seg" style="flex:${stats.preTot};background:var(--pre);opacity:${stats.prePct/100*0.8+0.2}"></div>
+        <div class="project-card-bar-seg" style="flex:${stats.diaTot};background:var(--dia);opacity:${stats.diaPct/100*0.8+0.2}"></div>
+        <div class="project-card-bar-seg" style="flex:${stats.posTot};background:var(--pos);opacity:${stats.posPct/100*0.8+0.2}"></div>
       </div>
-      <div class="group-bar"><div class="group-bar-fill" style="width:${pct}%;background:var(--${phase})"></div></div>`;
-    items.forEach((item, idx)=>{
-      html += `<div class="item-row">
-        <span class="item-num">${String(idx+1).padStart(2,'0')}</span>
-        <span class="item-checkbox ${item.done?'checked':''}" style="${item.done?`background:var(--${phase});border-color:var(--${phase})`:''}" onclick="toggleItem('${phase}','${esc(groupName,true)}','${item.id}')">${item.done?'✓':''}</span>
-        <span class="item-text ${item.done?'done':''}" onclick="toggleItem('${phase}','${esc(groupName,true)}','${item.id}')">${esc(item.text)}</span>
-        ${item.critical && !item.done ? '<span class="badge badge-critical">Crítico</span>' : ''}
-        ${item.done ? '<span class="badge badge-done">✓ Concluído</span>' : ''}
-        <button class="item-del" onclick="delItem('${phase}','${esc(groupName,true)}','${item.id}')">✕</button>
+      <div class="project-card-stats">
+        <div class="project-card-stat">Pré <span>${stats.prePct}%</span></div>
+        <div class="project-card-stat">Dia D <span>${stats.diaPct}%</span></div>
+        <div class="project-card-stat">Pós <span>${stats.posPct}%</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  grid.innerHTML = items + `<div class="card-new" onclick="createProject()">＋ Novo Evento</div>`;
+}
+
+function projectStats(p){
+  let preDone=0,preTot=0,diaDone=0,diaTot=0,posDone=0,posTot=0;
+  ['cenografia','ab','infratech','producao'].forEach(a=>{
+    const cl = p.checklists[a];
+    preTot+=cl.pre.length; preDone+=cl.pre.filter(x=>x.done).length;
+    diaTot+=cl.durante.length; diaDone+=cl.durante.filter(x=>x.done).length;
+    posTot+=cl.pos.length; posDone+=cl.pos.filter(x=>x.done).length;
+  });
+  return {
+    preTot,diaTot,posTot,
+    prePct: preTot?Math.round(preDone/preTot*100):0,
+    diaPct: diaTot?Math.round(diaDone/diaTot*100):0,
+    posPct: posTot?Math.round(posDone/posTot*100):0
+  };
+}
+
+function selectProject(id){
+  STATE.currentProjectId = id;
+  saveState();
+  showScreen('app');
+  showPage('dashboard');
+}
+
+function createProject(){
+  const name = prompt('Nome do evento:','Novo Evento 2026');
+  if(!name) return;
+  const p = mkDefaultProject(name);
+  STATE.projects.push(p);
+  saveState();
+  selectProject(p.id);
+}
+
+function deleteProject(id){
+  if(!confirm('Excluir este evento? Todos os dados serão perdidos.')) return;
+  STATE.projects = STATE.projects.filter(p=>p.id!==id);
+  saveState();
+  renderHomeScreen();
+}
+
+/* ===================== SIDEBAR ===================== */
+function renderSidebar(){
+  const p = getProject();
+  if(!p) return;
+  document.getElementById('sb-event-name').textContent = p.name;
+  document.getElementById('sb-event-date').textContent = p.date ? fmt(p.date) : 'Data não definida';
+}
+
+/* ===================== PAGE NAV ===================== */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const pg = document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  const ni = document.querySelector(`.nav-item[data-page="${name}"]`);
+  if(ni) ni.classList.add('active');
+  currentArea = null;
+  if(name==='dashboard') renderDashboard();
+  if(name==='fornecedores') renderFornecedores();
+  if(name==='cronograma') renderCronograma();
+  if(name==='briefings') renderBriefings();
+  if(name==='reunioes') renderReunioes();
+  if(name==='documentos') renderDocumentos();
+}
+
+function showArea(area){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-area').classList.add('active');
+  const ni = document.querySelector(`.nav-item[data-area="${area}"]`);
+  if(ni) ni.classList.add('active');
+  currentArea = area;
+  currentFase = 'pre';
+  if(area==='financeiro'){
+    document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+    document.getElementById('page-financeiro').classList.add('active');
+    renderFinanceiro();
+    return;
+  }
+  updateAreaTabs();
+  renderAreaContent();
+  const aInfo = AREAS[area];
+  document.getElementById('area-title').textContent = aInfo ? aInfo.label : area;
+}
+
+function switchFase(fase){
+  currentFase = fase;
+  updateAreaTabs();
+  renderAreaContent();
+}
+
+function updateAreaTabs(){
+  document.querySelectorAll('.area-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.fase===currentFase);
+  });
+}
+
+/* ===================== DASHBOARD ===================== */
+function renderDashboard(){
+  const p = getProject();
+  if(!p) return;
+  document.getElementById('dash-title').textContent = p.name;
+  document.getElementById('dash-date').value = p.date||'';
+  const stats = projectStats(p);
+  const tot = stats.preTot+stats.diaTot+stats.posTot||1;
+  document.getElementById('dp-bar').innerHTML =
+    `<div class="dp-seg pre" style="flex:${stats.preTot/tot}"></div>
+     <div class="dp-seg dia" style="flex:${stats.diaTot/tot}"></div>
+     <div class="dp-seg pos" style="flex:${stats.posTot/tot}"></div>`;
+  document.getElementById('dp-pre-pct').textContent=`Pré ${stats.prePct}%`;
+  document.getElementById('dp-dia-pct').textContent=`Dia D ${stats.diaPct}%`;
+  document.getElementById('dp-pos-pct').textContent=`Pós ${stats.posPct}%`;
+
+  // area cards
+  const areaColors = {cenografia:'#8B5CF6',ab:'#C84420',infratech:'#007870',producao:'#B8880A'};
+  document.getElementById('area-cards').innerHTML = ['cenografia','ab','infratech','producao','financeiro'].map(a=>{
+    const info = AREAS[a];
+    if(a==='financeiro'){
+      const fin = p.financeiro;
+      const custo = (p.budget||[]).reduce((s,b)=>s+(parseFloat(b.valor)||0),0);
+      const receita = parseFloat(fin.receitaContratada)||0;
+      const lucro = receita - custo;
+      const pct = receita>0?Math.min(100,Math.round(Math.abs(lucro)/receita*100)):0;
+      return `<div class="area-card" onclick="showArea('financeiro')">
+        <div class="area-card-icon">${info.icon}</div>
+        <div class="area-card-name">${info.label}</div>
+        <div class="area-card-pct">Margem: ${receita>0?Math.round(lucro/receita*100):0}%</div>
+        <div class="area-card-bar"><div class="area-card-bar-fill" style="width:${pct}%;background:var(--success)"></div></div>
       </div>`;
-    });
-    html += `<div class="add-item-row">
-      <input type="text" placeholder="+ Adicionar tarefa" onkeydown="if(event.key==='Enter'){addItem('${phase}','${esc(groupName,true)}',this)}">
-    </div></div>`;
-  });
-  container.innerHTML = html;
-}
+    }
+    const cl = p.checklists[a];
+    const total = cl.pre.length+cl.durante.length+cl.pos.length;
+    const done = cl.pre.filter(x=>x.done).length+cl.durante.filter(x=>x.done).length+cl.pos.filter(x=>x.done).length;
+    const pct = total?Math.round(done/total*100):0;
+    const color = areaColors[a]||'var(--pre)';
+    return `<div class="area-card" onclick="showArea('${a}')">
+      <div class="area-card-icon">${info.icon}</div>
+      <div class="area-card-name">${info.label}</div>
+      <div class="area-card-pct">${done}/${total} tarefas</div>
+      <div class="area-card-bar"><div class="area-card-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
 
-function toggleItem(phase, groupName, id){
-  const items = STATE.checklists[phase][groupName];
-  const item = items.find(i=>i.id===id);
-  if(item){ item.done = !item.done; saveState(); renderAll(); }
-}
-function delItem(phase, groupName, id){
-  STATE.checklists[phase][groupName] = STATE.checklists[phase][groupName].filter(i=>i.id!==id);
-  saveState(); renderAll();
-}
-function addItem(phase, groupName, input){
-  const text = input.value.trim();
-  if(!text) return;
-  STATE.checklists[phase][groupName].push(mkItem(text,false));
-  saveState(); renderAll();
-}
-
-/* ===================== VISÃO GERAL ===================== */
-function renderOverview(){
-  ['pre','dia','pos'].forEach(phase=>{
-    const t = checklistTotals(phase);
-    document.getElementById('ov-'+phase+'-pct').textContent = t.pct+'%';
-    document.getElementById('ov-'+phase+'-sub').textContent = `${t.done} / ${t.total} tarefas`;
-    document.getElementById('ov-'+phase+'-bar').style.width = t.pct+'%';
-  });
-
-  const criticals = [];
-  ['pre','dia','pos'].forEach(phase=>{
-    Object.entries(STATE.checklists[phase]).forEach(([groupName, items])=>{
-      items.filter(i=>i.critical && !i.done).forEach(i=>{
-        criticals.push({ phase, text:i.text });
+  // urgentes
+  const urgentes = [];
+  ['cenografia','ab','infratech','producao'].forEach(a=>{
+    const cl = p.checklists[a];
+    ['pre','durante','pos'].forEach(fase=>{
+      cl[fase].filter(item=>!item.done).forEach(item=>{
+        urgentes.push({area:a,fase,text:item.text});
       });
     });
   });
-  const alertsLabel = document.getElementById('alerts-label');
-  const alertsList = document.getElementById('alerts-list');
-  if(criticals.length){
-    alertsLabel.style.display='block';
-    alertsLabel.textContent = `Atenção Requerida — ${criticals.length} itens`;
-    alertsList.innerHTML = criticals.map(c=>`<div class="alert-item"><span class="alert-dot"></span><span class="alert-tag">[${c.phase.toUpperCase()}]</span> ${esc(c.text)}</div>`).join('');
+  document.getElementById('urgentes-count').textContent = urgentes.length;
+  if(urgentes.length===0){
+    document.getElementById('urgentes-list').innerHTML='<div class="urgentes-empty">✓ Nenhuma ação urgente — tudo em dia.</div>';
   } else {
-    alertsLabel.style.display='none';
-    alertsList.innerHTML='';
+    const faseLabel={pre:'PRÉ',durante:'DIA D',pos:'PÓS'};
+    document.getElementById('urgentes-list').innerHTML = urgentes.slice(0,20).map(u=>`
+      <div class="urgente-item">
+        <span class="urgente-badge badge-${u.fase==='durante'?'dia':u.fase}">${AREAS[u.area].label} · ${faseLabel[u.fase]}</span>
+        <span class="urgente-text">${esc(u.text)}</span>
+      </div>`).join('')+
+      (urgentes.length>20?`<div style="padding:8px 12px;font-size:11px;color:var(--text-muted)">+ ${urgentes.length-20} itens</div>`:'');
+  }
+}
+
+function onDateChange(val){
+  const p = getProject();
+  if(!p) return;
+  p.date = val;
+  saveState();
+  renderSidebar();
+}
+
+/* ===================== AREA PAGE ===================== */
+function renderAreaContent(){
+  const p = getProject();
+  if(!p||!currentArea) return;
+  const cl = p.checklists[currentArea][currentFase];
+  const forn = (p.fornecedores||[]).filter(f=>f.area===currentArea);
+  const budget = (p.budget||[]).filter(b=>b.area===currentArea);
+
+  let extra = '';
+  if(currentArea==='cenografia' && currentFase==='pre'){
+    extra = renderCenografiaGallery(p);
+  }
+  if(currentArea==='ab' && currentFase==='pre'){
+    extra = renderAbMenu(p);
   }
 
-  document.getElementById('mc-fornecedores').textContent = STATE.fornecedores.length;
-  const totalContratado = STATE.fornecedores.reduce((s,f)=> s + (Number(f.valor)||0), 0);
-  document.getElementById('mc-orcado').textContent = fmtBRL(totalContratado).replace(',00','').replace('R$\xa0','R$');
-  const contratados = STATE.fornecedores.filter(f=>f.status==='Contratado'||f.status==='Pago').length;
-  document.getElementById('mc-contratado').textContent = STATE.fornecedores.length ? Math.round(contratados/STATE.fornecedores.length*100)+'%' : '0%';
-  document.getElementById('mc-reunioes').textContent = STATE.reunioes.length;
+  document.getElementById('area-content').innerHTML = `
+    <div class="section-block">
+      <div class="section-title">Checklist <span class="section-title-count">${cl.filter(x=>x.done).length}/${cl.length}</span></div>
+      <div class="checklist-add">
+        <input type="text" id="cl-new-input" placeholder="Nova tarefa..." onkeydown="if(event.key==='Enter')addClItem()">
+        <button class="btn-add" onclick="addClItem()">Adicionar</button>
+      </div>
+      <div class="checklist-items">
+        ${cl.length===0?'<div class="cl-empty">Nenhuma tarefa. Adicione acima.</div>':cl.map(item=>`
+        <div class="cl-item${item.done?' done':''}" onclick="toggleCl('${item.id}')">
+          <div class="cl-check">${item.done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>':''}</div>
+          <span class="cl-text">${esc(item.text)}</span>
+          <button class="cl-del" onclick="event.stopPropagation();delClItem('${item.id}')">×</button>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${extra}
+    <div class="section-block">
+      <div class="section-title">Fornecedores <span class="section-title-count">${forn.length}</span></div>
+      ${renderFornTable(forn, true)}
+      <button class="tbl-add" onclick="openFornModal('${currentArea}')">+ Fornecedor</button>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Budget <span class="section-title-count">${budget.length}</span></div>
+      ${renderBudgetTable(budget, true)}
+      <button class="tbl-add" onclick="openBudgetModal('${currentArea}')">+ Item</button>
+    </div>`;
+}
+
+function toggleCl(id){
+  const p = getProject();
+  if(!p) return;
+  const cl = p.checklists[currentArea][currentFase];
+  const item = cl.find(x=>x.id===id);
+  if(item) item.done = !item.done;
+  saveState();
+  renderAreaContent();
+}
+
+function addClItem(){
+  const input = document.getElementById('cl-new-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const p = getProject();
+  p.checklists[currentArea][currentFase].push(mkItem(text));
+  saveState();
+  renderAreaContent();
+  document.getElementById('cl-new-input').focus();
+}
+
+function delClItem(id){
+  if(!confirm('Remover esta tarefa?')) return;
+  const p = getProject();
+  const cl = p.checklists[currentArea][currentFase];
+  p.checklists[currentArea][currentFase] = cl.filter(x=>x.id!==id);
+  saveState();
+  renderAreaContent();
+}
+
+function openAreaExtra(){
+  if(currentArea==='cenografia') openCenoModal();
+  else if(currentArea==='ab') openAbModal();
+  else if(currentArea==='infratech'||currentArea==='producao') openFornModal(currentArea);
+}
+
+/* ===================== CENOGRAFIA GALLERY ===================== */
+function renderCenografiaGallery(p){
+  const items = p.cenografiaProjects||[];
+  return `<div class="section-block">
+    <div class="section-title">Projetos de Cenografia <span class="section-title-count">${items.length}</span></div>
+    <div class="ceno-projects">
+      ${items.map(c=>`<div class="ceno-proj-card" onclick="openCenoModal('${c.id}')">
+        ${c.image?`<img class="ceno-proj-img" src="${c.image}" alt="${esc(c.name)}">`:'<div class="ceno-proj-img-placeholder">🎨</div>'}
+        <div class="ceno-proj-info">
+          <div class="ceno-proj-name">${esc(c.name)}</div>
+          <div class="ceno-proj-desc">${esc(c.desc||'')}</div>
+        </div>
+      </div>`).join('')}
+      <div class="ceno-proj-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;cursor:pointer;border-style:dashed;color:var(--text-muted)" onclick="openCenoModal()">+ Projeto</div>
+    </div>
+  </div>`;
+}
+
+function openCenoModal(id){
+  const p = getProject();
+  const existing = id ? (p.cenografiaProjects||[]).find(c=>c.id===id) : null;
+  openModal(`<div class="modal-header"><div class="modal-title">${existing?'Editar':'Novo'} Projeto</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Nome</label><input class="form-input" id="ceno-name" value="${existing?esc(existing.name):''}"></div>
+      <div class="form-row"><label class="form-label">Descrição</label><textarea class="form-input" id="ceno-desc" rows="2">${existing?esc(existing.desc||''):''}</textarea></div>
+      <div class="form-row"><label class="form-label">Imagem (opcional)</label><input type="file" accept="image/*" id="ceno-img-file" onchange="previewCenoImg(this)"><div id="ceno-img-preview" style="margin-top:8px">${existing&&existing.image?`<img src="${existing.image}" style="max-width:100%;max-height:200px">`:''}</div></div>
+    </div>
+    <div class="modal-footer">
+      ${existing?`<button class="btn-secondary" onclick="deleteCenoProject('${existing.id}')">Excluir</button>`:''}
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveCenoProject('${id||''}')">Salvar</button>
+    </div>`);
+}
+
+function previewCenoImg(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    document.getElementById('ceno-img-preview').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:200px">`;
+    input.dataset.b64 = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function saveCenoProject(id){
+  const p = getProject();
+  const name = document.getElementById('ceno-name').value.trim();
+  if(!name) return;
+  const desc = document.getElementById('ceno-desc').value;
+  const imgInput = document.getElementById('ceno-img-file');
+  const image = imgInput.dataset.b64 || (id?(p.cenografiaProjects||[]).find(c=>c.id===id)?.image||null:null);
+  if(!p.cenografiaProjects) p.cenografiaProjects=[];
+  if(id){
+    const idx = p.cenografiaProjects.findIndex(c=>c.id===id);
+    if(idx>=0) p.cenografiaProjects[idx]={...p.cenografiaProjects[idx],name,desc,image};
+  } else {
+    p.cenografiaProjects.push({id:uid(),name,desc,image});
+  }
+  saveState();
+  closeModal();
+  renderAreaContent();
+}
+
+function deleteCenoProject(id){
+  if(!confirm('Excluir projeto?')) return;
+  const p = getProject();
+  p.cenografiaProjects = (p.cenografiaProjects||[]).filter(c=>c.id!==id);
+  saveState();
+  closeModal();
+  renderAreaContent();
+}
+
+/* ===================== A&B MENU ===================== */
+function renderAbMenu(p){
+  const items = p.abItems||[];
+  return `<div class="section-block">
+    <div class="section-title">Cardápio / Menu <span class="section-title-count">${items.length}</span></div>
+    <table class="ab-menu-table"><thead><tr><th>Nome</th><th>Tipo</th><th>Qtd</th><th>Restrições</th><th></th></tr></thead>
+    <tbody>${items.map(i=>`<tr>
+      <td>${esc(i.nome)}</td>
+      <td><span class="ab-tipo ${i.tipo}">${i.tipo}</span></td>
+      <td>${i.quantidade||'-'}</td>
+      <td style="font-size:11px;color:var(--text-muted)">${esc(i.restricoes||'-')}</td>
+      <td><button class="btn-icon" onclick="deleteAbItem('${i.id}')">×</button></td>
+    </tr>`).join('')}</tbody></table>
+    <button class="tbl-add" onclick="openAbModal()">+ Item do Cardápio</button>
+  </div>`;
+}
+
+function openAbModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Item do Cardápio</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Nome</label><input class="form-input" id="ab-nome"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Tipo</label><select class="form-select" id="ab-tipo"><option value="prato">Prato</option><option value="bebida">Bebida</option><option value="outro">Outro</option></select></div>
+        <div class="form-row"><label class="form-label">Quantidade</label><input class="form-input" id="ab-qtd" type="number"></div>
+      </div>
+      <div class="form-row"><label class="form-label">Restrições Alimentares</label><input class="form-input" id="ab-rest" placeholder="Gluten-free, vegano..."></div>
+      <div class="form-row"><label class="form-label">Observações</label><input class="form-input" id="ab-obs"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveAbItem()">Salvar</button>
+    </div>`);
+}
+
+function saveAbItem(){
+  const nome = document.getElementById('ab-nome').value.trim();
+  if(!nome) return;
+  const p = getProject();
+  if(!p.abItems) p.abItems=[];
+  p.abItems.push({id:uid(),nome,tipo:document.getElementById('ab-tipo').value,quantidade:document.getElementById('ab-qtd').value,restricoes:document.getElementById('ab-rest').value,obs:document.getElementById('ab-obs').value});
+  saveState();
+  closeModal();
+  renderAreaContent();
+}
+
+function deleteAbItem(id){
+  const p = getProject();
+  p.abItems = (p.abItems||[]).filter(i=>i.id!==id);
+  saveState();
+  renderAreaContent();
 }
 
 /* ===================== FORNECEDORES ===================== */
-const FORNECEDOR_STATUS = ['Prospecção','Proposta','Em Negociação','Contratado','Pago','Cancelado'];
-const STATUS_COLORS = {
-  'Contratado':{bg:'var(--success-dim)',fg:'var(--success)'},
-  'Pago':{bg:'var(--success-dim)',fg:'var(--success)'},
-  'Em Negociação':{bg:'var(--pre-dim)',fg:'var(--pre)'},
-  'Cancelado':{bg:'var(--danger-dim)',fg:'var(--danger)'},
-  'Prospecção':{bg:'var(--border-subtle)',fg:'var(--text-muted)'},
-  'Proposta':{bg:'var(--info-dim)',fg:'var(--info)'},
-};
-let fornecedorFilter = 'TODOS';
-
-function renderFornecedorFilter(){
-  const counts = { TODOS: STATE.fornecedores.length };
-  FORNECEDOR_STATUS.forEach(s=> counts[s]=STATE.fornecedores.filter(f=>f.status===s).length);
-  const filterEl = document.getElementById('fornecedor-filter');
-  filterEl.innerHTML = ['TODOS', ...FORNECEDOR_STATUS].map(s=>
-    `<div class="status-pill ${fornecedorFilter===s?'active':''}" onclick="setFornecedorFilter('${s}')">${s.toUpperCase()} · ${counts[s]||0}</div>`
-  ).join('');
+function renderFornTable(items, compact){
+  if(items.length===0) return '<div class="cl-empty">Nenhum fornecedor cadastrado.</div>';
+  return `<table class="data-table"><thead><tr>
+    <th>Nome</th><th>Serviço</th><th>Contato</th><th>Valor</th>${!compact?'<th>Área</th>':''}<th>Status</th><th></th>
+  </tr></thead><tbody>
+  ${items.map(f=>`<tr>
+    <td><strong>${esc(f.nome)}</strong></td>
+    <td style="color:var(--text-secondary)">${esc(f.servico||'-')}</td>
+    <td style="font-size:11px">${esc(f.contato||'-')}</td>
+    <td class="td-num">${f.valor?'R$ '+num(f.valor):'-'}</td>
+    ${!compact?`<td><span class="badge-area ba-${f.area||'producao'}">${AREAS[f.area]?.label||f.area||'-'}</span></td>`:''}
+    <td><span class="nf-status ${f.status==='contratado'?'nf-pago':f.status==='negociando'?'nf-pendente':'nf-vencido'}">${f.status||'—'}</span></td>
+    <td class="td-actions"><button class="btn-icon edit" onclick="openFornModal('${f.area||currentArea||''}','${f.id}')">✎</button><button class="btn-icon" onclick="deleteForn('${f.id}')">×</button></td>
+  </tr>`).join('')}
+  </tbody></table>`;
 }
-function setFornecedorFilter(s){ fornecedorFilter = s; renderFornecedores(); }
+
+function openFornModal(area, id){
+  const p = getProject();
+  const ex = id ? (p.fornecedores||[]).find(f=>f.id===id) : null;
+  const a = area||currentArea||'producao';
+  openModal(`<div class="modal-header"><div class="modal-title">${ex?'Editar':'Novo'} Fornecedor</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Nome</label><input class="form-input" id="fn-nome" value="${ex?esc(ex.nome):''}"></div>
+      <div class="form-row"><label class="form-label">Serviço</label><input class="form-input" id="fn-srv" value="${ex?esc(ex.servico||''):''}"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Contato</label><input class="form-input" id="fn-ctc" value="${ex?esc(ex.contato||''):''}"></div>
+        <div class="form-row"><label class="form-label">Valor (R$)</label><input class="form-input" id="fn-val" type="number" value="${ex?ex.valor:''}"></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Área</label><select class="form-select" id="fn-area">
+          ${Object.entries(AREAS).map(([k,v])=>`<option value="${k}"${(ex?ex.area:a)===k?' selected':''}>${v.label}</option>`).join('')}
+        </select></div>
+        <div class="form-row"><label class="form-label">Status</label><select class="form-select" id="fn-status">
+          <option value="prospectando"${(ex?.status||'')===''?' selected':''}>Prospectando</option>
+          <option value="negociando"${ex?.status==='negociando'?' selected':''}>Negociando</option>
+          <option value="contratado"${ex?.status==='contratado'?' selected':''}>Contratado</option>
+          <option value="recusado"${ex?.status==='recusado'?' selected':''}>Recusado</option>
+        </select></div>
+      </div>
+      <div class="form-row"><label class="form-label">Observações</label><textarea class="form-input" id="fn-obs" rows="2">${ex?esc(ex.obs||''):''}</textarea></div>
+    </div>
+    <div class="modal-footer">
+      ${ex?`<button class="btn-secondary" onclick="deleteForn('${ex.id}',true)">Excluir</button>`:''}
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveForn('${ex?ex.id:''}')">Salvar</button>
+    </div>`);
+}
+
+function saveForn(id){
+  const nome = document.getElementById('fn-nome').value.trim();
+  if(!nome) return;
+  const p = getProject();
+  if(!p.fornecedores) p.fornecedores=[];
+  const data = {
+    nome, servico:document.getElementById('fn-srv').value,
+    contato:document.getElementById('fn-ctc').value,
+    valor:parseFloat(document.getElementById('fn-val').value)||0,
+    area:document.getElementById('fn-area').value,
+    status:document.getElementById('fn-status').value,
+    obs:document.getElementById('fn-obs').value
+  };
+  if(id){const idx=p.fornecedores.findIndex(f=>f.id===id);if(idx>=0)p.fornecedores[idx]={...p.fornecedores[idx],...data};}
+  else p.fornecedores.push({id:uid(),...data});
+  saveState();closeModal();
+  if(currentArea) renderAreaContent(); else renderFornecedores();
+}
+
+function deleteForn(id,fromModal){
+  if(!confirm('Excluir fornecedor?')) return;
+  const p=getProject();
+  p.fornecedores=(p.fornecedores||[]).filter(f=>f.id!==id);
+  saveState();
+  if(fromModal) closeModal();
+  if(currentArea) renderAreaContent(); else renderFornecedores();
+}
+
+function setFornFilter(val){
+  fornFilter=val;
+  document.querySelectorAll('#forn-filter .pill').forEach(p=>p.classList.toggle('active',p.dataset.val===val));
+  renderFornecedores();
+}
 
 function renderFornecedores(){
-  renderFornecedorFilter();
-  const tbody = document.getElementById('fornecedores-tbody');
-  const list = fornecedorFilter==='TODOS' ? STATE.fornecedores : STATE.fornecedores.filter(f=>f.status===fornecedorFilter);
-  if(!list.length){
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">Nenhum fornecedor cadastrado</div></td></tr>`;
-  } else {
-    tbody.innerHTML = list.map(f=>{
-      const c = STATUS_COLORS[f.status] || STATUS_COLORS['Prospecção'];
-      return `<tr>
-        <td><input value="${escAttr(f.nome)}" onchange="updateFornecedor('${f.id}','nome',this.value)"></td>
-        <td><input value="${escAttr(f.categoria)}" onchange="updateFornecedor('${f.id}','categoria',this.value)" placeholder="Categoria"></td>
-        <td><input value="${escAttr(f.contato)}" onchange="updateFornecedor('${f.id}','contato',this.value)"></td>
-        <td><input class="mono" value="${escAttr(f.valor)}" onchange="updateFornecedor('${f.id}','valor',this.value)" placeholder="R$ 0"></td>
-        <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateFornecedor('${f.id}','status',this.value)">
-          ${FORNECEDOR_STATUS.map(s=>`<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
-        </select></td>
-        <td><input value="${escAttr(f.especificacoes||'')}" placeholder="Rider, especificações técnicas..." onchange="updateFornecedor('${f.id}','especificacoes',this.value)"></td>
-        <td><input value="${escAttr(f.obs)}" onchange="updateFornecedor('${f.id}','obs',this.value)"></td>
-        <td><button class="del-btn" onclick="delFornecedor('${f.id}')">✕</button></td>
-      </tr>`;
-    }).join('');
-  }
-  const total = STATE.fornecedores.reduce((s,f)=>s+(Number(f.valor)||0),0);
-  document.getElementById('fornecedor-footer').textContent = `${STATE.fornecedores.length} fornecedores · ${fmtBRL(total)} total`;
-}
-function addFornecedor(){
-  STATE.fornecedores.push({ id:uid(), nome:'Novo Fornecedor', categoria:'', contato:'', valor:'', status:'Prospecção', especificacoes:'', obs:'' });
-  saveState(); renderAll();
-}
-function updateFornecedor(id, field, value){
-  const f = STATE.fornecedores.find(x=>x.id===id);
-  if(f){ f[field]= field==='valor' ? value.replace(/[^\d.,]/g,'') : value; saveState(); renderOverview(); }
-}
-function delFornecedor(id){
-  STATE.fornecedores = STATE.fornecedores.filter(f=>f.id!==id);
-  saveState(); renderAll();
+  const p=getProject();if(!p)return;
+  const items=(p.fornecedores||[]).filter(f=>!fornFilter||f.area===fornFilter);
+  document.getElementById('forn-table-wrap').innerHTML=renderFornTable(items,false);
 }
 
 /* ===================== BUDGET ===================== */
-const BUDGET_STATUS = ['Previsto','Aprovado','Pago','Cancelado'];
-function renderBudget(){
-  const tbody = document.getElementById('budget-tbody');
-  if(!STATE.budget.length){
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Nenhuma linha de orçamento</div></td></tr>`;
-  } else {
-    tbody.innerHTML = STATE.budget.map(b=>{
-      const diff = (Number(b.previsto)||0) - (Number(b.realizado)||0);
-      const diffClass = diff>0?'diff-pos':diff<0?'diff-neg':'diff-zero';
-      return `<tr>
-        <td><input value="${escAttr(b.categoria)}" onchange="updateBudget('${b.id}','categoria',this.value)"></td>
-        <td><input value="${escAttr(b.descricao)}" onchange="updateBudget('${b.id}','descricao',this.value)"></td>
-        <td><input class="mono" value="${escAttr(b.previsto)}" onchange="updateBudget('${b.id}','previsto',this.value)"></td>
-        <td><input class="mono" value="${escAttr(b.realizado)}" onchange="updateBudget('${b.id}','realizado',this.value)"></td>
-        <td class="mono ${diffClass}">${fmtBRL(diff)}</td>
-        <td><select class="status-select" onchange="updateBudget('${b.id}','status',this.value)">
-          ${BUDGET_STATUS.map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join('')}
-        </select></td>
-        <td><button class="del-btn" onclick="delBudget('${b.id}')">✕</button></td>
-      </tr>`;
-    }).join('');
-  }
-  const totalPrevisto = STATE.budget.reduce((s,b)=>s+(Number(b.previsto)||0),0);
-  const totalRealizado = STATE.budget.reduce((s,b)=>s+(Number(b.realizado)||0),0);
-  const totalDiff = totalPrevisto-totalRealizado;
-  document.getElementById('budget-total-row').innerHTML = `
-    <td>TOTAL</td><td></td>
-    <td class="mono">${fmtBRL(totalPrevisto)}</td>
-    <td class="mono">${fmtBRL(totalRealizado)}</td>
-    <td class="mono ${totalDiff>0?'diff-pos':totalDiff<0?'diff-neg':'diff-zero'}">${fmtBRL(totalDiff)}</td>
-    <td></td><td></td>`;
+function renderBudgetTable(items, compact){
+  if(items.length===0) return '<div class="cl-empty">Nenhum item de budget.</div>';
+  const total = items.reduce((s,b)=>s+(parseFloat(b.valor)||0),0);
+  return `<table class="data-table"><thead><tr>
+    <th>Descrição</th>${!compact?'<th>Área</th>':''}<th>Previsto (R$)</th><th>Realizado (R$)</th><th>Dif.</th><th></th>
+  </tr></thead><tbody>
+  ${items.map(b=>{
+    const prev=parseFloat(b.valor)||0;const real=parseFloat(b.realizado)||0;const dif=real-prev;
+    return`<tr>
+      <td>${esc(b.desc)}</td>
+      ${!compact?`<td><span class="badge-area ba-${b.area||'producao'}">${AREAS[b.area]?.label||b.area||'-'}</span></td>`:''}
+      <td class="td-num">${num(prev)}</td>
+      <td class="td-num">${real?num(real):'-'}</td>
+      <td class="td-num" style="color:${dif>0?'var(--danger)':dif<0?'var(--success)':'var(--text-muted)'}">${dif?num(dif):'-'}</td>
+      <td class="td-actions"><button class="btn-icon edit" onclick="openBudgetModal('${b.area||currentArea||''}','${b.id}')">✎</button><button class="btn-icon" onclick="deleteBudget('${b.id}')">×</button></td>
+    </tr>`;}).join('')}
+  <tr><td colspan="${compact?3:4}" style="font-weight:700;padding-top:10px">Total</td><td class="td-num" style="font-weight:700">${num(total)}</td><td></td></tr>
+  </tbody></table>`;
+}
 
-  document.getElementById('bg-previsto').textContent = fmtBRL(totalPrevisto);
-  document.getElementById('bg-realizado').textContent = fmtBRL(totalRealizado);
-  const pctRealizado = totalPrevisto? Math.round(totalRealizado/totalPrevisto*100):0;
-  document.getElementById('bg-realizado-sub').textContent = pctRealizado+'% do orçamento';
-  const realCard = document.getElementById('bg-realizado-card');
-  const meter = document.getElementById('bg-realizado-meter');
-  let color = 'var(--success)';
-  if(pctRealizado>=100) color='var(--danger)'; else if(pctRealizado>=80) color='var(--pre)';
-  realCard.style.borderLeftColor = color;
-  document.getElementById('bg-realizado').style.color = color;
-  meter.style.width = Math.min(pctRealizado,100)+'%';
-  meter.style.background = color;
+function openBudgetModal(area,id){
+  const p=getProject();
+  const ex=id?(p.budget||[]).find(b=>b.id===id):null;
+  const a=area||currentArea||'producao';
+  openModal(`<div class="modal-header"><div class="modal-title">${ex?'Editar':'Novo'} Item de Budget</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Descrição</label><input class="form-input" id="bg-desc" value="${ex?esc(ex.desc):''}"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Área</label><select class="form-select" id="bg-area">
+          ${Object.entries(AREAS).map(([k,v])=>`<option value="${k}"${(ex?ex.area:a)===k?' selected':''}>${v.label}</option>`).join('')}
+        </select></div>
+        <div class="form-row"><label class="form-label">Previsto (R$)</label><input class="form-input" id="bg-val" type="number" value="${ex?ex.valor:''}"></div>
+      </div>
+      <div class="form-row"><label class="form-label">Realizado (R$)</label><input class="form-input" id="bg-real" type="number" value="${ex?ex.realizado||'':''}"></div>
+      <div class="form-row"><label class="form-label">Observações</label><input class="form-input" id="bg-obs" value="${ex?esc(ex.obs||''):''}"></div>
+    </div>
+    <div class="modal-footer">
+      ${ex?`<button class="btn-secondary" onclick="deleteBudget('${ex.id}',true)">Excluir</button>`:''}
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveBudget('${ex?ex.id:''}')">Salvar</button>
+    </div>`);
+}
 
-  const saldo = totalPrevisto-totalRealizado;
-  document.getElementById('bg-saldo').textContent = fmtBRL(saldo);
-  document.getElementById('bg-saldo').style.color = saldo>=0?'var(--success)':'var(--danger)';
-  const saldoMeter = document.getElementById('bg-saldo-meter');
-  saldoMeter.style.width = Math.min(100, totalPrevisto? (saldo/totalPrevisto*100):0)+'%';
-  saldoMeter.style.background = saldo>=0?'var(--success)':'var(--danger)';
+function saveBudget(id){
+  const desc=document.getElementById('bg-desc').value.trim();
+  if(!desc)return;
+  const p=getProject();
+  if(!p.budget)p.budget=[];
+  const data={desc,area:document.getElementById('bg-area').value,valor:parseFloat(document.getElementById('bg-val').value)||0,realizado:parseFloat(document.getElementById('bg-real').value)||0,obs:document.getElementById('bg-obs').value};
+  if(id){const idx=p.budget.findIndex(b=>b.id===id);if(idx>=0)p.budget[idx]={...p.budget[idx],...data};}
+  else p.budget.push({id:uid(),...data});
+  saveState();closeModal();
+  if(currentArea) renderAreaContent(); else renderFinanceiro();
 }
-function addBudgetLine(){
-  STATE.budget.push({ id:uid(), categoria:'Categoria', descricao:'', previsto:0, realizado:0, status:'Previsto' });
-  saveState(); renderAll();
+
+function deleteBudget(id,fromModal){
+  if(!confirm('Excluir item?'))return;
+  const p=getProject();
+  p.budget=(p.budget||[]).filter(b=>b.id!==id);
+  saveState();
+  if(fromModal)closeModal();
+  if(currentArea)renderAreaContent();else renderFinanceiro();
 }
-function updateBudget(id, field, value){
-  const b = STATE.budget.find(x=>x.id===id);
-  if(b){
-    b[field] = (field==='previsto'||field==='realizado') ? (parseFloat(value.replace(',','.'))||0) : value;
-    saveState(); renderAll();
-  }
+
+/* ===================== FINANCEIRO ===================== */
+function renderFinanceiro(){
+  const p=getProject();if(!p)return;
+  const budget=p.budget||[];
+  const nfs=p.notasFiscais||[];
+  const receita=parseFloat(p.financeiro?.receitaContratada)||0;
+  const custo=budget.reduce((s,b)=>s+(parseFloat(b.valor)||0),0);
+  const custoReal=budget.reduce((s,b)=>s+(parseFloat(b.realizado)||0),0);
+  const lucro=receita-custo;
+  const margem=receita>0?Math.round(lucro/receita*100):0;
+  const parcelasRec=(p.financeiro?.parcelas||[]).reduce((s,px)=>s+(px.pago?parseFloat(px.valor)||0:0),0);
+
+  const byArea={};
+  Object.keys(AREAS).forEach(a=>{byArea[a]={prev:0,real:0};});
+  budget.forEach(b=>{
+    if(byArea[b.area]){byArea[b.area].prev+=parseFloat(b.valor)||0;byArea[b.area].real+=parseFloat(b.realizado)||0;}
+  });
+
+  document.getElementById('fin-body').innerHTML=`
+    <div class="fin-kpi-row">
+      <div class="fin-kpi"><div class="fin-kpi-label">Receita Contratada</div>
+        <div class="fin-kpi-value amber" contenteditable="true" onblur="saveReceita(this)" style="outline:none">R$ ${num(receita)}</div></div>
+      <div class="fin-kpi"><div class="fin-kpi-label">Recebido</div><div class="fin-kpi-value">${num(parcelasRec)}</div></div>
+      <div class="fin-kpi"><div class="fin-kpi-label">Custo Previsto</div><div class="fin-kpi-value red">R$ ${num(custo)}</div></div>
+      <div class="fin-kpi"><div class="fin-kpi-label">Custo Realizado</div><div class="fin-kpi-value red">R$ ${num(custoReal)}</div></div>
+      <div class="fin-kpi"><div class="fin-kpi-label">Lucro Previsto</div><div class="fin-kpi-value ${lucro>=0?'green':'red'}">R$ ${num(lucro)}</div></div>
+      <div class="fin-kpi"><div class="fin-kpi-label">Margem</div><div class="fin-kpi-value ${margem>=0?'green':'red'}">${margem}%</div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Custo por Área</div>
+      <table class="fin-area-table"><thead><tr><th>Área</th><th>Previsto</th><th>Realizado</th><th>Diferença</th><th>% da Receita</th></tr></thead>
+      <tbody>${Object.entries(byArea).map(([a,v])=>{
+        const dif=v.real-v.prev;
+        return`<tr><td class="td-label">${AREAS[a].label}</td>
+          <td>R$ ${num(v.prev)}</td><td>R$ ${num(v.real)}</td>
+          <td style="color:${dif>0?'var(--danger)':dif<0?'var(--success)':'inherit'}">${dif?'R$ '+num(dif):'-'}</td>
+          <td>${receita>0?Math.round(v.prev/receita*100):0}%</td></tr>`;}).join('')}
+      </tbody></table>
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Parcelas / Recebimentos</div>
+      ${renderParcelasTable(p)}
+      <button class="tbl-add" onclick="openParcelaModal()">+ Parcela</button>
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Budget Completo <span class="section-title-count">${budget.length}</span></div>
+      ${renderBudgetTable(budget,false)}
+      <button class="tbl-add" onclick="openBudgetModal('producao')">+ Item</button>
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Notas Fiscais <span class="section-title-count">${nfs.length}</span></div>
+      ${renderNfTable(nfs)}
+      <button class="tbl-add" onclick="openNfModal()">+ NF</button>
+    </div>`;
 }
-function delBudget(id){
-  STATE.budget = STATE.budget.filter(b=>b.id!==id);
-  saveState(); renderAll();
+
+function saveReceita(el){
+  const p=getProject();if(!p)return;
+  const val=parseFloat(el.textContent.replace(/[^\d,.-]/g,'').replace(',','.'))||0;
+  if(!p.financeiro)p.financeiro={receitaContratada:0,parcelas:[]};
+  p.financeiro.receitaContratada=val;
+  saveState();
+  el.textContent='R$ '+num(val);
+}
+
+function renderParcelasTable(p){
+  const parcelas=(p.financeiro?.parcelas)||[];
+  if(parcelas.length===0) return '<div class="cl-empty">Nenhuma parcela cadastrada.</div>';
+  return`<table class="data-table"><thead><tr><th>Descrição</th><th>Vencimento</th><th>Valor</th><th>Status</th><th></th></tr></thead>
+  <tbody>${parcelas.map(px=>`<tr>
+    <td>${esc(px.desc)}</td>
+    <td class="td-num">${px.venc?fmt(px.venc):'-'}</td>
+    <td class="td-num">R$ ${num(px.valor)}</td>
+    <td><span class="nf-status ${px.pago?'nf-pago':'nf-pendente'}" style="cursor:pointer" onclick="toggleParcela('${px.id}')">${px.pago?'Recebido':'Pendente'}</span></td>
+    <td><button class="btn-icon" onclick="deleteParcela('${px.id}')">×</button></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function openParcelaModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Nova Parcela</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Descrição</label><input class="form-input" id="px-desc" placeholder="1ª parcela..."></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Vencimento</label><input class="form-input" id="px-venc" type="date"></div>
+        <div class="form-row"><label class="form-label">Valor (R$)</label><input class="form-input" id="px-val" type="number"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveParcela()">Salvar</button>
+    </div>`);
+}
+
+function saveParcela(){
+  const desc=document.getElementById('px-desc').value.trim()||'Parcela';
+  const p=getProject();
+  if(!p.financeiro)p.financeiro={receitaContratada:0,parcelas:[]};
+  p.financeiro.parcelas.push({id:uid(),desc,venc:document.getElementById('px-venc').value,valor:parseFloat(document.getElementById('px-val').value)||0,pago:false});
+  saveState();closeModal();renderFinanceiro();
+}
+
+function toggleParcela(id){
+  const p=getProject();
+  const px=(p.financeiro?.parcelas||[]).find(x=>x.id===id);
+  if(px)px.pago=!px.pago;
+  saveState();renderFinanceiro();
+}
+
+function deleteParcela(id){
+  if(!confirm('Excluir parcela?'))return;
+  const p=getProject();
+  p.financeiro.parcelas=(p.financeiro.parcelas||[]).filter(x=>x.id!==id);
+  saveState();renderFinanceiro();
+}
+
+/* ===================== NF ===================== */
+function renderNfTable(nfs){
+  if(nfs.length===0) return '<div class="cl-empty">Nenhuma NF cadastrada.</div>';
+  return`<table class="data-table"><thead><tr><th>Fornecedor</th><th>Área</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
+  <tbody>${nfs.map(n=>`<tr>
+    <td>${esc(n.fornecedor)}</td>
+    <td><span class="badge-area ba-${n.area||'producao'}">${AREAS[n.area]?.label||n.area||'-'}</span></td>
+    <td class="td-num">R$ ${num(n.valor)}</td>
+    <td class="td-num">${n.venc?fmt(n.venc):'-'}</td>
+    <td><span class="nf-status ${n.status==='pago'?'nf-pago':n.status==='vencido'?'nf-vencido':'nf-pendente'}" style="cursor:pointer" onclick="toggleNf('${n.id}')">${n.status||'pendente'}</span></td>
+    <td><button class="btn-icon" onclick="deleteNf('${n.id}')">×</button></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function openNfModal(){
+  const p=getProject();
+  openModal(`<div class="modal-header"><div class="modal-title">Nova Nota Fiscal</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Fornecedor</label><input class="form-input" id="nf-forn"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Área</label><select class="form-select" id="nf-area">
+          ${Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}
+        </select></div>
+        <div class="form-row"><label class="form-label">Valor (R$)</label><input class="form-input" id="nf-val" type="number"></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Vencimento</label><input class="form-input" id="nf-venc" type="date"></div>
+        <div class="form-row"><label class="form-label">Número NF</label><input class="form-input" id="nf-num"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveNf()">Salvar</button>
+    </div>`);
+}
+
+function saveNf(){
+  const forn=document.getElementById('nf-forn').value.trim();if(!forn)return;
+  const p=getProject();if(!p.notasFiscais)p.notasFiscais=[];
+  p.notasFiscais.push({id:uid(),fornecedor:forn,area:document.getElementById('nf-area').value,valor:parseFloat(document.getElementById('nf-val').value)||0,venc:document.getElementById('nf-venc').value,num:document.getElementById('nf-num').value,status:'pendente'});
+  saveState();closeModal();renderFinanceiro();
+}
+
+function toggleNf(id){
+  const p=getProject();
+  const n=(p.notasFiscais||[]).find(x=>x.id===id);
+  if(n)n.status=n.status==='pago'?'pendente':'pago';
+  saveState();renderFinanceiro();
+}
+
+function deleteNf(id){
+  if(!confirm('Excluir NF?'))return;
+  const p=getProject();
+  p.notasFiscais=(p.notasFiscais||[]).filter(x=>x.id!==id);
+  saveState();renderFinanceiro();
+}
+
+/* ===================== IMPORT / EXPORT ===================== */
+function importPlanilha(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      let rows=[];
+      if(file.name.endsWith('.csv')){
+        rows=parseCSV(e.target.result);
+      } else {
+        if(typeof XLSX==='undefined'){alert('SheetJS não carregou. Verifique sua conexão.');return;}
+        const wb=XLSX.read(e.target.result,{type:'binary'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+      }
+      if(!rows.length){alert('Planilha vazia.');return;}
+      const keys=Object.keys(rows[0]).map(k=>k.toLowerCase());
+      const hasDesc=keys.some(k=>k.includes('desc')||k.includes('nome')||k.includes('item'));
+      const hasVal=keys.some(k=>k.includes('valor')||k.includes('value')||k.includes('preco'));
+      if(!hasDesc){alert('Coluna de descrição não encontrada (use "descricao", "nome" ou "item").');return;}
+      const p=getProject();if(!p.budget)p.budget=[];
+      let count=0;
+      rows.forEach(row=>{
+        const descKey=Object.keys(row).find(k=>['desc','descricao','nome','item','description'].some(s=>k.toLowerCase().includes(s)));
+        const valKey=Object.keys(row).find(k=>['valor','value','preco','price','custo','cost'].some(s=>k.toLowerCase().includes(s)));
+        const areaKey=Object.keys(row).find(k=>k.toLowerCase().includes('area'));
+        const desc=(descKey?String(row[descKey]):'').trim();
+        if(!desc)return;
+        const valor=valKey?parseFloat(String(row[valKey]).replace(/[R$\s.]/g,'').replace(',','.'))||0:0;
+        const rawArea=(areaKey?String(row[areaKey]).toLowerCase().trim():'');
+        const area=Object.keys(AREAS).find(a=>rawArea.includes(a)||rawArea.includes(AREAS[a].label.toLowerCase()))||'producao';
+        p.budget.push({id:uid(),desc,valor,area,realizado:0,obs:''});
+        count++;
+      });
+      saveState();
+      input.value='';
+      alert(`${count} itens importados com sucesso!`);
+      renderFinanceiro();
+    }catch(err){alert('Erro ao processar planilha: '+err.message);}
+  };
+  if(file.name.endsWith('.csv')) reader.readAsText(file,'UTF-8');
+  else reader.readAsBinaryString(file);
+}
+
+function parseCSV(text){
+  const lines=text.split('\n').filter(l=>l.trim());
+  if(lines.length<2)return[];
+  const sep=lines[0].includes(';')?';':',';
+  const headers=lines[0].split(sep).map(h=>h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line=>{
+    const vals=line.split(sep).map(v=>v.trim().replace(/^"|"$/g,''));
+    const obj={};headers.forEach((h,i)=>obj[h]=vals[i]||'');return obj;
+  });
+}
+
+function exportCSV(){
+  const p=getProject();if(!p)return;
+  const budget=p.budget||[];
+  const nfs=p.notasFiscais||[];
+  let csv='Tipo,Descrição,Área,Previsto (R$),Realizado (R$),Status\n';
+  budget.forEach(b=>{csv+=`Budget,${q(b.desc)},${AREAS[b.area]?.label||b.area},${b.valor||0},${b.realizado||0},-\n`;});
+  nfs.forEach(n=>{csv+=`NF,${q(n.fornecedor)},${AREAS[n.area]?.label||n.area},${n.valor||0},-,${n.status}\n`;});
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`callsheet-${(p.name||'evento').replace(/\s+/g,'-')}.csv`;a.click();
+  URL.revokeObjectURL(url);
+}
+function q(s){return'"'+(s||'').replace(/"/g,'""')+'"';}
+
+/* ===================== CRONOGRAMA ===================== */
+function renderCronograma(){
+  const p=getProject();if(!p)return;
+  const tl=p.timeline||[];
+  document.getElementById('tl-body').innerHTML=tl.length===0?'<div class="empty-state">Nenhum marco cadastrado.</div>':
+    tl.map(m=>`<div class="timeline-item">
+      <div class="tl-dot-col"><div class="tl-dot ${m.status}"></div></div>
+      <div class="tl-body">
+        <div class="tl-date">${m.data?fmt(m.data):'-'}</div>
+        <div class="tl-text">${esc(m.texto)}</div>
+        <span class="tl-status tl-${m.status}">${m.status}</span>
+        <button class="btn-icon" style="margin-left:8px" onclick="deleteTl('${m.id}')">×</button>
+      </div>
+    </div>`).join('');
+}
+
+function openTlModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Novo Marco</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Descrição</label><input class="form-input" id="tl-txt"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" id="tl-data" type="date"></div>
+        <div class="form-row"><label class="form-label">Status</label><select class="form-select" id="tl-status">
+          <option value="pendente">Pendente</option><option value="concluido">Concluído</option><option value="atencao">Atenção</option>
+        </select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveTl()">Salvar</button>
+    </div>`);
+}
+
+function saveTl(){
+  const txt=document.getElementById('tl-txt').value.trim();if(!txt)return;
+  const p=getProject();if(!p.timeline)p.timeline=[];
+  p.timeline.push({id:uid(),texto:txt,data:document.getElementById('tl-data').value,status:document.getElementById('tl-status').value});
+  p.timeline.sort((a,b)=>a.data>b.data?1:-1);
+  saveState();closeModal();renderCronograma();
+}
+
+function deleteTl(id){
+  if(!confirm('Excluir marco?'))return;
+  const p=getProject();p.timeline=(p.timeline||[]).filter(m=>m.id!==id);
+  saveState();renderCronograma();
 }
 
 /* ===================== BRIEFINGS ===================== */
 function renderBriefings(){
-  const grid = document.getElementById('briefings-grid');
-  let html = STATE.briefings.map(b=>`
-    <div class="card">
-      <div class="card-header">
-        <input class="card-title" value="${escAttr(b.titulo)}" onchange="updateBriefing('${b.id}','titulo',this.value)">
-        <span class="card-date">${escAttr(b.data)}</span>
-        <button class="del-card" onclick="delBriefing('${b.id}')">✕</button>
-      </div>
-      <div class="card-author">${esc(b.autor||'')}</div>
-      <div class="card-body">
-        <textarea onchange="updateBriefing('${b.id}','conteudo',this.value)" placeholder="Escreva o briefing...">${esc(b.conteudo||'')}</textarea>
-      </div>
-    </div>`).join('');
-  html += `<div class="add-card" onclick="addBriefing()"><span>+ Novo Briefing</span></div>`;
-  grid.innerHTML = html;
-}
-function addBriefing(){
-  STATE.briefings.push({ id:uid(), titulo:'Novo Briefing', data: new Date().toISOString().slice(0,10), autor:'', conteudo:'' });
-  saveState(); renderAll();
-}
-function updateBriefing(id, field, value){
-  const b = STATE.briefings.find(x=>x.id===id);
-  if(b){ b[field]=value; saveState(); }
-}
-function delBriefing(id){
-  STATE.briefings = STATE.briefings.filter(b=>b.id!==id);
-  saveState(); renderAll();
+  const p=getProject();if(!p)return;
+  const items=p.briefings||[];
+  document.getElementById('brief-body').innerHTML=items.length===0?'<div class="empty-state">Nenhum briefing cadastrado.</div>':
+    `<div class="card-list">${items.map(b=>`<div class="card-item">
+      <div class="card-item-title">${esc(b.titulo)}</div>
+      <div class="card-item-meta">${b.data?fmt(b.data):''} · ${esc(b.responsavel||'')}</div>
+      <div class="card-item-body">${esc(b.conteudo||'')}</div>
+      <button class="btn-icon" style="margin-top:8px" onclick="deleteBrief('${b.id}')">× Excluir</button>
+    </div>`).join('')}</div>`;
 }
 
-/* ===================== REUNIÕES + IA ===================== */
+function openBriefModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Novo Briefing</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Título</label><input class="form-input" id="br-titulo"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" id="br-data" type="date"></div>
+        <div class="form-row"><label class="form-label">Responsável</label><input class="form-input" id="br-resp"></div>
+      </div>
+      <div class="form-row"><label class="form-label">Conteúdo</label><textarea class="form-input" id="br-cont" rows="5"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveBrief()">Salvar</button>
+    </div>`);
+}
+
+function saveBrief(){
+  const titulo=document.getElementById('br-titulo').value.trim();if(!titulo)return;
+  const p=getProject();if(!p.briefings)p.briefings=[];
+  p.briefings.push({id:uid(),titulo,data:document.getElementById('br-data').value,responsavel:document.getElementById('br-resp').value,conteudo:document.getElementById('br-cont').value});
+  saveState();closeModal();renderBriefings();
+}
+
+function deleteBrief(id){
+  if(!confirm('Excluir briefing?'))return;
+  const p=getProject();p.briefings=(p.briefings||[]).filter(b=>b.id!==id);
+  saveState();renderBriefings();
+}
+
+/* ===================== REUNIOES ===================== */
 function renderReunioes(){
-  const grid = document.getElementById('reunioes-grid');
-  let html = STATE.reunioes.map(r=>`
-    <div class="card" style="border-left-color:var(--dia)">
-      <div class="card-header">
-        <input class="card-title" value="${escAttr(r.titulo)}" onchange="updateReuniao('${r.id}','titulo',this.value)">
-        <span class="meeting-meta">${escAttr(r.data)} · ${escAttr(r.participantes||'')}</span>
-        <button class="del-card" onclick="delReuniao('${r.id}')">✕</button>
+  const p=getProject();if(!p)return;
+  const items=p.reunioes||[];
+  document.getElementById('reun-body').innerHTML=items.length===0?'<div class="empty-state">Nenhuma reunião cadastrada.</div>':
+    `<div class="card-list">${items.map(r=>`<div class="card-item">
+      <div class="card-item-title">${esc(r.titulo)}</div>
+      <div class="card-item-meta">${r.data?fmt(r.data):''} · ${esc(r.participantes||'')}</div>
+      <div class="card-item-body">${esc(r.notas||'')}</div>
+      <button class="btn-icon" style="margin-top:8px" onclick="deleteReuniao('${r.id}')">× Excluir</button>
+    </div>`).join('')}</div>`;
+}
+
+function openReuniaoModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Nova Reunião</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Título</label><input class="form-input" id="rn-titulo"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" id="rn-data" type="date"></div>
+        <div class="form-row"><label class="form-label">Participantes</label><input class="form-input" id="rn-part"></div>
       </div>
-      <div class="card-body">
-        <div class="field-label">Notas / Transcrição</div>
-        <textarea onchange="updateReuniao('${r.id}','notas',this.value)" placeholder="Cole aqui as notas ou transcrição...">${esc(r.notas||'')}</textarea>
-        <button class="ghost-btn" onclick="resumirIA('${r.id}')">Resumir com IA</button>
-        <div class="field-label">Resumo IA</div>
-        <textarea class="ia-summary-input" onchange="updateReuniao('${r.id}','resumoIA',this.value)" placeholder="Integre via n8n + API Claude para resumo automático. Enquanto isso, cole o resumo manualmente aqui." style="width:100%;min-height:80px;background:rgba(0,180,168,0.06);border:1px solid var(--dia);padding:10px;font-size:12px;outline:none;">${esc(r.resumoIA||'')}</textarea>
-      </div>
-    </div>`).join('');
-  html += `<div class="add-card" onclick="addReuniao()"><span>+ Nova Reunião</span></div>`;
-  grid.innerHTML = html;
-}
-function addReuniao(){
-  STATE.reunioes.push({ id:uid(), titulo:'Nova Reunião', data:new Date().toISOString().slice(0,10), participantes:'', notas:'', resumoIA:'' });
-  saveState(); renderAll();
-}
-function updateReuniao(id, field, value){
-  const r = STATE.reunioes.find(x=>x.id===id);
-  if(r){ r[field]=value; saveState(); }
-}
-function delReuniao(id){
-  STATE.reunioes = STATE.reunioes.filter(r=>r.id!==id);
-  saveState(); renderAll();
-}
-function resumirIA(id){
-  const r = STATE.reunioes.find(x=>x.id===id);
-  if(r && !r.resumoIA){
-    r.resumoIA = 'Integre via n8n + API Claude para resumo automático.\nEnquanto isso, cole o resumo manualmente aqui.';
-    saveState(); renderReunioes();
-  }
+      <div class="form-row"><label class="form-label">Notas / Atas</label><textarea class="form-input" id="rn-notas" rows="5"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveReuniao()">Salvar</button>
+    </div>`);
 }
 
-/* ===================== TIMELINE ===================== */
-const TIMELINE_STATUS = { pending:{label:'PENDENTE',color:'var(--border-strong)'}, doing:{label:'EM ANDAMENTO',color:'var(--pre)'}, done:{label:'CONCLUÍDO',color:'var(--success)'} };
-function renderTimeline(){
-  const list = document.getElementById('timeline-list');
-  if(!STATE.timeline.length){
-    list.innerHTML = `<div class="empty-state">Nenhum marco no cronograma</div>`;
-    return;
-  }
-  list.innerHTML = STATE.timeline.map((m,idx)=>{
-    const st = TIMELINE_STATUS[m.status] || TIMELINE_STATUS.pending;
-    const isLast = idx===STATE.timeline.length-1;
-    return `<div class="marco ${m.diad?'diad':''}">
-      <div class="marco-line">
-        <div class="marco-dot" style="background:${m.diad?'var(--dia)':st.color}"></div>
-        ${!isLast?'<div class="marco-connector"></div>':''}
-      </div>
-      <div class="marco-body">
-        <div class="marco-row">
-          <input class="marco-title" value="${escAttr(m.titulo)}" onchange="updateMarco('${m.id}','titulo',this.value)">
-          <select class="marco-select" onchange="updateMarco('${m.id}','status',this.value)">
-            ${Object.entries(TIMELINE_STATUS).map(([k,v])=>`<option value="${k}" ${m.status===k?'selected':''}>${v.label}</option>`).join('')}
-          </select>
-          <input type="date" class="marco-date" value="${escAttr(m.data)}" onchange="updateMarco('${m.id}','data',this.value)">
-          <button class="marco-del" onclick="delMarco('${m.id}')">✕</button>
-        </div>
-        <input class="marco-desc" placeholder="Descrição opcional" value="${escAttr(m.descricao)}" onchange="updateMarco('${m.id}','descricao',this.value)">
-      </div>
-    </div>`;
-  }).join('');
-}
-function updateMarco(id, field, value){
-  const m = STATE.timeline.find(x=>x.id===id);
-  if(m){ m[field]=value; saveState(); renderTimeline(); }
-}
-function delMarco(id){
-  STATE.timeline = STATE.timeline.filter(m=>m.id!==id);
-  saveState(); renderTimeline();
-}
-function openTimelineModal(){
-  document.getElementById('modal-titulo').value='';
-  document.getElementById('modal-data').value='';
-  document.getElementById('modal-desc').value='';
-  document.getElementById('modal-overlay').classList.add('active');
-}
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('active'); }
-function saveModalMarco(){
-  const titulo = document.getElementById('modal-titulo').value.trim();
-  if(!titulo) return;
-  STATE.timeline.push({
-    id: uid(),
-    titulo,
-    data: document.getElementById('modal-data').value,
-    descricao: document.getElementById('modal-desc').value,
-    status: 'pending'
-  });
-  saveState(); renderTimeline(); closeModal();
+function saveReuniao(){
+  const titulo=document.getElementById('rn-titulo').value.trim();if(!titulo)return;
+  const p=getProject();if(!p.reunioes)p.reunioes=[];
+  p.reunioes.push({id:uid(),titulo,data:document.getElementById('rn-data').value,participantes:document.getElementById('rn-part').value,notas:document.getElementById('rn-notas').value});
+  saveState();closeModal();renderReunioes();
 }
 
-/* ===================== CENOGRAFIA ===================== */
-const CENO_STATUS = ['Conceito','Em Produção','Aprovado','Montado'];
-function renderCenografia(){
-  const grid = document.getElementById('cenografia-grid');
-  let html = STATE.cenografia.map(c=>`
-    <div class="ceno-card">
-      <div class="ceno-card-header">
-        <input class="ceno-title" value="${escAttr(c.titulo)}" onchange="updateCeno('${c.id}','titulo',this.value)">
-        <button class="del-card" onclick="delCeno('${c.id}')">✕</button>
-      </div>
-      <div class="ceno-gallery">
-        ${(c.imagens||[]).map((img,idx)=>`
-          <div class="ceno-thumb">
-            <img src="${img}">
-            <button class="ceno-thumb-del" onclick="delCenoImg('${c.id}',${idx})">✕</button>
-          </div>`).join('')}
-        <label class="ceno-add-img">
-          +
-          <input type="file" accept="image/*" multiple class="file-input-hidden" onchange="addCenoImg('${c.id}',this.files)">
-        </label>
-      </div>
-      <div class="ceno-body">
-        <select onchange="updateCeno('${c.id}','status',this.value)">
-          ${CENO_STATUS.map(s=>`<option ${c.status===s?'selected':''}>${s}</option>`).join('')}
-        </select>
-        <textarea placeholder="Descrição, referências, conceito..." onchange="updateCeno('${c.id}','descricao',this.value)">${esc(c.descricao||'')}</textarea>
-      </div>
-    </div>`).join('');
-  html += `<div class="add-card" onclick="addCeno()" style="min-height:200px;"><span>+ Novo Projeto</span></div>`;
-  grid.innerHTML = html;
-}
-function addCeno(){
-  STATE.cenografia.push({ id:uid(), titulo:'Novo Projeto', descricao:'', status:'Conceito', imagens:[] });
-  saveState(); renderAll();
-}
-function updateCeno(id, field, value){
-  const c = STATE.cenografia.find(x=>x.id===id);
-  if(c){ c[field]=value; saveState(); }
-}
-function delCeno(id){
-  STATE.cenografia = STATE.cenografia.filter(c=>c.id!==id);
-  saveState(); renderAll();
-}
-function addCenoImg(id, files){
-  const c = STATE.cenografia.find(x=>x.id===id);
-  if(!c || !files.length) return;
-  c.imagens = c.imagens || [];
-  let pending = files.length;
-  Array.from(files).forEach(file=>{
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      c.imagens.push(reader.result);
-      pending--;
-      if(pending===0){ saveState(); renderCenografia(); }
-    };
-    reader.readAsDataURL(file);
-  });
-}
-function delCenoImg(id, idx){
-  const c = STATE.cenografia.find(x=>x.id===id);
-  if(c){ c.imagens.splice(idx,1); saveState(); renderCenografia(); }
+function deleteReuniao(id){
+  if(!confirm('Excluir reunião?'))return;
+  const p=getProject();p.reunioes=(p.reunioes||[]).filter(r=>r.id!==id);
+  saveState();renderReunioes();
 }
 
-/* ===================== A&B ===================== */
-const AB_CATEGORIAS = ['Entrada','Principal','Sobremesa','Bebida','Coffee Break','Outro'];
-function renderAb(){
-  const tbody = document.getElementById('ab-tbody');
-  if(!STATE.ab.length){
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nenhum item de A&B cadastrado</div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = STATE.ab.map(a=>`
-    <tr>
-      <td><input value="${escAttr(a.item)}" onchange="updateAbItem('${a.id}','item',this.value)"></td>
-      <td><select class="status-select" style="background:var(--border-subtle);color:var(--text-secondary)" onchange="updateAbItem('${a.id}','categoria',this.value)">
-        ${AB_CATEGORIAS.map(c=>`<option ${a.categoria===c?'selected':''}>${c}</option>`).join('')}
-      </select></td>
-      <td><input class="mono" value="${escAttr(a.qtd)}" onchange="updateAbItem('${a.id}','qtd',this.value)" placeholder="0"></td>
-      <td><input value="${escAttr(a.restricao)}" onchange="updateAbItem('${a.id}','restricao',this.value)" placeholder="Vegano, sem glúten..."></td>
-      <td><input value="${escAttr(a.obs)}" onchange="updateAbItem('${a.id}','obs',this.value)"></td>
-      <td><button class="del-btn" onclick="delAbItem('${a.id}')">✕</button></td>
-    </tr>`).join('');
-}
-function addAbItem(){
-  STATE.ab.push({ id:uid(), item:'Novo Item', categoria:'Principal', qtd:'', restricao:'', obs:'' });
-  saveState(); renderAll();
-}
-function updateAbItem(id, field, value){
-  const a = STATE.ab.find(x=>x.id===id);
-  if(a){ a[field]=value; saveState(); }
-}
-function delAbItem(id){
-  STATE.ab = STATE.ab.filter(a=>a.id!==id);
-  saveState(); renderAll();
-}
-
-/* ===================== FINANCEIRO (P&L) ===================== */
-function renderFinanceiro(){
-  document.getElementById('fin-receita-input').value = STATE.financeiro.receitaContratada ? fmtBRL(STATE.financeiro.receitaContratada).replace('R$\xa0','') : '';
-  const receita = Number(STATE.financeiro.receitaContratada)||0;
-  const custo = STATE.budget.reduce((s,b)=>s+(Number(b.realizado)||0),0);
-  const lucro = receita - custo;
-  const margem = receita ? Math.round(lucro/receita*100) : 0;
-
-  document.getElementById('fin-receita').textContent = fmtBRL(receita);
-  document.getElementById('fin-custo').textContent = fmtBRL(custo);
-  document.getElementById('fin-lucro').textContent = fmtBRL(lucro);
-  document.getElementById('fin-margem-sub').textContent = margem+'% de margem';
-  const lucroCard = document.getElementById('fin-lucro-card');
-  const lucroColor = lucro>=0 ? 'var(--success)' : 'var(--danger)';
-  lucroCard.style.borderLeftColor = lucroColor;
-  document.getElementById('fin-lucro').style.color = lucroColor;
-
-  const tbody = document.getElementById('parcelas-tbody');
-  const parcelas = STATE.financeiro.parcelas || [];
-  if(!parcelas.length){
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">Nenhuma parcela cadastrada</div></td></tr>`;
-  } else {
-    tbody.innerHTML = parcelas.map(p=>`
-      <tr>
-        <td><input value="${escAttr(p.descricao)}" onchange="updateParcela('${p.id}','descricao',this.value)"></td>
-        <td><input class="mono" value="${escAttr(p.valor)}" onchange="updateParcela('${p.id}','valor',this.value)" placeholder="R$ 0"></td>
-        <td><input type="date" value="${escAttr(p.data)}" onchange="updateParcela('${p.id}','data',this.value)" style="background:transparent;border:none;outline:none;color:var(--text-secondary);font-size:12px;"></td>
-        <td><span class="item-checkbox ${p.recebido?'checked':''}" style="${p.recebido?'background:var(--success);border-color:var(--success)':''}" onclick="toggleParcela('${p.id}')">${p.recebido?'✓':''}</span></td>
-        <td><button class="del-btn" onclick="delParcela('${p.id}')">✕</button></td>
-      </tr>`).join('');
-  }
-}
-document.getElementById('fin-receita-input').addEventListener('change', e=>{
-  STATE.financeiro.receitaContratada = parseFloat(e.target.value.replace(/[^\d,.-]/g,'').replace(',','.'))||0;
-  saveState(); renderAll();
-});
-function addParcela(){
-  STATE.financeiro.parcelas.push({ id:uid(), descricao:'Parcela', valor:0, data:'', recebido:false });
-  saveState(); renderAll();
-}
-function updateParcela(id, field, value){
-  const p = STATE.financeiro.parcelas.find(x=>x.id===id);
-  if(p){
-    p[field] = field==='valor' ? (parseFloat(value.replace(',','.'))||0) : value;
-    saveState(); renderAll();
-  }
-}
-function toggleParcela(id){
-  const p = STATE.financeiro.parcelas.find(x=>x.id===id);
-  if(p){ p.recebido = !p.recebido; saveState(); renderFinanceiro(); }
-}
-function delParcela(id){
-  STATE.financeiro.parcelas = STATE.financeiro.parcelas.filter(p=>p.id!==id);
-  saveState(); renderAll();
-}
-
-/* ===================== PRESTAÇÃO DE CONTAS (NOTAS FISCAIS) ===================== */
-const NF_STATUS = ['Pendente','Aprovado','Reembolsado','Pago'];
-const NF_STATUS_COLORS = {
-  'Pendente':{bg:'var(--pre-dim)',fg:'var(--pre)'},
-  'Aprovado':{bg:'var(--info-dim)',fg:'var(--info)'},
-  'Reembolsado':{bg:'var(--success-dim)',fg:'var(--success)'},
-  'Pago':{bg:'var(--success-dim)',fg:'var(--success)'},
-};
-let nfFilter = 'TODOS';
-function renderNfFilter(){
-  const counts = { TODOS: STATE.notasFiscais.length };
-  NF_STATUS.forEach(s=> counts[s]=STATE.notasFiscais.filter(n=>n.status===s).length);
-  document.getElementById('nf-filter').innerHTML = ['TODOS', ...NF_STATUS].map(s=>
-    `<div class="status-pill ${nfFilter===s?'active':''}" onclick="setNfFilter('${s}')">${s.toUpperCase()} · ${counts[s]||0}</div>`
-  ).join('');
-}
-function setNfFilter(s){ nfFilter = s; renderNotasFiscais(); }
-function renderNotasFiscais(){
-  renderNfFilter();
-  const tbody = document.getElementById('nf-tbody');
-  const list = nfFilter==='TODOS' ? STATE.notasFiscais : STATE.notasFiscais.filter(n=>n.status===nfFilter);
-  if(!list.length){
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">Nenhuma nota fiscal cadastrada</div></td></tr>`;
-  } else {
-    tbody.innerHTML = list.map(n=>{
-      const c = NF_STATUS_COLORS[n.status] || NF_STATUS_COLORS['Pendente'];
-      return `<tr>
-        <td><input value="${escAttr(n.descricao)}" onchange="updateNf('${n.id}','descricao',this.value)"></td>
-        <td><input value="${escAttr(n.categoria)}" onchange="updateNf('${n.id}','categoria',this.value)" placeholder="Categoria"></td>
-        <td><input class="mono" value="${escAttr(n.numero)}" onchange="updateNf('${n.id}','numero',this.value)" placeholder="000000"></td>
-        <td><input class="mono" value="${escAttr(n.valor)}" onchange="updateNf('${n.id}','valor',this.value)" placeholder="R$ 0"></td>
-        <td><input type="date" value="${escAttr(n.data)}" onchange="updateNf('${n.id}','data',this.value)" style="background:transparent;border:none;outline:none;color:var(--text-secondary);font-size:12px;"></td>
-        <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateNf('${n.id}','status',this.value)">
-          ${NF_STATUS.map(s=>`<option value="${s}" ${n.status===s?'selected':''}>${s}</option>`).join('')}
-        </select></td>
-        <td>${n.arquivoNome
-          ? `<span class="file-pill">📎 ${esc(n.arquivoNome)}</span>`
-          : `<label class="upload-btn">+ Anexar<input type="file" accept="image/*,application/pdf" class="file-input-hidden" onchange="attachNfFile('${n.id}',this.files[0])"></label>`}</td>
-        <td><button class="del-btn" onclick="delNotaFiscal('${n.id}')">✕</button></td>
-      </tr>`;
-    }).join('');
-  }
-  const total = STATE.notasFiscais.reduce((s,n)=>s+(Number(n.valor)||0),0);
-  document.getElementById('nf-footer').textContent = `${STATE.notasFiscais.length} notas fiscais · ${fmtBRL(total)} total`;
-}
-function addNotaFiscal(){
-  STATE.notasFiscais.push({ id:uid(), descricao:'Despesa', categoria:'', numero:'', valor:0, data:'', status:'Pendente', arquivoNome:'', arquivoData:'' });
-  saveState(); renderAll();
-}
-function updateNf(id, field, value){
-  const n = STATE.notasFiscais.find(x=>x.id===id);
-  if(n){
-    n[field] = field==='valor' ? (parseFloat(value.replace(',','.'))||0) : value;
-    saveState(); renderAll();
-  }
-}
-function attachNfFile(id, file){
-  if(!file) return;
-  const n = STATE.notasFiscais.find(x=>x.id===id);
-  if(!n) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    n.arquivoNome = file.name;
-    n.arquivoData = reader.result;
-    saveState(); renderNotasFiscais();
-  };
-  reader.readAsDataURL(file);
-}
-function delNotaFiscal(id){
-  STATE.notasFiscais = STATE.notasFiscais.filter(n=>n.id!==id);
-  saveState(); renderAll();
-}
-
-/* ===================== DOCUMENTAÇÃO ===================== */
-const DOC_CATEGORIAS = ['Contrato','Alvará/Licença','ART','Seguro','Rider Técnico','Relatório','Outro'];
-const DOC_STATUS = ['Pendente','Em Análise','Aprovado','Vencido'];
-const DOC_STATUS_COLORS = {
-  'Pendente':{bg:'var(--pre-dim)',fg:'var(--pre)'},
-  'Em Análise':{bg:'var(--info-dim)',fg:'var(--info)'},
-  'Aprovado':{bg:'var(--success-dim)',fg:'var(--success)'},
-  'Vencido':{bg:'var(--danger-dim)',fg:'var(--danger)'},
-};
+/* ===================== DOCUMENTOS ===================== */
 function renderDocumentos(){
-  const tbody = document.getElementById('documentos-tbody');
-  if(!STATE.documentos.length){
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nenhum documento cadastrado</div></td></tr>`;
-    return;
+  const p=getProject();if(!p)return;
+  const items=p.documentos||[];
+  document.getElementById('doc-body').innerHTML=items.length===0?'<div class="empty-state">Nenhum documento cadastrado.</div>':
+    `<table class="data-table"><thead><tr><th>Nome</th><th>Área</th><th>Tipo</th><th>Data</th><th></th></tr></thead>
+    <tbody>${items.map(d=>`<tr>
+      <td><strong>${esc(d.nome)}</strong>${d.url?`<br><a href="${esc(d.url)}" target="_blank" style="font-size:11px;color:var(--info)">Abrir</a>`:''}</td>
+      <td><span class="badge-area ba-${d.area||'producao'}">${AREAS[d.area]?.label||d.area||'-'}</span></td>
+      <td style="font-size:11px;color:var(--text-secondary)">${esc(d.tipo||'-')}</td>
+      <td style="font-size:11px">${d.data?fmt(d.data):'-'}</td>
+      <td><button class="btn-icon" onclick="deleteDoc('${d.id}')">×</button></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function openDocModal(){
+  openModal(`<div class="modal-header"><div class="modal-title">Novo Documento</div><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label class="form-label">Nome</label><input class="form-input" id="dc-nome"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Área</label><select class="form-select" id="dc-area">
+          ${Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}
+        </select></div>
+        <div class="form-row"><label class="form-label">Tipo</label><input class="form-input" id="dc-tipo" placeholder="Contrato, ART, Rider..."></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" id="dc-data" type="date"></div>
+        <div class="form-row"><label class="form-label">URL / Link</label><input class="form-input" id="dc-url" placeholder="https://..."></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveDoc()">Salvar</button>
+    </div>`);
+}
+
+function saveDoc(){
+  const nome=document.getElementById('dc-nome').value.trim();if(!nome)return;
+  const p=getProject();if(!p.documentos)p.documentos=[];
+  p.documentos.push({id:uid(),nome,area:document.getElementById('dc-area').value,tipo:document.getElementById('dc-tipo').value,data:document.getElementById('dc-data').value,url:document.getElementById('dc-url').value});
+  saveState();closeModal();renderDocumentos();
+}
+
+function deleteDoc(id){
+  if(!confirm('Excluir documento?'))return;
+  const p=getProject();p.documentos=(p.documentos||[]).filter(d=>d.id!==id);
+  saveState();renderDocumentos();
+}
+
+/* ===================== MODAL ===================== */
+function openModal(html){
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function overlayClose(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
+
+/* ===================== HELPERS ===================== */
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function num(n){return(parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmt(d){if(!d)return'';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`;}
+
+/* ===================== INIT ===================== */
+STATE = loadState();
+if(sessionStorage.getItem('callsheet_session')){
+  if(STATE.currentProjectId && STATE.projects.find(p=>p.id===STATE.currentProjectId)){
+    showScreen('app');
+    showPage('dashboard');
+  } else {
+    showScreen('home');
   }
-  tbody.innerHTML = STATE.documentos.map(d=>{
-    const c = DOC_STATUS_COLORS[d.status] || DOC_STATUS_COLORS['Pendente'];
-    return `<tr>
-      <td><input value="${escAttr(d.nome)}" onchange="updateDocumento('${d.id}','nome',this.value)"></td>
-      <td><select class="status-select" style="background:var(--border-subtle);color:var(--text-secondary)" onchange="updateDocumento('${d.id}','categoria',this.value)">
-        ${DOC_CATEGORIAS.map(c2=>`<option ${d.categoria===c2?'selected':''}>${c2}</option>`).join('')}
-      </select></td>
-      <td><select class="status-select" style="background:${c.bg};color:${c.fg}" onchange="updateDocumento('${d.id}','status',this.value)">
-        ${DOC_STATUS.map(s=>`<option value="${s}" ${d.status===s?'selected':''}>${s}</option>`).join('')}
-      </select></td>
-      <td>${d.arquivoNome
-        ? `<span class="file-pill">📎 ${esc(d.arquivoNome)}</span>`
-        : `<label class="upload-btn">+ Anexar<input type="file" class="file-input-hidden" onchange="attachDocFile('${d.id}',this.files[0])"></label>`}</td>
-      <td><input value="${escAttr(d.obs)}" onchange="updateDocumento('${d.id}','obs',this.value)"></td>
-      <td><button class="del-btn" onclick="delDocumento('${d.id}')">✕</button></td>
-    </tr>`;
-  }).join('');
-}
-function addDocumento(){
-  STATE.documentos.push({ id:uid(), nome:'Novo Documento', categoria:'Contrato', status:'Pendente', obs:'', arquivoNome:'', arquivoData:'' });
-  saveState(); renderAll();
-}
-function updateDocumento(id, field, value){
-  const d = STATE.documentos.find(x=>x.id===id);
-  if(d){ d[field]=value; saveState(); renderAll(); }
-}
-function attachDocFile(id, file){
-  if(!file) return;
-  const d = STATE.documentos.find(x=>x.id===id);
-  if(!d) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    d.arquivoNome = file.name;
-    d.arquivoData = reader.result;
-    saveState(); renderDocumentos();
-  };
-  reader.readAsDataURL(file);
-}
-function delDocumento(id){
-  STATE.documentos = STATE.documentos.filter(d=>d.id!==id);
-  saveState(); renderAll();
-}
-
-/* ===================== UTIL ===================== */
-function esc(str, forAttr){
-  str = String(str==null?'':str);
-  const out = str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  return forAttr ? out.replace(/'/g,'&#39;') : out;
-}
-function escAttr(str){
-  return String(str==null?'':str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-/* ===================== RENDER ALL ===================== */
-if(sessionStorage.getItem('callsheet_session')){ showApp(); }
-
-function renderAll(){
-  eventNameInput.value = STATE.eventName || '';
-  eventDateInput.value = STATE.eventDate || '';
-  document.getElementById('topbar-event-name').textContent = STATE.eventName || '';
-  renderCountdown();
-  renderOverview();
-  renderChecklistPage('pre');
-  renderChecklistPage('dia');
-  renderChecklistPage('pos');
-  renderFornecedores();
-  renderBudget();
-  renderFinanceiro();
-  renderNotasFiscais();
-  renderDocumentos();
-  renderCenografia();
-  renderAb();
-  renderBriefings();
-  renderReunioes();
-  renderTimeline();
+} else {
+  document.getElementById('login').style.display='flex';
 }
 </script>
 </body>
